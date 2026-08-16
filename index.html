@@ -120,7 +120,15 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .clubrow{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:12px;
  background:var(--fx-surface-2);border:1px solid var(--fx-line);margin-bottom:7px;width:100%;text-align:start}
 .clubrow.on{background:var(--fx-surface-3);border-color:var(--fx-line-3)}
-.clubrow[disabled]{opacity:.42;cursor:not-allowed}
+/* Dim the row, never the reason. The blocked row used opacity:.42 on the whole element,
+   which dragged its explanation down to 1.92:1 - the usability study timed a tester quitting
+   at that exact moment, unable to see why Liverpool would not respond to a tap. */
+.clubrow[disabled]{cursor:not-allowed}
+.clubrow[disabled] .fxkit,
+.clubrow[disabled] .crn,
+.clubrow[disabled] .crprice,
+.clubrow[disabled] .crpick{opacity:.42}
+.clubrow[disabled] .crwhy{opacity:1}
 .crname{flex:1;min-width:0}
 .crn{font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .crl{font-size:10.5px;color:var(--fx-ink-mute)}
@@ -396,7 +404,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 <header class="hdr">
  <div class="hbrand">
   <div class="hname">جولك <b>فانتازي</b></div>
-  <div class="hsub" id="hsub">اختر ٨ أندية · ١٢٠ مليون</div>
+  <div class="hsub" id="hsub">11 + 4 بدلاء · 120 مليون</div>
  </div>
  <span class="demoTag" id="demoTag">DEMO</span>
  <button class="hbtn" id="langBtn" onclick="toggleLang()" aria-label="اللغة">EN</button>
@@ -474,69 +482,69 @@ try{ seenCoach = JSON.parse(localStorage.getItem("fx_coach") || "{}"); }catch(_)
 
 /* ---------------- i18n. Every user-visible string lives here. ---------------- */
 const STR = {
- brandSub:["١١ + ٤ بدلاء · ١٢٠ مليون","11 + 4 subs · 120M"],
- demoNote:["هذه نسخة تجريبية للعرض فقط — لا حساب ولا اتصال بالخادم، وكل شيء محفوظ على جهازك. النقاط هنا محاكاة لعرض التصميم.",
+ brandSub:["11 + 4 بدلاء · 120 مليون","11 + 4 subs · 120M"],
+ demoNote:["دي نسخة تجريبية للعرض بس — من غير حساب ومن غير سيرفر، وكل حاجة متسجلة على تليفونك. النقط اللي هنا مش حقيقية، دي عشان تشوف الشكل.",
            "Demo build for review only — no account, no server. Everything is stored on your device and the points are simulated to show the design."],
  segTeam:["فريقي","My team"], segPts:["النقاط","Points"], segBoard:["الترتيب","Standings"],
  navTeam:["فريقي","Team"], navPick:["الاختيار","Pick"], navPts:["النقاط","Points"], navBoard:["الترتيب","Table"], navHelp:["الشرح","Help"],
- budLeft:["المتبقي","Remaining"], budOf:["من ١٢٠ مليون","of 120M"],
- nextMax:["أقصى سعر للنادي الجاي","Max for your next club"], slotsLeft:["أماكن باقية","Slots left"],
- pickTitle:["اختر أنديتك","Pick your clubs"],
+ budLeft:["المتبقي","Remaining"], budOf:["من 120 مليون","of 120M"],
+ nextMax:["أغلى نادي تقدر تشتريه دلوقتي","Max for your next club"], slotsLeft:["أماكن فاضية","Slots left"],
+ pickTitle:["اختار أنديتك","Pick your clubs"],
  allLg:["الكل","All"],
  emptySlot:["فاضي","Empty"],
- tooExpensive:["أغلى من المتبقي","Over your remaining budget"],
- leagueFull:["وصلت ٣ أندية من نفس الدوري","3 clubs from this league already"],
- squadFull:["فريقك كامل","Your squad is full"],
- reserveWarn:["لازم تسيب فلوس للأماكن الباقية","You must leave money for the remaining slots"],
+ tooExpensive:["أغلى من اللي فاضل معاك","Over your remaining budget"],
+ leagueFull:["خلاص عندك 3 أندية من الدوري ده","3 clubs from this league already"],
+ squadFull:["فريقك كمل — شيل نادي الأول","Your squad is full"],
+ reserveWarn:["لازم تسيب فلوس للأماكن الفاضية","You must leave money for the remaining slots"],
  capTitle:["الكابتن","Captain"], capNote:["الكابتن بياخد ضعف نقاطه","Your captain scores double"],
- setCap:["اجعله الكابتن","Make captain"],
+ setCap:["خليه الكابتن","Make captain"],
  gwTitle:["الجولة","Gameweek"], totalPts:["إجمالي النقاط","Total points"],
  gwPts:["نقاط الجولة","Gameweek points"],
  breakdown:["من فين جت النقاط؟","Where did these points come from?"],
  bdWin:["فوز","Win"], bdDraw:["تعادل","Draw"], bdLoss:["خسارة","Loss"],
- bdClean:["شباك نظيفة","Clean sheet"], bdGoals:["أهداف","Goals scored"], bdConc:["أهداف مستقبلة","Goals conceded"],
+ bdClean:["شباك نظيفة","Clean sheet"], bdGoals:["أهداف","Goals scored"], bdConc:["أهداف دخلت عليه","Goals conceded"],
  bdTier:["مكافأة قوة الخصم","Opponent strength bonus"], bdCap:["ضعف الكابتن","Captain double"],
- noPlay:["لا يلعب","No fixture"],
+ noPlay:["مالوش ماتش الجولة دي","No fixture"],
  rulesTitle:["إزاي تلعب؟","How to play"],
  glossTitle:["قاموس الفانتازي","Fantasy glossary"],
  startWiz:["ابدأ فريقك","Build your team"],
  changeTeam:["عدّل فريقك","Edit your team"],
- resetDemo:["ابدأ من جديد","Reset demo"],
+ resetDemo:["ابدأ من الأول","Reset demo"],
  benchLab:["دكة البدلاء · بيدخلوا لوحدهم لو ناديك مالوش ماتش","The bench · they come on automatically when a starter has no match"],
  cameOn:["دخل","Came on"],
  swapWith:["بدّل","Swap"],
  swapHere:["حطه هنا","Put here"],
  swapCancel:["إلغاء","Cancel"],
  swapTip:["دوس على أي نادي، وبعدين على اللي عايز تبدله بيه","Tap a club, then tap the one you want to swap it with"],
- coveredLab:["تغييرات تلقائية","Automatic substitutions"],
- uncoveredLab:["بدون تغطية","Left uncovered"],
- scrubHint:["حرّك المؤشر لتشوف الاستاد وهو بيتغيّر عبر الموسم","Slide to watch the stadium change across the season"],
- repaired:["الأسعار اتغيرت، فشيلنا الأندية اللي مابقتش تدخل في ميزانيتك. اختر بدلها.",
+ coveredLab:["بدلاء دخلوا لوحدهم","Automatic substitutions"],
+ uncoveredLab:["مالقاش بديل يدخل مكانه","Left uncovered"],
+ scrubHint:["اسحب عشان تشوف نقط أي جولة","Slide to watch the stadium change across the season"],
+ repaired:["الأسعار اتغيرت، فشيلنا الأندية اللي مابقتش تدخل في ميزانيتك. اختار بدلها.",
            "Prices changed, so clubs that no longer fit your budget were removed. Pick replacements."],
- done:["تمام","Done"], next:["التالي","Next"], back:["رجوع","Back"], skip:["تخطى الشرح","Skip"],
- confirmSquad:["أكد الفريق","Confirm squad"],
+ done:["تمام","Done"], next:["التالي","Next"], back:["رجوع","Back"], skip:["بعدين","Skip"],
+ confirmSquad:["أكّد الفريق","Confirm squad"],
  wiz1h:["أهلاً بيك في جولك فانتازي","Welcome to Goallak Fantasy"],
  wiz1p:["مش هتختار لاعيبة — هتختار <b>أندية</b>. كل أسبوع، الأندية اللي في فريقك بتجيب لك نقط على حسب نتايجها.",
         "You don't pick players — you pick <b>clubs</b>. Each week the clubs in your team earn you points based on their real results."],
- wiz2h:["١١ + ٤ بدلاء · ١٢٠ مليون","11 + 4 subs · 120M"],
- wiz2p:["ميزانيتك ١٢٠ مليون: ١١ نادي في الملعب و٤ على الدكة. البدلاء بيدخلوا لوحدهم لو ناديك مالوش ماتش.. أقصى ٣ أندية من نفس الدوري، عشان تفضل تتفرج على كل حاجة.",
+ wiz2h:["11 + 4 بدلاء · 120 مليون","11 + 4 subs · 120M"],
+ wiz2p:["ميزانيتك 120 مليون: 11 نادي في الملعب و4 على الدكة. البدلاء بيدخلوا لوحدهم لو ناديك مالوش ماتش. و3 أندية بالكتير من الدوري الواحد، عشان تفضل تتفرج على كل حاجة.",
         "You have 120M: 11 clubs on the pitch and 4 on the bench. Subs come on automatically when a starter has no match.. Maximum 3 from any one league, so you always have something to watch."],
- wiz3h:["جهزنا لك فريق",""],
+ wiz3h:["جهزنالك فريق",""],
  wiz3hEn:["We built you a team","We built you a team"],
- wiz3p:["دي بداية صحيحة وكاملة. سيبها زي ما هي، أو غيّر اللي مش عاجبك.",
+ wiz3p:["دي بداية كاملة ومظبوطة. سيبها زي ما هي، أو غيّر اللي مش عاجبك.",
         "This is a complete, legal starting squad. Keep it, or change whatever you like."],
- wiz4h:["اختر الكابتن","Choose your captain"],
+ wiz4h:["اختار الكابتن","Choose your captain"],
  wiz4p:["نادي واحد بس بياخد ضعف النقط. اختاره كويس.","One club scores double. Choose well."],
- autoPick:["اختيار تلقائي","Auto-pick"],
+ autoPick:["املا الباقي لوحده","Auto-pick"],
  coachBudget:["الشريط ده فلوسك. الجزء المخطط محجوز للأماكن اللي لسه فاضية.","This bar is your money. The hatched part is reserved for your empty slots."],
  coachCap:["دوس على أي نادي عشان تخليه الكابتن.","Tap any club to make it your captain."],
  coachPts:["دوس على نقاط أي نادي عشان تشوف جت منين بالظبط.","Tap any club's points to see exactly how they were earned."],
  gotIt:["فهمت","Got it"],
  tierLab:["قوة الخصم","Opponent strength"],
- tier1:["بطل","Elite"],tier2:["قوي","Strong"],tier3:["متوسط","Mid"],tier4:["ضعيف","Weak"],tier5:["أضعف","Weakest"],
+ tier1:["بطل","Elite"],tier2:["قوي","Strong"],tier3:["متوسط","Mid"],tier4:["ضعيف","Weak"],tier5:["الأضعف","Weakest"],
  priceLab:["السعر","Price"],
- you:["أنت","You"],
- simNote:["النتائج هنا محاكاة لعرض الشكل — مش نتائج حقيقية.","Results here are simulated to show the design — not real fixtures."]
+ you:["إنت","You"],
+ simNote:["النتايج اللي هنا مش حقيقية — دي بس عشان تشوف الشكل.","Results here are simulated to show the design — not real fixtures."]
 };
 /* Every module ships bilingual [ar,en] pairs in STR's own shape. Merged once, here, so
    t() reaches all of them and nothing has to know which module a string came from.
@@ -1001,7 +1009,9 @@ function paintPicker(){
    + '<span class="crname"><span class="crn">' + esc(clubName(c)) + "</span>"
    + '<span class="' + (why ? "crwhy" : "crl") + '">' + esc(why || leagueName(c.lg)) + "</span></span>"
    + '<span class="crprice" dir="ltr">' + num(priceOf(c.id).toFixed(1)) + "M</span>"
-   + '<span class="crpick">' + (picked ? "✓" : "+") + "</span></button>";
+   /* a blocked row must NOT show "+": it promises an action that cannot happen, which is
+      what made the tester tap Liverpool repeatedly and conclude the app was broken */
+   + '<span class="crpick">' + (picked ? "✓" : why ? "✕" : "+") + "</span></button>";
  }).join("");
  $("sheetBox").innerHTML =
   '<button type="button" class="sx" onclick="closeSheet()" aria-label="' + esc(t("done")) + '">✕</button>'
@@ -1099,16 +1109,16 @@ function openBreakdown(id, gw){
    Arabic fantasy vocabulary does not exist in most fans' heads, so every term is
    given in Arabic with a plain one-line explanation, English underneath. */
 const GLOSSARY = [
- ["الجولة","Gameweek","مجموعة المباريات اللي بتتحسب مع بعض. النقط بتتجمع لكل جولة."],
+ ["الجولة","Gameweek","فترة بين إقفالين. كل ماتش تلعبه أنديتك جوّاها بيتحسب لك."],
  ["الكابتن","Captain","نادي واحد بس في فريقك بياخد ضعف نقطه كل جولة."],
- ["الميزانية","Budget","الـ ١٢٠ مليون اللي بتشتري بيها أنديتك. مش فلوس حقيقية."],
+ ["الميزانية","Budget","الـ 120 مليون اللي بتشتري بيها أنديتك. مش فلوس حقيقية."],
  ["الانتقالات","Transfers","تغيير نادي بنادي تاني بعد ما تبدأ."],
- ["شباك نظيفة","Clean sheet","النادي خلّص الماتش من غير ما يستقبل أي هدف."],
+ ["شباك نظيفة","Clean sheet","النادي خلّص الماتش من غير ما يدخل عليه أي هدف."],
  ["مكافأة قوة الخصم","Opponent strength bonus","لو نادي ضعيف كسب نادي كبير، بياخد نقط زيادة."],
- ["الجوكرات","Chips","مزايا بتستخدمها مرة واحدة في الموسم."],
- ["تغيير شامل","Wildcard","تغير فريقك كله مرة واحدة من غير خصم نقط."],
+ ["الجوكرات","Chips","مزايا بتستخدمها مرتين في الموسم — واحدة في كل نص."],
+ ["تغيير شامل","Wildcard","تغيّر فريقك كله مرة واحدة من غير خصم نقط."],
  ["فريق مؤقت","Free Hit","فريق لجولة واحدة بس، وبعدها يرجع فريقك الأصلي."],
- ["لا يلعب","No fixture","النادي مالوش ماتش في الجولة دي، فمش هياخد نقط."]
+ ["مالوش ماتش","No fixture","النادي مالوش ماتش في الجولة دي، فمش هياخد نقط."]
 ];
 function openHelp(){
  openSheet("<h2>" + esc(t("rulesTitle")) + "</h2>"
@@ -1193,7 +1203,7 @@ function paintWizard(){
   body = '<div class="wizart">💰</div><div class="wizh">' + esc(t("wiz2h")) + '</div><div class="wizp">' + t("wiz2p") + "</div>";
  } else if(wizStep === 2){
   if(squad.length < SQUAD_SIZE) autoFill();
-  body = '<div class="wizh">' + esc(LANG === "ar" ? "جهزنا لك فريق" : "We built you a team") + "</div>"
+  body = '<div class="wizh">' + esc(LANG === "ar" ? "جهزنالك فريق" : "We built you a team") + "</div>"
    + '<div class="wizp">' + t("wiz3p") + "</div>" + budgetHtml() + pitchHtml(false)
    + '<button type="button" class="btn ghost" onclick="closeWizard();openPicker()">' + esc(t("changeTeam")) + "</button>";
  } else {
