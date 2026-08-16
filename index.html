@@ -746,16 +746,14 @@ const STR = {
  allLg:["الكل","All"],
  emptySlot:["فاضي","Empty"],
  /* THE CARD LABEL AND THE FULL LABEL ARE DIFFERENT STRINGS, and that is deliberate.
-    Measured on the live page: «مالوش ماتش» needs 81.8px at 11px, against 72px of a starter's
-    plate and 56px of a bench card's. It never fitted on ANY card — which is how it came to be
-    sliced to «مالوش» on the owner's phone, a fragment that reads as nonsense. «راحة» is 30px,
-    is a complete word, and is what a commentator actually says about a club with no fixture.
-    The literal phrase survives in aria-label, the breakdown and the glossary. */
-    Measured both languages on the live page against a 44px bench line:
+    Measured on the live page against a 44px bench line and a 72px starter line:
       «مالوش ماتش» 81.8   "No match" 65.2   "No fixture" 66.0
       «راحة»       25.1   "Rest"     27.8
-    Only the last pair fits, and the two are the same word — which is the right answer
-    anyway: a club with no fixture is resting, and both languages should say so. */
+    Only the last pair fits anywhere. The long phrase never fitted on ANY card at ANY size —
+    which is how it came to be sliced to «مالوش» on the owner's phone, a fragment that reads
+    as nonsense. The two short words are the same word in both languages, which is the right
+    answer regardless: a club with no fixture is resting, and both should say so.
+    The literal phrase survives in aria-label, the breakdown and the glossary. */
  noMatch:["راحة","Rest"],
  noMatchFull:["مالوش ماتش","No match this round"],
  /* full words, for the screen reader and the breakdown sheet — the card shows H/A */
