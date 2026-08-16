@@ -640,6 +640,13 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    y=887 returned .bnav from elementFromPoint, i.e. it could not be tapped at all without
    scrolling, with nothing on screen to suggest scrolling. */
 .wrap{padding-block-end:calc(96px + env(safe-area-inset-bottom))}
+/* Padding alone was not enough: it stopped the page ENDING under the nav, but the primary
+   action still sat at y=887 against a nav at y=737, so on first paint the one button that
+   does anything was off screen with nothing suggesting a scroll. Measured again after the
+   padding fix and it was still unreachable. It sticks above the nav instead — the eleven
+   are the hero, but the way to change them must never be hunted for. */
+#viewTeam > .btn{position:sticky;z-index:55;
+ inset-block-end:calc(74px + env(safe-area-inset-bottom))}
 /* TOUCH FEEDBACK. -webkit-tap-highlight-color is transparent globally and only the club card
    had an :active rule, so tapping the big orange button, the tab bar, or any of 126 picker
    rows produced nothing at all on screen. On a phone that IS the "something is off". */
