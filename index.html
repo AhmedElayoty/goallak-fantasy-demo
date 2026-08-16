@@ -559,7 +559,8 @@ const num = n => String(n);
 
 function clubName(c){ return LANG === "ar" && c.ar ? c.ar : (c.short || c.name); }
 function leagueName(id){ const l = LEAGUES.find(x => x.id === id); return l ? (LANG === "ar" ? l.ar : l.en) : id; }
-function priceOf(id){ return PRICES[id] ? PRICES[id].price : 8; }
+/* 0, not 8: a default price hid a corrupted squad by making a phantom club look affordable */
+function priceOf(id){ return id && PRICES[id] ? PRICES[id].price : 0; }
 function tierOf(id){ return PRICES[id] ? PRICES[id].tier : "mid"; }
 
 /* ---------------- kit tile: the whole club identity, no crest ---------------- */
@@ -720,7 +721,7 @@ function paintChrome(){
   .map(n => '<button type="button" class="' + (view === n[0] ? "on" : "") + '" onclick="navTo(\'' + n[0] + '\')">'
    + '<span class="ic">' + n[1] + '</span><span>' + esc(t(n[2])) + "</span></button>").join("");
 }
-function setView(v){ view = v; paintChrome(); render(); }
+function setView(v){ swapFrom = null; view = v; paintChrome(); render(); }
 function navTo(v){
  if(v === "pick") return openPicker();
  if(v === "help") return openHelp();
@@ -809,7 +810,7 @@ function pitchHtml(withPoints, gw){
      + '<button type="button" class="cc cc--empty" onclick="' + (swapFrom !== null ? "swapArm(" + i + ")" : "openPicker()") + '"'
      + ' aria-label="' + esc(t("emptySlot")) + '"><span class="cc__plus">+</span></button>'
      + '<span class="plinth"></span>'
-     + (swapFrom !== null ? '<span class="swaphint">' + esc(swapLabel(i)) + "</span>" : "") + "</div>";
+     + (!withPoints && swapFrom !== null ? '<span class="swaphint">' + esc(swapLabel(i)) + "</span>" : "") + "</div>";
     continue;
    }
    h += '<div class="slot' + (swapFrom === i ? " armed" : "") + '" ' + pos + '>'
@@ -882,7 +883,7 @@ function renderTeam(){
   + pitchHtml(false)
   + '<button type="button" class="btn" onclick="openPicker()">'
   + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>"
-  + (full && !captain ? '<button type="button" class="btn ghost" onclick="openCaptain()">' + esc(t("capTitle")) + "</button>" : "")
+  + (full ? '<button type="button" class="btn ghost" onclick="openCaptain()">' + esc(t("capTitle")) + "</button>" : "")
   + '<button type="button" class="btn ghost" onclick="resetDemo()">' + esc(t("resetDemo")) + "</button>";
  if(squad.length) maybeCoach("budget", "budBox", t("coachBudget"));
 }
@@ -957,6 +958,7 @@ let _entryPlayed = false;
 let swapFrom = null;                        /* index in `squad` currently armed for a swap */
 function isStarter(i){ return i < START_SIZE; }
 function swapArm(i){
+ if(i == null || i < 0 || i >= squad.length || !squad[i]) return;   /* empty slots are not swappable */
  if(swapFrom === i){ swapFrom = null; render(); return; }      /* tap again to cancel */
  if(swapFrom === null){ swapFrom = i; render(); return; }
  swapSlots(swapFrom, i);
@@ -964,11 +966,17 @@ function swapArm(i){
  render();
 }
 function swapSlots(a, b){
+ /* BOTH indices must name a club the manager actually owns. The first version wrote to
+    any index, so tapping an empty slot beyond the end of the squad extended the array
+    with holes - and priceOf(undefined) charged 8.0M for a club that does not exist,
+    which blocked every remaining club and made the squad impossible to complete. */
  if(a === b || a == null || b == null) return;
- if(!squad[a] || !squad[b]){                                    /* one side empty: just move */
-  const tmp = squad[a]; squad[a] = squad[b]; squad[b] = tmp; save(); return;
- }
+ if(a < 0 || b < 0 || a >= squad.length || b >= squad.length) return;
+ if(!squad[a] || !squad[b]) return;
  const tmp = squad[a]; squad[a] = squad[b]; squad[b] = tmp;
+ /* the captain must always be one of the eleven: a swap that benches him would leave the
+    armband showing while silently paying nothing (measured: 67 -> 51 points) */
+ if(captain && squad.indexOf(captain) >= START_SIZE) captain = squad[0] || null;
  save();
 }
 /* promote a substitute straight into the XI, replacing a chosen starter */
@@ -990,6 +998,7 @@ function closeSheet(){ $("sheet").classList.add("hide"); document.body.classList
 $("sheet").addEventListener("click", e => { if(e.target === $("sheet")) closeSheet(); });
 
 function openPicker(){
+ swapFrom = null;
  pickFilter = "all";
  paintPicker();
  $("sheet").classList.remove("hide");
@@ -1222,7 +1231,7 @@ function paintWizard(){
 }
 
 function resetDemo(){
- squad = []; captain = null;
+ squad = []; captain = null; swapFrom = null;
  try{ localStorage.removeItem("fx_squad"); localStorage.removeItem("fx_cap");
       localStorage.removeItem("fx_onboarded"); localStorage.removeItem("fx_coach"); }catch(_){}
  seenCoach = {}; coachShownThisSession = false;
