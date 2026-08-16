@@ -560,13 +560,40 @@ function renderPoints(){
  maybeCoach("pts", "viewPoints", t("coachPts"));
 }
 
+/* Rivals own REAL squads and are scored by the same engine as the user.
+   The first version faked their totals as `hash(name) % 40 + yourScore - k`, which tied every
+   rival to the user's own score: three offsets came out positive and two negative, so every
+   player sat at exactly 4th of 6 forever, whatever they picked. A leaderboard that cannot move
+   is not a leaderboard — and it was the first screen telling the owner the game was over. */
+const RIVALS = ["Yahia", "Hegazy", "Omar", "Kareem", "Mostafa"];
+function rivalSquad(name){
+ const out = [], byLg = {};
+ /* deterministic per rival, but a genuinely different team each — sample the pool by a seeded walk */
+ let seed = hash(name);
+ const pool = CLUBS.slice().sort((a, b) => priceOf(b.id) - priceOf(a.id));
+ let budget = BUDGET;
+ for(let guard = 0; guard < 400 && out.length < SQUAD_SIZE; guard++){
+  seed = (seed * 1103515245 + 12345) >>> 0;
+  const c = pool[seed % pool.length];
+  if(out.includes(c.id)) continue;
+  if((byLg[c.lg] || 0) >= MAX_PER_LEAGUE) continue;
+  const need = (SQUAD_SIZE - out.length - 1) * MIN_CLUB_PRICE;
+  if(priceOf(c.id) + need > budget) continue;
+  out.push(c.id); byLg[c.lg] = (byLg[c.lg] || 0) + 1; budget -= priceOf(c.id);
+ }
+ return out;
+}
+function rivalTotal(name){
+ const sq = rivalSquad(name);
+ const cap = sq[hash(name + "c") % (sq.length || 1)];
+ let total = 0;
+ for(let g = 1; g <= CURRENT_GW; g++)
+  for(const id of sq) total += simMatch(id, g).pts * (id === cap ? 2 : 1);
+ return total;
+}
 function renderBoard(){
  const me = seasonTotal();
- const rivals = [
-  {n:"Yahia", s:hash("yahia") % 40 + me - 18}, {n:"Hegazy", s:hash("hegazy") % 40 + me - 22},
-  {n:"Omar", s:hash("omar") % 40 + me - 12}, {n:"Kareem", s:hash("kareem") % 40 + me - 30},
-  {n:"Mostafa", s:hash("mostafa") % 40 + me - 26}
- ];
+ const rivals = RIVALS.map(n => ({n: n, s: rivalTotal(n)}));
  const rows = rivals.concat([{n:t("you"), s:me, me:true}]).sort((a, b) => b.s - a.s);
  $("viewBoard").innerHTML = '<div class="card"><h3>' + esc(t("segBoard")) + "</h3>"
   + rows.map((r, i) => '<div class="lbrow' + (r.me ? " me" : "") + '"><span class="lbrank" dir="ltr">' + num(i + 1) + "</span>"
