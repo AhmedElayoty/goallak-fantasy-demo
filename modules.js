@@ -1404,7 +1404,7 @@ const TUT_STR = {
   tutW1Ttl:  ["مش هتختار لاعيبة — هتختار أندية", "You don't pick players — you pick clubs"],
   tutW1Body: ["كل نادي في فريقك بيجيب لك نقط من نتايجه الحقيقية. مفيش لاعيبة، ومفيش إصابات.",
               "Every club in your team earns you points from its real results. No players, no injuries."],
-  tutW1Note: ["3 دقايق وفريقك جاهز", "3 minutes and your team is ready"],
+  tutW1Note: ["دقيقتين وفريقك جاهز", "Two minutes and your team is ready"],
   tutW1Cta:  ["يلا نبدأ", "Let's go"],
 
   tutFavTtl:  ["إنت بتشجع مين؟", "Who do you support?"],
@@ -2570,8 +2570,8 @@ return {
     lndFact3:     ["مش مراهنات", "No betting"],
 
     lndCta:       ["يلا نجهز فريقك", "Build my team"],
-    lndAssure:    ["حوالي 40 ثانية · من غير تسجيل ولا تحميل",
-                   "About 40 seconds · no sign-up, no download"],
+    lndAssure:    ["دقيقتين ويبقى عندك فريق · من غير تسجيل ولا تحميل",
+                   "Two minutes to a team · no sign-up, no download"],
     lndAlt:       ["وريني فريق جاهز الأول", "Show me a ready-made team first"],
 
     lndBackH1:    ["فريقك مستنيك.", "Your team is waiting."],

@@ -189,9 +189,21 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    width most of the audience actually owns, the stadium was never seen. This is the single
    change that fixes it: ignoring .wrap's padding reclaims 48px, which is the entire budget
    for growing the card from 47px to 76px. */
+/* THE GROUND. A theme here is not a skin you pick — it is the state of your stadium, and you
+   never choose it. It is scoped to the turf, the stands and the light because those are the
+   only surfaces in the product where a club kit is never composited: every kit sits on the
+   card, the club row or the share tile, all of which have fixed grounds. So the ground can
+   change freely without invalidating a single one of the 126 hand-tuned rim decisions.
+   The chrome — nav, cards, budget, points, sheets — never changes for anybody. */
 .st{position:relative;border-radius:0;overflow:hidden;isolation:isolate;
  margin-inline:calc(50% - 50vw);inline-size:100vw;border-inline:none;
  border-block:1px solid var(--fx-line-2);
+ --st-stand-1:#141C3E; --st-stand-2:#0C1330;
+ --st-lamp-1:#E8F0FF;  --st-lamp-2:#9DB2DA;
+ --st-glow:rgba(200,222,255,.55);
+ --st-pool:rgba(190,214,255,.16);
+ --st-line:.30;
+ --st-mow:8.3333%;
  --crowd-a:.34; --wear:.055; --scuff:0;
  background:radial-gradient(120% 80% at 50% -10%, var(--sky-1,#14204A) 0%, var(--sky-2,#0A1130) 46%, #070B1A 100%)}
 .st[data-sky="dusk"]    {--sky-1:#2A2560;--sky-2:#141A44}
@@ -203,13 +215,14 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 /* --- the four floodlight pools, painted on the sky --- */
 .st__sky{position:absolute;inset:0;z-index:1;
  background:
-  radial-gradient(50% 34% at 16% 8%, rgba(190,214,255,.16), transparent 70%),
-  radial-gradient(50% 34% at 84% 8%, rgba(190,214,255,.16), transparent 70%)}
+  radial-gradient(50% 34% at 16% 8%, var(--st-pool), transparent 70%),
+  radial-gradient(50% 34% at 84% 8%, var(--st-pool), transparent 70%)}
 /* --- two pylons, not four: at this crop only the far pair is in frame --- */
 .st__pylon{position:absolute;top:2%;width:26px;height:16%;z-index:2}
 .st__pylon.a{inset-inline-start:9%} .st__pylon.b{inset-inline-end:9%}
 .st__pylon i{position:absolute;inset-inline:0;top:0;height:9px;border-radius:2px;
- background:linear-gradient(180deg,#E8F0FF,#9DB2DA);box-shadow:0 0 12px 3px rgba(200,222,255,.55)}
+ background:linear-gradient(180deg,var(--st-lamp-1),var(--st-lamp-2));
+ box-shadow:0 0 12px 3px var(--st-glow)}
 .st__pylon u{position:absolute;inset-inline-start:50%;top:9px;bottom:0;width:2px;margin-inline-start:-1px;
  background:linear-gradient(180deg,#3D4C82,#1A2244)}
 /* --- the stands: three crowd grids at different scales so it never visibly repeats --- */
@@ -220,7 +233,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
   radial-gradient(circle at 25% 30%, rgba(255,255,255,calc(var(--crowd-a) * .38)) 0 1px, transparent 1.6px) 0 0/7px 6px,
   radial-gradient(circle at 70% 65%, rgba(255,255,255,calc(var(--crowd-a) * .30)) 0 1px, transparent 1.6px) 3px 2px/11px 9px,
   radial-gradient(circle at 45% 50%, rgba(120,150,220,calc(var(--crowd-a) * .41)) 0 1px, transparent 1.6px) 1px 4px/5px 8px,
-  linear-gradient(180deg,#141C3E,#0C1330);
+  linear-gradient(180deg,var(--st-stand-1),var(--st-stand-2));
  border-bottom:1px solid rgba(255,255,255,.10)}
 /* --- the playing surface --- */
 .st__stage{position:absolute;inset:0;z-index:3;perspective:820px;perspective-origin:50% 118%}
@@ -231,14 +244,27 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
   radial-gradient(circle at 50% 47%, rgba(255,255,255,var(--wear)) 0 16.5%, transparent 17.4%),
   repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 1px, transparent 1px 3px),
   repeating-linear-gradient(90deg, rgba(0,0,0,.030) 0 1px, transparent 1px 3px),
-  repeating-linear-gradient(90deg, var(--fx-turf-a) 0 8.3333%, var(--fx-turf-b) 8.3333% 16.6667%),
+  repeating-linear-gradient(90deg, var(--fx-turf-a) 0 var(--st-mow),
+                            var(--fx-turf-b) var(--st-mow) calc(var(--st-mow) * 2)),
   var(--fx-turf-b);
  box-shadow:inset 0 34px 56px -26px rgba(0,0,0,.62), inset 0 -44px 64px -34px rgba(0,0,0,.50)}
 /* markings ride the same plane so they warp with it */
 .st__mark{position:absolute;inset:0;pointer-events:none;
  background:
-  radial-gradient(circle at 50% 47%, transparent 0 16.2%, rgba(255,255,255,.30) 16.2% 16.8%, transparent 17.2%),
-  linear-gradient(180deg, transparent calc(47% - 1px), rgba(255,255,255,.26) calc(47% - 1px) calc(47% + 1px), transparent calc(47% + 1px))}
+  radial-gradient(circle at 50% 47%, transparent 0 16.2%, rgba(255,255,255,var(--st-line)) 16.2% 16.8%, transparent 17.2%),
+  linear-gradient(180deg, transparent calc(47% - 1px), rgba(255,255,255,calc(var(--st-line) * .87)) calc(47% - 1px) calc(47% + 1px), transparent calc(47% + 1px))}
+/* ── THE EARNED GROUND ────────────────────────────────────────────────────────
+   Not a chooser. A chooser carries no information about the person showing it,
+   which is why Sorare's best-looking cards arrived alongside its worst revenue
+   years. This one says you did the one thing the game actually needs: you set a
+   legal eleven before the deadline, ten times. Tighter mow, fresher paint. */
+.st[data-ground="clean"]{--fx-turf-a:#0F6335;--fx-turf-b:#0A4728;--st-line:.46;--st-mow:6.25%}
+/* the ground's name, SOLID not alpha — an rgba() label on this turf measured 3.83:1 when it
+   was claimed at 6.8:1, and every contrast failure found in three QA passes here came from an
+   alpha multiplier rather than a hue. */
+.st__brand{position:absolute;z-index:7;inset-block-end:6px;inset-inline-start:10px;
+ font-size:9.5px;font-weight:800;letter-spacing:.3px;color:#C9D6F5;
+ text-shadow:0 1px 3px rgba(0,0,0,.95)}
 .st__box{position:absolute;inset-inline:26%;top:0;height:15%;border:2px solid rgba(255,255,255,.24);
  border-top:none;pointer-events:none}
 /* --- the card layer: flat, upright, never rotated --- */
@@ -686,7 +712,8 @@ const FORMATIONS = {
    ============================================================================ */
 (function resetOnOpen(){
  try{
-  for(const k of ["fx_squad","fx_cap","fx_form","fx_lang","fx_coach","fx_onboarded","fx_gw","fx_chips","fx_team"]) localStorage.removeItem(k);
+  for(const k of ["fx_squad","fx_cap","fx_form","fx_lang","fx_coach","fx_onboarded","fx_gw",
+                  "fx_chips","fx_team","fx_ledger"]) localStorage.removeItem(k);
  }catch(_){}
 })();
 
@@ -729,6 +756,9 @@ const STR = {
  renameAsk:["سمّي فريقك","Name your team"],
  toolsTitle:["إعدادات الفريق","Team settings"],
  formLab:["الخطة","Formation"],
+ /* the ground */
+ groundClean:["الملعب النضيف","The Groundsman's Pitch"],
+ groundProgress:["أرضك · {n}/{of} جولة","Your ground · {n}/{of} rounds"],
  tooExpensive:["أغلى من اللي فاضل معاك","Over your remaining budget"],
  leagueFull:["خلاص عندك 3 أندية من الدوري ده","3 clubs from this league already"],
  squadFull:["فريقك كمل — شيل نادي الأول","Your squad is full"],
@@ -1123,14 +1153,18 @@ function pitchHtml(withPoints, gw){
  _entryPlayed = true;
  const full = squad.length >= SQUAD_SIZE;
  const shared = rivalOwned();          /* the head-to-head set; empty when the band is off */
+ markRound(gwNow);
+ const ground = groundOf();
  let h = '<div class="st' + enter + '" data-sky="' + sky + '" data-cup="' + inCup + '"'
   + ' data-full="' + (full ? 1 : 0) + '" data-arm="' + (swapFrom !== null ? 1 : 0) + '"'
-  + ' data-h2h="' + (shared.size ? "on" : "off") + '"'
+  + ' data-h2h="' + (shared.size ? "on" : "off") + '" data-ground="' + ground + '"'
   + ' style="--crowd-a:' + crowd + ';--wear:' + wear + ';--scuff:' + scuff + '">'
   + '<div class="st__sky"></div>'
   + '<div class="st__pylon a"><i></i><u></u></div><div class="st__pylon b"><i></i><u></u></div>'
   + '<div class="st__stand"></div>'
   + '<div class="st__stage"><div class="st__turf"><div class="st__mark"></div><div class="st__box"></div></div></div>'
+  + '<div class="st__brand">' + esc(ground === "clean" ? t("groundClean")
+      : t("groundProgress", {n: ledger().length, of: GROUND_AT})) + "</div>"
   + '<div class="st__cards">';
  let i = 0;
  const starters = squad.slice(0, START_SIZE);
@@ -1377,6 +1411,22 @@ function rivalTotal(name){
    or directly below if you lead. Everything on the team screen is then read against
    them, which is the difference between a score and a contest.
    ============================================================================ */
+/* THE LEDGER. One number: the rounds in which you had a legal eleven at the deadline. It is
+   not a streak — fantasy-engagement.md refuses streaks, and rightly: missing round 14 should
+   cost you round 14 and nothing else. Ten rounds, in any order, earns the Groundsman's Pitch.
+   In the demo the season is walked with the scrubber, so a round counts as you reach it. */
+const GROUND_AT = 10;
+function ledger(){
+ try{ return JSON.parse(localStorage.getItem("fx_ledger") || "[]"); }catch(_){ return []; }
+}
+function markRound(gw){
+ if(squad.length < SQUAD_SIZE) return;
+ const L = ledger();
+ if(L.indexOf(gw) >= 0) return;
+ L.push(gw);
+ try{ localStorage.setItem("fx_ledger", JSON.stringify(L)); }catch(_){}
+}
+function groundOf(){ return ledger().length >= GROUND_AT ? "clean" : "base"; }
 let h2hIdx = 0;
 function boardRows(){
  return RIVALS.map((r, i) => ({i: i, name: rivalName(r), s: rivalTotal(rivalName(r)), me: false}))
@@ -1786,7 +1836,7 @@ function resetDemo(){
  squad = []; captain = null; swapFrom = null;
  try{ localStorage.removeItem("fx_squad"); localStorage.removeItem("fx_cap");
       localStorage.removeItem("fx_onboarded"); localStorage.removeItem("fx_coach");
-      localStorage.removeItem("fx_team"); }catch(_){}
+      localStorage.removeItem("fx_team"); localStorage.removeItem("fx_ledger"); }catch(_){}
  seenCoach = {}; coachShownThisSession = false;
  closeSheet(); paintChrome(); render(); openWizard();
 }
