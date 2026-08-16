@@ -247,6 +247,23 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .cc--empty .cc__shirtwrap{opacity:.34}
 .cc--empty .cc__plus{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px}
 
+/* ---------- the dugout ---------- */
+.dug{margin-top:10px;background:linear-gradient(180deg,#0E1430,#0A1026);border:1px solid var(--fx-line-2);
+ border-radius:var(--r);padding:10px 10px 12px}
+.dug__lab{font-size:10.5px;color:var(--fx-ink-mute);margin-bottom:8px;text-align:center}
+.dug__row{display:flex;gap:8px;justify-content:space-between}
+.subslot{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px}
+.subslot .cc{width:100%}
+.subslot .ord{position:absolute;inset-block-start:-4px;inset-inline-start:-3px;z-index:5;width:16px;height:16px;
+ border-radius:50%;background:var(--fx-surface-3);border:1px solid var(--fx-line-3);color:var(--fx-ink-dim);
+ font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.subslot .nm{font-size:9px;font-weight:700;color:var(--fx-ink-dim);max-width:100%;white-space:nowrap;
+ overflow:hidden;text-overflow:ellipsis}
+/* a sub that actually came on: the fourth official's board, lit */
+.subslot.on .cc{border-color:var(--fx-pos)}
+.subslot.on .camein{font-size:8.5px;font-weight:900;color:#08210F;background:var(--fx-pos);
+ padding:1px 5px;border-radius:4px;text-shadow:none}
+
 /* ---------- tier dots ---------- */
 .tier{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--fx-ink-dim)}
 .tdot{width:8px;height:8px;border-radius:50%;display:inline-block}
@@ -399,7 +416,12 @@ const VERSION = "demo-1.0";
    The floor is 4.5M, NOT 4.0M, and that coupling matters: at 4.5 a fourth elite strands all seven
    remaining slots at the floor, which is what enforces the ceiling. At 4.0 the fourth becomes
    comfortable and the tension quietly disappears. */
-const SQUAD_SIZE = 11, BUDGET = 100.0, MAX_PER_LEAGUE = 3, MIN_CLUB_PRICE = 4.5;
+const START_SIZE = 11, BENCH_SIZE = 4;
+const SQUAD_SIZE = START_SIZE + BENCH_SIZE;          /* 15 clubs owned, 11 of them on the pitch */
+const BUDGET = 120.0, MAX_PER_LEAGUE = 3, MIN_CLUB_PRICE = 4.5;
+/* Why 120.0M: the bench is priced at +5.0M per slot, which holds the ceiling at exactly THREE
+   elite clubs across all 15 (109.5M) — a fourth needs 123.5M. The same decision the 11-club
+   budget was built around, preserved at the larger squad. */
 /* rows of the formation, back to front. 1-4-4-2 = 11. */
 const FORMATIONS = {
  "4-4-2": [1, 4, 4, 2],
@@ -419,7 +441,7 @@ try{ seenCoach = JSON.parse(localStorage.getItem("fx_coach") || "{}"); }catch(_)
 
 /* ---------------- i18n. Every user-visible string lives here. ---------------- */
 const STR = {
- brandSub:["١١ ناديًا · ١٠٠ مليون","11 clubs · 100M"],
+ brandSub:["١١ + ٤ بدلاء · ١٢٠ مليون","11 + 4 subs · 120M"],
  demoNote:["هذه نسخة تجريبية للعرض فقط — لا حساب ولا اتصال بالخادم، وكل شيء محفوظ على جهازك. النقاط هنا محاكاة لعرض التصميم.",
            "Demo build for review only — no account, no server. Everything is stored on your device and the points are simulated to show the design."],
  segTeam:["فريقي","My team"], segPts:["النقاط","Points"], segBoard:["الترتيب","Standings"],
@@ -447,6 +469,10 @@ const STR = {
  startWiz:["ابدأ فريقك","Build your team"],
  changeTeam:["عدّل فريقك","Edit your team"],
  resetDemo:["ابدأ من جديد","Reset demo"],
+ benchLab:["دكة البدلاء · بيدخلوا لوحدهم لو ناديك مالوش ماتش","The bench · they come on automatically when a starter has no match"],
+ cameOn:["دخل","Came on"],
+ coveredLab:["تغييرات تلقائية","Automatic substitutions"],
+ uncoveredLab:["بدون تغطية","Left uncovered"],
  scrubHint:["حرّك المؤشر لتشوف الاستاد وهو بيتغيّر عبر الموسم","Slide to watch the stadium change across the season"],
  repaired:["الأسعار اتغيرت، فشيلنا الأندية اللي مابقتش تدخل في ميزانيتك. اختر بدلها.",
            "Prices changed, so clubs that no longer fit your budget were removed. Pick replacements."],
@@ -455,9 +481,9 @@ const STR = {
  wiz1h:["أهلاً بيك في جولك فانتازي","Welcome to Goallak Fantasy"],
  wiz1p:["مش هتختار لاعيبة — هتختار <b>أندية</b>. كل أسبوع، الأندية اللي في فريقك بتجيب لك نقط على حسب نتايجها.",
         "You don't pick players — you pick <b>clubs</b>. Each week the clubs in your team earn you points based on their real results."],
- wiz2h:["١١ ناديًا · ١٠٠ مليون","11 clubs · 100M"],
- wiz2p:["ميزانيتك ١٠٠ مليون وتختار ١١ ناديًا من ٧ دوريات — فريق كامل زي أي مدرب. أقصى ٣ أندية من نفس الدوري، عشان تفضل تتفرج على كل حاجة.",
-        "You have 100M for 11 clubs across 7 leagues — a full XI, like any manager. Maximum 3 from any one league, so you always have something to watch."],
+ wiz2h:["١١ + ٤ بدلاء · ١٢٠ مليون","11 + 4 subs · 120M"],
+ wiz2p:["ميزانيتك ١٢٠ مليون: ١١ نادي في الملعب و٤ على الدكة. البدلاء بيدخلوا لوحدهم لو ناديك مالوش ماتش.. أقصى ٣ أندية من نفس الدوري، عشان تفضل تتفرج على كل حاجة.",
+        "You have 120M: 11 clubs on the pitch and 4 on the bench. Subs come on automatically when a starter has no match.. Maximum 3 from any one league, so you always have something to watch."],
  wiz3h:["جهزنا لك فريق",""],
  wiz3hEn:["We built you a team","We built you a team"],
  wiz3p:["دي بداية صحيحة وكاملة. سيبها زي ما هي، أو غيّر اللي مش عاجبك.",
@@ -578,14 +604,41 @@ function simMatch(clubId, gw){
  return {blank:false, win, draw, gf, ga, oppTier, res, clean, goals, conc, tierBonus,
          pts: res + clean + goals + conc + tierBonus};
 }
-function gwTotal(gw){
- let total = 0;
- for(const id of squad){
+/* AUTOMATIC SUBSTITUTION.
+   A club with no fixture scores nothing, and the scenario analysis measured that an XI with no
+   bench forfeits 158 points a season — 4.2% — to blanks it cannot cover. So a blanked starter is
+   replaced, in bench order, by the first substitute who actually has a match. Each sub can only
+   come on once. This returns the whole picture, not just a number, because the points screen has
+   to be able to SHOW what happened. */
+function resolveGw(gw){
+ const starters = squad.slice(0, START_SIZE);
+ const bench = squad.slice(START_SIZE);
+ const used = {};
+ const lineup = [];
+ for(const id of starters){
   const m = simMatch(id, gw);
-  total += m.pts * (id === captain ? 2 : 1);
+  if(!m.blank){ lineup.push({id: id, m: m, sub: null}); continue; }
+  let replacement = null;
+  for(const b of bench){
+   if(used[b]) continue;
+   const bm = simMatch(b, gw);
+   if(bm.blank) continue;
+   used[b] = 1; replacement = {id: b, m: bm};
+   break;
+  }
+  lineup.push({id: id, m: m, sub: replacement});   /* sub === null: nobody could cover it */
  }
- return total;
+ let total = 0, covered = 0, uncovered = 0;
+ for(const row of lineup){
+  const scorer = row.sub || row;
+  const isCap = scorer.id === captain;
+  total += scorer.m.pts * (isCap ? 2 : 1);
+  if(row.sub) covered++;
+  else if(row.m.blank) uncovered++;
+ }
+ return {total: total, lineup: lineup, covered: covered, uncovered: uncovered, used: used};
 }
+function gwTotal(gw){ return resolveGw(gw).total; }
 /* DEMO ONLY: a scrubber so the season can be walked in ten seconds instead of nine months.
    The real product reads the gameweek from the fixture calendar. */
 let CURRENT_GW = 6;
@@ -676,11 +729,12 @@ function pitchHtml(withPoints, gw){
   + '<div class="st__stage"><div class="st__turf"><div class="st__mark"></div><div class="st__box"></div></div></div>'
   + '<div class="st__cards">';
  let i = 0;
+ const starters = squad.slice(0, START_SIZE);
  rows.forEach((count, r) => {
   const g = ROW_GEOM[r] || ROW_GEOM[3];
   const xs = ROW_X[count] || ROW_X[4];
   for(let k = 0; k < count; k++, i++){
-   const id = squad[i];
+   const id = starters[i];
    const c = id ? CLUBS.find(x => x.id === id) : null;
    const pos = 'style="inset-inline-start:' + xs[k] + '%;top:' + g.top + '%;--depth:' + g.depth + ';--i:' + i + '"';
    if(!c){
@@ -694,6 +748,31 @@ function pitchHtml(withPoints, gw){
     + '<span class="plinth"></span><span class="nm">' + esc(clubName(c)) + "</span></div>";
   }
  });
+ h += "</div></div>";
+ return h + dugoutHtml(withPoints, gw);
+}
+/* THE DUGOUT — the bench lives at the touchline, below the pitch, where a real one does.
+   A bench is not a compromise on the XI metaphor; it completes it. */
+function dugoutHtml(withPoints, gw){
+ const bench = squad.slice(START_SIZE);
+ const res = withPoints ? resolveGw(gw) : null;
+ let h = '<div class="dug"><div class="dug__lab">' + esc(t("benchLab")) + "</div><div class="
+  + '"dug__row">';
+ for(let i = 0; i < BENCH_SIZE; i++){
+  const id = bench[i];
+  const c = id ? CLUBS.find(x => x.id === id) : null;
+  if(!c){
+   h += '<div class="subslot"><button type="button" class="cc cc--empty cc--sub" onclick="openPicker()"'
+    + ' aria-label="' + esc(t("emptySlot")) + '"><span class="cc__plus">+</span></button>'
+    + '<span class="ord" dir="ltr">' + num(i + 1) + "</span></div>";
+   continue;
+  }
+  const cameOn = res && res.used[c.id];
+  h += '<div class="subslot' + (cameOn ? " on" : "") + '">' + cardHtml(c, withPoints, gw)
+   + '<span class="ord" dir="ltr">' + num(i + 1) + "</span>"
+   + '<span class="nm">' + esc(clubName(c)) + "</span>"
+   + (cameOn ? '<span class="camein">' + esc(t("cameOn")) + "</span>" : "") + "</div>";
+ }
  return h + "</div></div>";
 }
 function formationBar(){
@@ -741,7 +820,12 @@ function renderPoints(){
   + '<div class="muted" style="text-align:center;margin-top:4px">' + esc(t("gwPts")) + "</div></div>"
   + '<div class="card"><h3>' + esc(t("totalPts")) + '</h3><div class="ptsrow"><span class="dim">'
   + esc(t("gwTitle")) + " 1–" + num(gw) + '</span><span class="v" dir="ltr">' + num(seasonTotal()) + "</span></div></div>"
-  + '<div class="note">' + esc(t("simNote")) + "</div>"
+  + (function(){ const r = resolveGw(gw);
+    if(!r.covered && !r.uncovered) return '';
+    return '<div class="note">' + (r.covered ? '✅ ' + esc(t('coveredLab')) + ': ' + num(r.covered) : '')
+      + (r.covered && r.uncovered ? ' · ' : '')
+      + (r.uncovered ? '⚠️ ' + esc(t('uncoveredLab')) + ': ' + num(r.uncovered) : '') + '</div>'; })()
+  + '<div class="note">' + esc(t('simNote')) + '</div>'
   + pitchHtml(true, gw);
  maybeCoach("pts", "viewPoints", t("coachPts"));
 }
