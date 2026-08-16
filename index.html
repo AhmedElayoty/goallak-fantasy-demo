@@ -1814,7 +1814,10 @@ $("wizBox").addEventListener("click", function(e){
  TS = tutReduce(TS, {type: el.dataset.tutAct, arg: el.dataset.tutArg});
  if(TS.done){
   squad = TS.squad.slice(); captain = TS.captain; save();
-  closeWizard(); return;
+  /* paintChrome, not just render: the header subtitle becomes the TEAM NAME once a squad
+     exists, and the tutorial is the moment a squad first exists. Without this the header
+     kept showing the rules recap for the whole session. */
+  paintChrome(); closeWizard(); return;
  }
  tutMount();
  const f = $("wizBox").querySelector("[data-tut-focus]");
