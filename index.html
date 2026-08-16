@@ -537,6 +537,7 @@ const STR = {
  shareTitle:["شارك جولتك","Share your round"],
  shareHint:["دوس مطوّل على الصورة عشان تحفظها وتبعتها لأصحابك","Press and hold the image to save it and send it to your friends"],
  chipsLab:["الجوكرات","Chips"],
+ capCleared:["نزّلت الكابتن للدكة، فشيلنا الشارة. اختار كابتن جديد.","You benched your captain, so the armband was removed. Pick a new one."],
  scrubHint:["اسحب عشان تشوف نقط أي جولة","Swipe to see any round"],
  repaired:["الأسعار اتغيرت، فشيلنا الأندية اللي مابقتش تدخل في ميزانيتك. اختار بدلها.",
            "Prices changed, so clubs that no longer fit your budget were removed. Pick replacements."],
@@ -709,12 +710,29 @@ function resolveGw(gw){
  }
  return {total: total, lineup: lineup, covered: covered, uncovered: uncovered, used: used};
 }
-function gwTotal(gw){ return resolveGw(gw).total; }
+/* The chip has to reach the SCORE, or the confirm sheet is a lie: it promised the captain
+   would score x3 and the points screen still showed x2. applyChip needs three facts
+   resolveGw does not carry, so they are attached before it runs. */
+function activeChipFor(gw){
+ const p = chipPlays.find(x => x.gw === gw && x.state !== "cancelled");
+ return p ? p.chip + "-" + p.half : null;
+}
+function scoreGw(gw){
+ const res = resolveGw(gw);
+ const id = activeChipFor(gw);
+ if(!id || typeof applyChip !== "function") return res;
+ res.captain = captain;
+ res.vice = null;
+ res.bench = squad.slice(START_SIZE).map(cid => ({id: cid, m: simMatch(cid, gw)}));
+ return applyChip(id, res) || res;
+}
+function gwTotal(gw){ return scoreGw(gw).total; }
 /* DEMO ONLY: a scrubber so the season can be walked in ten seconds instead of nine months.
    The real product reads the gameweek from the fixture calendar. */
 let CURRENT_GW = 6;
 let _gwRaf = 0;
 function setGw(g){
+ clearArm();
  CURRENT_GW = Math.max(1, Math.min(36, g));
  /* on the team screen nothing but the stadium and the label depend on the gameweek, so
     patch in place and never touch the input the user is dragging */
@@ -782,8 +800,11 @@ const ROW_X = {1:[50], 2:[33,67], 3:[20,50,80], 4:[11,35,65,89], 5:[11,30,50,70,
 function fixtureState(id, gw){
  const m = simMatch(id, gw);
  if(m.blank) return {kind:"blank", matches:0};
- const dbl = (hash(id + "|d|" + gw) % 17) === 0;      /* a double round is rare */
- return dbl ? {kind:"double", matches:2} : {kind:"plays", matches:1};
+ /* NO double badge. The first version invented one from a separate hash the scoring engine
+    never reads, so "plays twice" clubs actually averaged 5.21 points against 5.55 for the
+    rest - the badge was decorative and wrong. The blank badge IS real: it comes from the
+    same simMatch the score comes from, and was measured exact across 4,536 club-rounds. */
+ return {kind:"plays", matches:1};
 }
 function bandOf(id){
  const p = priceOf(id);
@@ -863,7 +884,7 @@ function pitchHtml(withPoints, gw){
    A bench is not a compromise on the XI metaphor; it completes it. */
 function dugoutHtml(withPoints, gw){
  const bench = squad.slice(START_SIZE);
- const res = withPoints ? resolveGw(gw) : null;
+ const res = withPoints ? scoreGw(gw) : null;
  let h = '<div class="dug"><div class="dug__lab">' + esc(t("benchLab")) + "</div><div class="
   + '"dug__row">';
  for(let i = 0; i < BENCH_SIZE; i++){
@@ -895,6 +916,7 @@ function formationBar(){
 }
 function setFormation(f){
  if(!FORMATIONS[f]) return;
+ clearArm();
  formation = f;
  try{ localStorage.setItem("fx_form", f); }catch(_){}
  render();
@@ -950,7 +972,9 @@ function centreGwChip(){
 }
 function renderTeam(){
  const full = squad.length === SQUAD_SIZE;
- $("viewTeam").innerHTML = (squadWasRepaired ? '<div class="note">⚠️ ' + esc(t("repaired")) + "</div>" : "")
+ const capNote = _capDropped ? '<div class="note">⚠️ ' + esc(t("capCleared")) + "</div>" : "";
+ _capDropped = false;
+ $("viewTeam").innerHTML = capNote + (squadWasRepaired ? '<div class="note">⚠️ ' + esc(t("repaired")) + "</div>" : "")
   + budgetHtml() + formationBar()
   + '<div class="note" style="margin-bottom:10px">⇄ ' + esc(t('swapTip')) + '</div>'
   + gwBarHtml()
@@ -962,6 +986,7 @@ function renderTeam(){
   + (full ? '<button type="button" class="btn ghost" onclick="openShare()">' + esc(t("shareTitle")) + "</button>" : "")
   + '<button type="button" class="btn ghost" onclick="resetDemo()">' + esc(t("resetDemo")) + "</button>";
  if(squad.length) maybeCoach("budget", "budBox", "coachBudget");
+ centreGwChip();
 }
 
 function renderPoints(){
@@ -973,7 +998,7 @@ function renderPoints(){
   + '<div class="muted" style="text-align:center;margin-top:4px">' + esc(t("gwPts")) + "</div></div>"
   + '<div class="card"><h3>' + esc(t("totalPts")) + '</h3><div class="ptsrow"><span class="dim">'
   + esc(t("gwTitle")) + " 1–" + num(gw) + '</span><span class="v" dir="ltr">' + num(seasonTotal()) + "</span></div></div>"
-  + (function(){ const r = resolveGw(gw);
+  + (function(){ const r = scoreGw(gw);
     if(!r.covered && !r.uncovered) return '';
     return '<div class="note">' + (r.covered ? '✅ ' + esc(t('coveredLab')) + ': ' + num(r.covered) : '')
       + (r.covered && r.uncovered ? ' · ' : '')
@@ -1052,6 +1077,7 @@ function renderBoard(){
    offered action was "make captain". That is not a squad, it is a receipt.
    ============================================================================ */
 let _entryPlayed = false;
+let _capDropped = false;
 let swapFrom = null;                        /* index in `squad` currently armed for a swap */
 function isStarter(i){ return i < START_SIZE; }
 function swapArm(i){
@@ -1073,7 +1099,10 @@ function swapSlots(a, b){
  const tmp = squad[a]; squad[a] = squad[b]; squad[b] = tmp;
  /* the captain must always be one of the eleven: a swap that benches him would leave the
     armband showing while silently paying nothing (measured: 67 -> 51 points) */
- if(captain && squad.indexOf(captain) >= START_SIZE) captain = squad[0] || null;
+ /* Never silently reassign the armband. Benching the captain used to hand it to whatever
+    club happened to occupy slot 0 - measured 8 silent reassignments in 200 swaps, once
+    swinging a round by 17 points. Clear it and say so; the manager chooses. */
+ if(captain && squad.indexOf(captain) >= START_SIZE){ captain = null; _capDropped = true; }
  save();
 }
 /* promote a substitute straight into the XI, replacing a chosen starter */
@@ -1085,13 +1114,15 @@ function swapLabel(i){
 }
 
 /* ---------------- sheets ---------------- */
+function clearArm(){ swapFrom = null; }
 function openSheet(html){
+ clearArm();
  $("sheetBox").innerHTML = '<button type="button" class="sx" onclick="closeSheet()" aria-label="' + esc(t("done")) + '">✕</button>' + html;
  $("sheet").classList.remove("hide");
  document.body.classList.add("gk-lock");
  $("sheetBox").focus({preventScroll:true});
 }
-function closeSheet(){ $("sheet").classList.add("hide"); document.body.classList.remove("gk-lock"); render(); }
+function closeSheet(){ clearArm(); $("sheet").classList.add("hide"); document.body.classList.remove("gk-lock"); render(); }
 $("sheet").addEventListener("click", e => { if(e.target === $("sheet")) closeSheet(); });
 
 function openPicker(){
@@ -1389,6 +1420,7 @@ function resetDemo(){
 }
 
 function toggleLang(){
+ clearArm();
  LANG = LANG === "ar" ? "en" : "ar";
  try{ localStorage.setItem("fx_lang", LANG); }catch(_){}
  paintChrome(); render();
