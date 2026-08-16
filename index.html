@@ -718,7 +718,7 @@ const FORMATIONS = {
 (function resetOnOpen(){
  try{
   for(const k of ["fx_squad","fx_cap","fx_form","fx_lang","fx_coach","fx_onboarded","fx_gw",
-                  "fx_chips","fx_team","fx_ledger"]) localStorage.removeItem(k);
+                  "fx_chips","fx_team","fx_ledger","fx_firstsub"]) localStorage.removeItem(k);
  }catch(_){}
 })();
 
@@ -776,6 +776,7 @@ const STR = {
  groundProgress:["أرضك · {n}/{of} جولة","Your ground · {n}/{of} rounds"],
  covNote:["الجولة دي فيها {pct}% بس من الأندية بتلعب — عشان كده في أندية مالهاش ماتش",
           "Only {pct}% of clubs play this round — that is why some have no match"],
+ whyZero:["ليه في أندية ماجابتش نقط؟","Why did some clubs score nothing?"],
  tooExpensive:["أغلى من اللي فاضل معاك","Over your remaining budget"],
  leagueFull:["خلاص عندك 3 أندية من الدوري ده","3 clubs from this league already"],
  squadFull:["فريقك كمل — شيل نادي الأول","Your squad is full"],
@@ -1367,9 +1368,13 @@ function renderPoints(){
   + esc(t("gwTitle")) + " 1–" + num(gw) + '</span><span class="v" dir="ltr">' + num(seasonTotal()) + "</span></div></div>"
   + (function(){ const r = scoreGw(gw);
     if(!r.covered && !r.uncovered) return '';
+    /* the sheet is offered ONLY when a club actually blanked — on a full round the module
+       renders "0 of your clubs had no match" and then contradicts itself */
     return '<div class="note">' + (r.covered ? '✅ ' + esc(t('coveredLab')) + ': ' + num(r.covered) : '')
       + (r.covered && r.uncovered ? ' · ' : '')
-      + (r.uncovered ? '⚠️ ' + esc(t('uncoveredLab')) + ': ' + num(r.uncovered) : '') + '</div>'; })()
+      + (r.uncovered ? '⚠️ ' + esc(t('uncoveredLab')) + ': ' + num(r.uncovered) : '') + '</div>'
+      + '<button type="button" class="btn ghost" onclick="openBlankSheet(' + gw + ')">'
+      + esc(t("whyZero")) + "</button>"; })()
   /* the round's real fixture coverage, from the frozen calendar — this is WHY clubs blank,
      and until now the app never told anyone. 100% rounds say nothing; the rest explain. */
   + (gwCoverage(gw) < 0.999
@@ -1378,6 +1383,61 @@ function renderPoints(){
   + pitchHtml(true, gw);
  maybeCoach("pts", "viewPoints", "coachPts");
  centreGwChip();
+}
+/* ============================================================================
+   «ليه ماجابوش نقط؟» — the blank-round sheet.
+   gwBlankSheetHtml has been in the bundle since it was written and index.html has
+   never called it. It only became worth mounting once calendar.json was actually
+   read, because until then the blanks it explains were invented by a hash and
+   contradicted the fixture list it would have been explaining them against.
+
+   Two traps in this module's contract, both confirmed by reading its body:
+     · nameOf() tests `typeof o.name === "string"` BEFORE the {ar,en} branch, so
+       passing a club row straight through returns "Arsenal" in the Arabic UI.
+       Every name goes in as {ar, en}.
+     · every date field is a pre-formatted DISPLAY STRING, never a Date object.
+   And one behaviour: on a round with no blanks it renders "0 of your clubs had no
+   match" followed by "no substitute came in", because the nCov===0 branch is
+   tested before nCov===nBlank. So the entry point is guarded on there being any.
+   ============================================================================ */
+function nameOf2(o){ return {ar: (o && o.ar) || (o && o.name) || "", en: (o && (o.short || o.name)) || ""}; }
+function blankRows(gw){
+ const res = resolveGw(gw);
+ return res.lineup.filter(r => r.m.blank);
+}
+function openBlankSheet(gw){
+ if(typeof gwBlankSheetHtml !== "function") return;
+ const res = resolveGw(gw);
+ const bench = squad.slice(START_SIZE);
+ let firstUsed = false;
+ try{ firstUsed = localStorage.getItem("fx_firstsub") === "1"; }catch(_){}
+ let awarded = false;
+ const clubs = res.lineup.map(row => {
+  const c = CLUBS.find(x => x.id === row.id) || {};
+  const lg = LEAGUES.find(l => l.id === c.lg);
+  const isCap = row.id === captain;
+  const scorer = row.sub || row;
+  let sub = null;
+  if(row.sub){
+   const sc = CLUBS.find(x => x.id === row.sub.id) || {};
+   sub = {name: nameOf2(sc), slot: bench.indexOf(row.sub.id) + 1, pts: row.sub.m.pts};
+  }
+  /* the celebration fires ONCE, ever — on the first substitution this player ever sees */
+  let firstEver = false;
+  if(row.sub && !firstUsed && !awarded){ firstEver = true; awarded = true; }
+  return {blank: row.m.blank, sub: sub, firstEver: firstEver,
+          league: lg ? {ar: lg.ar, en: lg.en} : "",
+          captain: isCap, matches: row.m.blank ? 0 : 1,
+          pts: row.m.blank ? 0 : scorer.m.pts * (isCap ? 2 : 1),
+          code: c.code || "", name: nameOf2(c)};
+ });
+ if(awarded){ try{ localStorage.setItem("fx_firstsub", "1"); }catch(_){} }
+ const next = gw < 36 ? gw + 1 : null;
+ openSheet(gwBlankSheetHtml({
+  lang: LANG, points: gwTotal(gw), status: "final", clubs: clubs,
+  nextGw: next, nextDate: next ? gwDates(next) : "",
+  nextMissing: next ? Math.round(CLUBS.length * (1 - gwCoverage(next))) : 0
+ }) + '<button type="button" class="btn" onclick="closeSheet()">' + esc(t("done")) + "</button>");
 }
 /* Everything you touch once and then never again. It used to sit permanently above the
    pitch: the budget meter, the formation chips, the swap tip, the round strip, and four
