@@ -259,30 +259,36 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  line-height:1.12;color:#F2F5FF;width:132%;max-width:26vw;
  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
  text-shadow:0 1px 3px rgba(0,0,0,.95), 0 0 6px rgba(0,0,0,.75)}
-/* THE PLATE MUST NEVER EAT A DIGIT.
-   It was a fixed 11px on a card that is as narrow as 43px (the goalkeeper, at .90 depth) and
-   37px on the bench. "14.5" + "RMA" needs ~52px, so it overflowed — and in RTL the overflow
-   edge is the LEFT one, which is where the price sits. Real Madrid at 14.5M rendered as
-   ".5RMA" and a 4.5M club as ".5". Reported from a real phone. Three guarantees now:
-     1. the type scales with the card's OWN rendered width, so it fits by construction;
-     2. the price cannot shrink or clip - only the code may, and only as a last resort;
-     3. the bench, which is too narrow to hold both legibly at any size, shows the code
-        alone. A sliced price is worse than no price, and the price is one tap away. */
-.cc__plate{height:26%;min-height:18px;display:flex;align-items:center;justify-content:space-between;
- gap:2px;padding:0 3px;overflow:hidden;border-top:1px solid rgba(255,255,255,.09);
+/* THE PLATE CARRIES ONE THING, NOT TWO.
+   It used to hold the price AND the code at a fixed 11px on a card that renders 45px wide
+   (the goalkeeper, at .90 depth) and 39px on the bench. Measured on the live page at 360px:
+   the pair needs 4.00em, so at 11px it wants 52px of a 41px plate. It overflowed — and in
+   RTL the overflow edge is the LEFT one, which is exactly where the price sits, so Real
+   Madrid rendered as ".5RMA" and every 4.5M club as ".5". Reported from a real phone.
+
+   Scaling the type down does not rescue it: to fit both, the goalkeeper's plate needs
+   8.2px and the 48px floor needs 7.7px. That is not a readable size, it is a smaller bug.
+
+   So the PRICE comes off the card. It is not lost and it is not even the card's job —
+   the rim metal already encodes the price band, which is what "is this club expensive"
+   actually asks, and the exact number is on the selection row, in the club sheet and in
+   the budget line. What is left is the code, centred, at a full 11px.
+   In the points view the plate shows the score beside the code: 3.2em, which fits.
+
+   The size is derived from the card's own rendered width for the WORST case the plate can
+   hold - code plus a score, 3.2em - so the same rule is safe in both views and nothing here
+   depends on :has(), which older phones do not have. */
+.cc__plate{height:26%;min-height:18px;display:flex;align-items:center;justify-content:center;
+ gap:3px;padding:0 3px;overflow:hidden;border-top:1px solid rgba(255,255,255,.09);
  background:rgba(6,10,26,.72);
- font-size:clamp(8.5px, calc((var(--cw) * var(--depth,1) - 8px) / 4.3), 11px)}
-.cc__code{font-size:1em;font-weight:900;letter-spacing:0;color:#F2F5FF;
+ font-size:clamp(9px, calc((var(--cw) * var(--depth,1) - 12px) / 3.3), 11px)}
+.cc__code{font-size:1em;font-weight:900;letter-spacing:.3px;color:#F2F5FF;
  flex:0 1 auto;min-width:0;overflow:hidden;white-space:nowrap}
-.cc__val{font-size:1em;font-weight:900;color:var(--fx-gold);flex:0 0 auto;white-space:nowrap}
-.cc__val.pts{color:var(--fx-pos)}
-/* the bench: code only, centred, at a size that is actually readable */
-.subslot .cc__plate{justify-content:center;font-size:10px}
-.subslot .cc__val{display:none}
-/* ...except when the plate is showing POINTS, which is the whole reason to look at a
-   substitute. Points are 1-3 characters, so both still fit. */
-.subslot .cc__plate:has(.cc__val.pts){justify-content:space-between;font-size:9px}
-.subslot .cc__val.pts{display:inline}
+/* the price is hidden on the card; .pts marks a RESULT, which is always shown */
+.cc__val{font-size:1em;font-weight:900;color:var(--fx-gold);flex:0 0 auto;white-space:nowrap;
+ display:none}
+.cc__val.pts{display:inline;color:var(--fx-pos)}
+.subslot{--depth:.78}
 /* On a 45px card the fixture badge's words do not fit - "مالوش ماتش" rendered as a sliced
    "مالوش". The pill keeps its shape and colour (both non-colour channels survive) but the
    label is moved to aria-label, where it is read but never clipped. */
