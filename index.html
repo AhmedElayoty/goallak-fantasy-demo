@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070B1A">
+<title>جولك فانتازي · Goallak Fantasy — DEMO</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⚽</text></svg>">
+<style>
+/* ============================================================================
+   GOALLAK FANTASY — ONE MODE ONLY.
+   No light theme, no dark theme, no toggle. Every token is declared here and
+   nothing inherits from a themed parent, so the look cannot drift.
+   Palette + contrast ratios are from design/fantasy-color.md (all measured).
+   ============================================================================ */
+:root{
+ --fx-bg:#070B1A; --fx-surface:#101736; --fx-surface-2:#182246; --fx-surface-3:#212D57;
+ --fx-scrim:rgba(3,5,14,.82);
+ --fx-line:#2A3560; --fx-line-2:#3D4C82; --fx-line-3:#55689F;
+ --fx-ink:#F2F5FF; --fx-ink-dim:#A9B7E4; --fx-ink-mute:#7C8AB8;
+ --fx-gold:#FFC53D; --fx-pos:#3BE07F; --fx-neg:#FF6070; --fx-acc:#FF7A45;
+ --fx-live:#35D0F5; --fx-chip:#A77BFF; --fx-urgent:#FF3B5C; --fx-blank:#63719C;
+ --t1:#FFD24A; --t2:#FF8A3D; --t3:#7E8CC8; --t4:#49578A; --t5:#2A3560;
+ --r:14px; --pad:14px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+ background:var(--fx-bg); color:var(--fx-ink);
+ font-family:"Segoe UI",system-ui,-apple-system,"Noto Sans Arabic",Tahoma,sans-serif;
+ font-size:15px; line-height:1.5;
+ padding-bottom:78px;
+ overflow-x:hidden;
+}
+body.gk-lock{position:fixed;width:100%;overflow:hidden}
+button,input,select{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:3px solid var(--fx-gold);outline-offset:2px;border-radius:6px}
+.hide{display:none !important}
+[dir=ltr]{unicode-bidi:isolate}
+
+/* ---------- header ---------- */
+.hdr{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#0A1024 0%,rgba(10,16,36,.96) 100%);
+ border-bottom:1px solid var(--fx-line);padding:10px var(--pad);display:flex;align-items:center;gap:10px}
+.hbrand{display:flex;flex-direction:column;min-width:0;flex:1}
+.hname{font-size:17px;font-weight:900;letter-spacing:.2px}
+.hname b{color:var(--fx-gold)}
+.hsub{font-size:10.5px;color:var(--fx-ink-mute)}
+.hbtn{width:38px;height:38px;border-radius:11px;background:var(--fx-surface-2);border:1px solid var(--fx-line);
+ display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex:0 0 auto}
+.demoTag{font-size:9.5px;font-weight:900;letter-spacing:.6px;color:#0B1020;background:var(--fx-gold);
+ padding:3px 7px;border-radius:6px;flex:0 0 auto}
+
+/* ---------- shell ---------- */
+.wrap{padding:var(--pad);max-width:560px;margin:0 auto}
+.seg{display:flex;gap:6px;background:var(--fx-surface);border:1px solid var(--fx-line);border-radius:12px;padding:4px;margin-bottom:14px}
+.seg button{flex:1;padding:9px 4px;border-radius:9px;font-size:13px;font-weight:800;color:var(--fx-ink-dim)}
+.seg button.on{background:var(--fx-surface-3);color:var(--fx-ink);box-shadow:0 1px 0 rgba(255,255,255,.05) inset}
+.card{background:var(--fx-surface);border:1px solid var(--fx-line-2);border-radius:var(--r);padding:var(--pad);margin-bottom:12px}
+.card h3{margin:0 0 10px;font-size:14px;font-weight:900;color:var(--fx-ink)}
+.muted{color:var(--fx-ink-mute);font-size:12px}
+.dim{color:var(--fx-ink-dim)}
+
+/* ---------- the kit tile: club identity WITHOUT any crest ----------
+   Club trademarks are not licensed by any football data feed, so colours + pattern
+   ARE the identity. Nine patterns, pure CSS, percentage-based so one rule works at
+   every size. `sash` deliberately never mirrors in RTL. */
+.fxkit{position:relative;border-radius:12px;flex:0 0 auto;overflow:hidden;display:flex;
+ align-items:center;justify-content:center;background:var(--c1)}
+.fxkit[data-pat="stripes"]{background:repeating-linear-gradient(90deg,var(--c1) 0 14.285%,var(--c2) 14.285% 28.571%)}
+.fxkit[data-pat="hoops"]{background:repeating-linear-gradient(180deg,var(--c1) 0 20%,var(--c2) 20% 40%)}
+.fxkit[data-pat="halves"]{background:linear-gradient(90deg,var(--c1) 0 50%,var(--c2) 50%)}
+.fxkit[data-pat="sash"]{background:linear-gradient(58deg,var(--c1) 0 38%,var(--c2) 38% 62%,var(--c1) 62%)}
+.fxkit[data-pat="band"]{background:linear-gradient(180deg,var(--c1) 0 62%,var(--c2) 62%)}
+.fxkit[data-pat="diagonal"]{background:linear-gradient(135deg,var(--c1) 0 50%,var(--c2) 50%)}
+.fxkit[data-pat="chevron"]{background:linear-gradient(45deg,var(--c2) 0 24%,transparent 24%),linear-gradient(-45deg,var(--c2) 0 24%,transparent 24%),var(--c1)}
+.fxkit[data-pat="sleeves"]{background:linear-gradient(90deg,var(--c2) 0 16%,var(--c1) 16% 84%,var(--c2) 84%)}
+[dir=rtl] .fxkit[data-pat="sash"]{background:linear-gradient(58deg,var(--c1) 0 38%,var(--c2) 38% 62%,var(--c1) 62%)}
+/* three rim tiers, chosen by tile luminance at BUILD time, never at runtime */
+.fxkit[data-rim="contain"]{border:2px solid rgba(6,10,26,.62);box-shadow:0 2px 8px rgba(0,0,0,.55)}
+.fxkit[data-rim="standard"]{border:2px solid rgba(255,255,255,.55);box-shadow:0 2px 6px rgba(0,0,0,.45)}
+.fxkit[data-rim="rescue"]{border:2px solid rgba(255,255,255,.86);box-shadow:0 0 0 3px rgba(255,255,255,.10),0 2px 6px rgba(0,0,0,.45)}
+/* isoluminant kits (Barcelona) get a hairline seam or the stripes fuse into one field */
+.fxkit[data-iso="1"][data-pat="stripes"]{background:repeating-linear-gradient(90deg,
+ var(--c1) 0 13.6%, rgba(0,0,0,.55) 13.6% 14.285%, var(--c2) 14.285% 27.9%, rgba(0,0,0,.55) 27.9% 28.571%)}
+.fxkit::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 80% at 30% 12%,rgba(255,255,255,.22),rgba(255,255,255,0) 60%)}
+.fxcode{position:relative;z-index:2;font-size:11px;font-weight:900;letter-spacing:.5px;
+ color:var(--ink);paint-order:stroke fill;-webkit-text-stroke:.6px rgba(0,0,0,.55)}
+.k34{width:34px;height:34px}.k34 .fxcode{font-size:9px}
+.k44{width:44px;height:44px}.k44 .fxcode{font-size:10px}
+.k60{width:60px;height:60px}.k60 .fxcode{font-size:12.5px}
+
+/* ---------- budget meter ---------- */
+.bud{background:var(--fx-surface-2);border:1px solid var(--fx-line);border-radius:12px;padding:11px 12px;margin-bottom:12px}
+.budtop{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:8px}
+.budleft{font-size:20px;font-weight:900;color:var(--fx-gold)}
+.budlab{font-size:11px;color:var(--fx-ink-dim)}
+.budtrack{height:9px;border-radius:99px;background:#0B1024;border:1px solid var(--fx-line);overflow:hidden;position:relative}
+.budfill{height:100%;background:linear-gradient(90deg,var(--fx-acc),var(--fx-gold));transition:inline-size .25s}
+/* the reserve floor: the money you MUST keep to fill remaining slots. Hatched, not a number to work out. */
+.budresv{position:absolute;inset-block:0;inset-inline-end:0;background:repeating-linear-gradient(45deg,
+ rgba(85,104,159,.55) 0 4px,rgba(85,104,159,.18) 4px 8px);border-inline-start:1px solid var(--fx-line-3)}
+.budnext{font-size:11.5px;color:var(--fx-ink-dim);margin-top:7px;display:flex;justify-content:space-between;gap:8px}
+.budnext b{color:var(--fx-ink)}
+
+/* ---------- club rows ---------- */
+.clubrow{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:12px;
+ background:var(--fx-surface-2);border:1px solid var(--fx-line);margin-bottom:7px;width:100%;text-align:start}
+.clubrow.on{background:var(--fx-surface-3);border-color:var(--fx-line-3)}
+.clubrow[disabled]{opacity:.42;cursor:not-allowed}
+.crname{flex:1;min-width:0}
+.crn{font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crl{font-size:10.5px;color:var(--fx-ink-mute)}
+.crwhy{font-size:10.5px;color:var(--fx-neg)}
+.crprice{font-size:13px;font-weight:900;color:var(--fx-gold);flex:0 0 auto}
+.crpick{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--fx-acc);color:#0B1020;
+ font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center}
+.clubrow.on .crpick{background:var(--fx-pos)}
+
+/* ---------- pitch ---------- */
+.pitch{background:linear-gradient(180deg,#0C1430,#0A1026);border:1px solid var(--fx-line-2);
+ border-radius:var(--r);padding:16px 10px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px 6px;
+ isolation:isolate;position:relative}
+.pslot{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+.pslot .nm{font-size:9.5px;color:var(--fx-ink-dim);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pslot .pt{font-size:11px;font-weight:900;color:var(--fx-gold)}
+.pempty{width:60px;height:60px;border-radius:12px;border:2px dashed var(--fx-line-3);
+ display:flex;align-items:center;justify-content:center;color:var(--fx-ink-mute);font-size:20px}
+.capbadge{position:absolute;inset-block-start:-5px;inset-inline-end:-5px;width:20px;height:20px;border-radius:50%;
+ background:var(--fx-gold);color:#0B1020;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;z-index:3}
+.kitwrap{position:relative}
+
+/* ---------- tier dots ---------- */
+.tier{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--fx-ink-dim)}
+.tdot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* ---------- points ---------- */
+.ptsbig{font-size:44px;font-weight:900;color:var(--fx-gold);line-height:1;text-align:center}
+.ptsrow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--fx-line);font-size:13px;gap:10px}
+.ptsrow:last-child{border-bottom:none}
+.ptsrow .v{font-weight:900}
+.pos{color:var(--fx-pos)}.neg{color:var(--fx-neg)}
+
+/* ---------- leaderboard ---------- */
+.lbrow{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:11px;background:var(--fx-surface-2);
+ border:1px solid var(--fx-line);margin-bottom:6px}
+.lbrank{width:26px;font-weight:900;color:var(--fx-ink-mute);font-size:12px}
+.lbrow.me{border-color:var(--fx-gold);background:var(--fx-surface-3)}
+.lbname{flex:1;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbpts{font-weight:900;color:var(--fx-gold)}
+
+/* ---------- bottom nav ---------- */
+.bnav{position:fixed;inset-inline:0;bottom:0;z-index:60;display:flex;
+ background:linear-gradient(180deg,rgba(10,16,36,.97),#080D1E);border-top:1px solid var(--fx-line-2);
+ padding:7px 6px calc(7px + env(safe-area-inset-bottom))}
+.bnav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 2px;
+ color:var(--fx-ink-mute);font-size:10.5px;font-weight:700}
+.bnav button.on{color:var(--fx-gold)}
+.bnav .ic{font-size:19px;line-height:1}
+
+/* ---------- sheets ---------- */
+.sheet{position:fixed;inset:0;z-index:120;background:var(--fx-scrim);display:flex;align-items:flex-end;justify-content:center}
+.sheetbox{background:var(--fx-surface);border:1px solid var(--fx-line-2);border-start-start-radius:20px;border-start-end-radius:20px;
+ width:100%;max-width:560px;max-height:88vh;overflow:auto;padding:18px var(--pad) 26px;position:relative;overscroll-behavior:contain}
+.sx{position:sticky;top:0;float:inline-end;width:32px;height:32px;border-radius:50%;background:var(--fx-surface-3);
+ color:var(--fx-ink-dim);font-size:15px;z-index:40}
+.sheetbox h2{margin:0 0 4px;font-size:18px;font-weight:900}
+
+/* ---------- wizard ---------- */
+.wizdots{display:flex;gap:6px;justify-content:center;margin:14px 0 18px}
+.wizdot{width:7px;height:7px;border-radius:50%;background:var(--fx-line-2)}
+.wizdot.on{background:var(--fx-gold);width:20px;border-radius:99px}
+.wizart{font-size:52px;text-align:center;margin:8px 0 14px}
+.wizh{font-size:20px;font-weight:900;text-align:center;margin-bottom:8px}
+.wizp{font-size:14px;color:var(--fx-ink-dim);text-align:center;line-height:1.65;margin-bottom:6px}
+.btn{display:block;width:100%;padding:13px;border-radius:12px;background:var(--fx-acc);color:#12060B;
+ font-weight:900;font-size:15px;text-align:center;margin-top:14px}
+.btn.ghost{background:transparent;border:1px solid var(--fx-line-2);color:var(--fx-ink-dim);font-weight:700;margin-top:8px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* ---------- coach mark ---------- */
+.coach{position:fixed;z-index:130;background:var(--fx-surface-3);border:1px solid var(--fx-line-3);
+ border-radius:12px;padding:11px 13px;max-width:290px;box-shadow:0 10px 30px rgba(0,0,0,.6);font-size:12.5px;line-height:1.55}
+.coach b{color:var(--fx-gold)}
+.coach .cdo{margin-top:9px;text-align:end;color:var(--fx-acc);font-weight:900;font-size:12px}
+
+/* ---------- glossary ---------- */
+.gloss{border-bottom:1px solid var(--fx-line);padding:10px 0}
+.gloss:last-child{border-bottom:none}
+.gterm{font-size:13.5px;font-weight:900;color:var(--fx-gold)}
+.gen{font-size:11px;color:var(--fx-ink-mute)}
+.gdef{font-size:12.5px;color:var(--fx-ink-dim);margin-top:3px;line-height:1.6}
+
+.note{background:rgba(255,197,61,.08);border:1px solid rgba(255,197,61,.32);border-radius:11px;
+ padding:10px 12px;font-size:12px;color:var(--fx-ink-dim);margin-bottom:12px;line-height:1.6}
+.filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:8px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.fchip{flex:0 0 auto;padding:7px 12px;border-radius:99px;background:var(--fx-surface-2);border:1px solid var(--fx-line);
+ font-size:12px;font-weight:700;color:var(--fx-ink-dim)}
+.fchip.on{background:var(--fx-surface-3);color:var(--fx-ink);border-color:var(--fx-line-3)}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms !important;animation:none !important}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+ <div class="hbrand">
+  <div class="hname">جولك <b>فانتازي</b></div>
+  <div class="hsub" id="hsub">اختر ٨ أندية · ١٠٠ مليون</div>
+ </div>
+ <span class="demoTag" id="demoTag">DEMO</span>
+ <button class="hbtn" id="langBtn" onclick="toggleLang()" aria-label="اللغة">EN</button>
+</header>
+
+<main class="wrap">
+ <div class="note" id="demoNote"></div>
+
+ <div class="seg" id="segbar"></div>
+
+ <section id="viewTeam"></section>
+ <section id="viewPoints" class="hide"></section>
+ <section id="viewBoard" class="hide"></section>
+</main>
+
+<nav class="bnav" id="bnav"></nav>
+
+<div class="sheet hide" id="sheet"><div class="sheetbox" id="sheetBox" tabindex="-1"></div></div>
+<div class="sheet hide" id="wiz"><div class="sheetbox" id="wizBox" tabindex="-1"></div></div>
+<div class="coach hide" id="coach"></div>
+
+<script>
+/* ===========================================================================
+   GOALLAK FANTASY — DEMO
+   Standalone. No backend, no accounts, no network writes. Everything lives in
+   localStorage so the whole flow can be walked through and judged.
+   The real build will sit behind the worker's signed sessions.
+   =========================================================================== */
+const $ = id => document.getElementById(id);
+const VERSION = "demo-1.0";
+const SQUAD_SIZE = 8, BUDGET = 100.0, MAX_PER_LEAGUE = 3, MIN_CLUB_PRICE = 4.0;
+
+let LANG = "ar";
+try{ LANG = localStorage.getItem("fx_lang") || "ar"; }catch(_){}
+
+let CLUBS = [], LEAGUES = [], PRICES = {};
+let squad = [], captain = null, view = "team", pickFilter = "all", wizStep = 0;
+let seenCoach = {};
+try{ seenCoach = JSON.parse(localStorage.getItem("fx_coach") || "{}"); }catch(_){}
+
+/* ---------------- i18n. Every user-visible string lives here. ---------------- */
+const STR = {
+ brandSub:["اختر ٨ أندية · ١٠٠ مليون","Pick 8 clubs · 100M"],
+ demoNote:["هذه نسخة تجريبية للعرض فقط — لا حساب ولا اتصال بالخادم، وكل شيء محفوظ على جهازك. النقاط هنا محاكاة لعرض التصميم.",
+           "Demo build for review only — no account, no server. Everything is stored on your device and the points are simulated to show the design."],
+ segTeam:["فريقي","My team"], segPts:["النقاط","Points"], segBoard:["الترتيب","Standings"],
+ navTeam:["فريقي","Team"], navPick:["الاختيار","Pick"], navPts:["النقاط","Points"], navBoard:["الترتيب","Table"], navHelp:["الشرح","Help"],
+ budLeft:["المتبقي","Remaining"], budOf:["من ١٠٠ مليون","of 100M"],
+ nextMax:["أقصى سعر للنادي الجاي","Max for your next club"], slotsLeft:["أماكن باقية","Slots left"],
+ pickTitle:["اختر أنديتك","Pick your clubs"],
+ allLg:["الكل","All"],
+ emptySlot:["فاضي","Empty"],
+ tooExpensive:["أغلى من المتبقي","Over your remaining budget"],
+ leagueFull:["وصلت ٣ أندية من نفس الدوري","3 clubs from this league already"],
+ squadFull:["فريقك كامل","Your squad is full"],
+ reserveWarn:["لازم تسيب فلوس للأماكن الباقية","You must leave money for the remaining slots"],
+ capTitle:["الكابتن","Captain"], capNote:["الكابتن بياخد ضعف نقاطه","Your captain scores double"],
+ setCap:["اجعله الكابتن","Make captain"],
+ gwTitle:["الجولة","Gameweek"], totalPts:["إجمالي النقاط","Total points"],
+ gwPts:["نقاط الجولة","Gameweek points"],
+ breakdown:["من فين جت النقاط؟","Where did these points come from?"],
+ bdWin:["فوز","Win"], bdDraw:["تعادل","Draw"], bdLoss:["خسارة","Loss"],
+ bdClean:["شباك نظيفة","Clean sheet"], bdGoals:["أهداف","Goals scored"], bdConc:["أهداف مستقبلة","Goals conceded"],
+ bdTier:["مكافأة قوة الخصم","Opponent strength bonus"], bdCap:["ضعف الكابتن","Captain double"],
+ noPlay:["لا يلعب","No fixture"],
+ rulesTitle:["إزاي تلعب؟","How to play"],
+ glossTitle:["قاموس الفانتازي","Fantasy glossary"],
+ startWiz:["ابدأ فريقك","Build your team"],
+ changeTeam:["عدّل فريقك","Edit your team"],
+ resetDemo:["ابدأ من جديد","Reset demo"],
+ done:["تمام","Done"], next:["التالي","Next"], back:["رجوع","Back"], skip:["تخطى الشرح","Skip"],
+ confirmSquad:["أكد الفريق","Confirm squad"],
+ wiz1h:["أهلاً بيك في جولك فانتازي","Welcome to Goallak Fantasy"],
+ wiz1p:["مش هتختار لاعيبة — هتختار <b>أندية</b>. كل أسبوع، الأندية اللي في فريقك بتجيب لك نقط على حسب نتايجها.",
+        "You don't pick players — you pick <b>clubs</b>. Each week the clubs in your team earn you points based on their real results."],
+ wiz2h:["٨ أندية · ١٠٠ مليون","8 clubs · 100M"],
+ wiz2p:["ميزانيتك ١٠٠ مليون وتختار ٨ أندية من ٧ دوريات. أقصى ٣ أندية من نفس الدوري، عشان تفضل تتفرج على كل حاجة.",
+        "You have 100M for 8 clubs across 7 leagues. Maximum 3 from any one league, so you always have something to watch."],
+ wiz3h:["جهزنا لك فريق",""],
+ wiz3hEn:["We built you a team","We built you a team"],
+ wiz3p:["دي بداية صحيحة وكاملة. سيبها زي ما هي، أو غيّر اللي مش عاجبك.",
+        "This is a complete, legal starting squad. Keep it, or change whatever you like."],
+ wiz4h:["اختر الكابتن","Choose your captain"],
+ wiz4p:["نادي واحد بس بياخد ضعف النقط. اختاره كويس.","One club scores double. Choose well."],
+ autoPick:["اختيار تلقائي","Auto-pick"],
+ coachBudget:["الشريط ده فلوسك. الجزء المخطط محجوز للأماكن اللي لسه فاضية.","This bar is your money. The hatched part is reserved for your empty slots."],
+ coachCap:["دوس على أي نادي عشان تخليه الكابتن.","Tap any club to make it your captain."],
+ coachPts:["دوس على نقاط أي نادي عشان تشوف جت منين بالظبط.","Tap any club's points to see exactly how they were earned."],
+ gotIt:["فهمت","Got it"],
+ tierLab:["قوة الخصم","Opponent strength"],
+ tier1:["بطل","Elite"],tier2:["قوي","Strong"],tier3:["متوسط","Mid"],tier4:["ضعيف","Weak"],tier5:["أضعف","Weakest"],
+ priceLab:["السعر","Price"],
+ you:["أنت","You"],
+ simNote:["النتائج هنا محاكاة لعرض الشكل — مش نتائج حقيقية.","Results here are simulated to show the design — not real fixtures."]
+};
+function t(k){ const e = STR[k]; return e ? e[LANG === "ar" ? 0 : 1] : k; }
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+/* Western digits everywhere, per the app's own rule */
+const num = n => String(n);
+
+function clubName(c){ return LANG === "ar" && c.ar ? c.ar : (c.short || c.name); }
+function leagueName(id){ const l = LEAGUES.find(x => x.id === id); return l ? (LANG === "ar" ? l.ar : l.en) : id; }
+function priceOf(id){ return PRICES[id] ? PRICES[id].price : 8; }
+function tierOf(id){ return PRICES[id] ? PRICES[id].tier : "mid"; }
+
+/* ---------------- kit tile: the whole club identity, no crest ---------------- */
+function kitHtml(c, size){
+ return '<span class="fxkit ' + (size || "k44") + '" data-pat="' + esc(c.pat) + '" data-rim="' + esc(c.rim) + '"'
+  + (c.iso ? ' data-iso="1"' : "")
+  + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + ';--ink:' + esc(c.ink) + '">'
+  + '<span class="fxcode" dir="ltr">' + esc(c.code) + "</span></span>";
+}
+
+/* ---------------- budget maths ----------------
+   The reserve floor is what makes overspending unreachable instead of punished:
+   you can never spend money that the remaining slots still need. */
+function spent(){ return squad.reduce((a, id) => a + priceOf(id), 0); }
+function remaining(){ return +(BUDGET - spent()).toFixed(1); }
+function slotsLeft(){ return SQUAD_SIZE - squad.length; }
+function reserve(){ return Math.max(0, (slotsLeft() - 1)) * MIN_CLUB_PRICE; }
+function maxNextPrice(){ return slotsLeft() <= 0 ? 0 : +(remaining() - reserve()).toFixed(1); }
+function leagueCount(lg){ return squad.filter(id => (CLUBS.find(c => c.id === id) || {}).lg === lg).length; }
+
+/* why a club cannot be picked — printed on the row, so there is no error state */
+function blockReason(c){
+ if(squad.includes(c.id)) return null;
+ if(slotsLeft() <= 0) return t("squadFull");
+ if(leagueCount(c.lg) >= MAX_PER_LEAGUE) return t("leagueFull");
+ if(priceOf(c.id) > maxNextPrice()) return t("tooExpensive");
+ return null;
+}
+
+function save(){
+ try{
+  localStorage.setItem("fx_squad", JSON.stringify(squad));
+  localStorage.setItem("fx_cap", captain || "");
+ }catch(_){}
+}
+function load(){
+ try{
+  squad = JSON.parse(localStorage.getItem("fx_squad") || "[]");
+  captain = localStorage.getItem("fx_cap") || null;
+ }catch(_){ squad = []; captain = null; }
+ if(!Array.isArray(squad)) squad = [];
+}
+
+/* ---------------- simulated scoring (demo only) ----------------
+   Deterministic from club id + gameweek so the same squad always shows the same
+   story. Mirrors the real scoring shape: result + clean sheet + goals - conceded
+   + opponent-strength tier bonus. */
+function hash(str){ let h = 2166136261; for(let i = 0; i < str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return Math.abs(h); }
+function simMatch(clubId, gw){
+ const c = CLUBS.find(x => x.id === clubId) || {};
+ const h = hash(clubId + "|" + gw);
+ const strength = { elite:.62, strong:.52, mid:.42, value:.34, budget:.28 }[tierOf(clubId)] || .4;
+ const roll = (h % 1000) / 1000;
+ const win = roll < strength, draw = !win && roll < strength + .26;
+ const gf = win ? 1 + (h >> 3) % 3 : draw ? (h >> 5) % 2 : (h >> 7) % 2;
+ const ga = win ? (h >> 9) % 2 : draw ? gf : 1 + (h >> 11) % 2;
+ const oppTier = 1 + (h >> 13) % 5;
+ const blank = ((h >> 17) % 11) === 0;      /* no fixture this week */
+ if(blank) return {blank:true, pts:0};
+ const res = win ? 6 : draw ? 2 : 0;
+ const clean = ga === 0 ? 4 : 0;
+ const goals = gf * 1;
+ const conc = -Math.floor(ga / 2);
+ const tierBonus = win ? [0,3,2,1,0,0][oppTier] : 0;
+ return {blank:false, win, draw, gf, ga, oppTier, res, clean, goals, conc, tierBonus,
+         pts: res + clean + goals + conc + tierBonus};
+}
+function gwTotal(gw){
+ let total = 0;
+ for(const id of squad){
+  const m = simMatch(id, gw);
+  total += m.pts * (id === captain ? 2 : 1);
+ }
+ return total;
+}
+const CURRENT_GW = 6;
+function seasonTotal(){ let s = 0; for(let g = 1; g <= CURRENT_GW; g++) s += gwTotal(g); return s; }
+
+/* ---------------- rendering ---------------- */
+function paintChrome(){
+ document.documentElement.lang = LANG;
+ document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+ $("langBtn").textContent = LANG === "ar" ? "EN" : "ع";
+ $("hsub").textContent = t("brandSub");
+ $("demoNote").textContent = t("demoNote");
+ $("segbar").innerHTML =
+  ['team','points','board'].map(v =>
+   '<button type="button" class="' + (view === v ? "on" : "") + '" onclick="setView(\'' + v + '\')">'
+   + esc(t(v === "team" ? "segTeam" : v === "points" ? "segPts" : "segBoard")) + "</button>").join("");
+ $("bnav").innerHTML =
+  [["team","👕","navTeam"],["pick","➕","navPick"],["points","📊","navPts"],["board","🏆","navBoard"],["help","❓","navHelp"]]
+  .map(n => '<button type="button" class="' + (view === n[0] ? "on" : "") + '" onclick="navTo(\'' + n[0] + '\')">'
+   + '<span class="ic">' + n[1] + '</span><span>' + esc(t(n[2])) + "</span></button>").join("");
+}
+function setView(v){ view = v; paintChrome(); render(); }
+function navTo(v){
+ if(v === "pick") return openPicker();
+ if(v === "help") return openHelp();
+ setView(v);
+}
+
+function budgetHtml(){
+ const pct = Math.max(0, Math.min(100, (spent() / BUDGET) * 100));
+ const rpct = Math.max(0, Math.min(100 - pct, (reserve() / BUDGET) * 100));
+ return '<div class="bud" id="budBox">'
+  + '<div class="budtop"><div><div class="budlab">' + esc(t("budLeft")) + '</div>'
+  + '<div class="budleft" dir="ltr">' + num(remaining().toFixed(1)) + 'M</div></div>'
+  + '<div class="budlab" dir="ltr">' + num(spent().toFixed(1)) + ' / ' + num(BUDGET.toFixed(1)) + 'M</div></div>'
+  + '<div class="budtrack"><div class="budfill" style="inline-size:' + pct + '%"></div>'
+  + (rpct > 0 ? '<div class="budresv" style="inline-size:' + rpct + '%"></div>' : "") + "</div>"
+  + '<div class="budnext"><span>' + esc(t("nextMax")) + ' <b dir="ltr">' + num(maxNextPrice().toFixed(1)) + 'M</b></span>'
+  + '<span>' + esc(t("slotsLeft")) + ' <b dir="ltr">' + num(slotsLeft()) + '</b></span></div></div>';
+}
+
+function pitchHtml(withPoints, gw){
+ let h = '<div class="pitch">';
+ for(let i = 0; i < SQUAD_SIZE; i++){
+  const id = squad[i];
+  const c = id ? CLUBS.find(x => x.id === id) : null;
+  if(!c){ h += '<div class="pslot"><div class="pempty">+</div><span class="nm">' + esc(t("emptySlot")) + "</span></div>"; continue; }
+  const m = withPoints ? simMatch(c.id, gw) : null;
+  h += '<div class="pslot">'
+   + '<span class="kitwrap">'
+   + (c.id === captain ? '<span class="capbadge">C</span>' : "")
+   + '<button type="button" onclick="' + (withPoints ? "openBreakdown('" + esc(c.id) + "'," + gw + ")" : "openClub('" + esc(c.id) + "')") + '" style="padding:0;border-radius:12px">'
+   + kitHtml(c, "k60") + "</button></span>"
+   + '<span class="nm">' + esc(clubName(c)) + "</span>"
+   + (withPoints
+      ? '<span class="pt" dir="ltr">' + (m.blank ? "–" : num(m.pts * (c.id === captain ? 2 : 1))) + "</span>"
+      : '<span class="pt" dir="ltr">' + num(priceOf(c.id).toFixed(1)) + "M</span>")
+   + "</div>";
+ }
+ return h + "</div>";
+}
+
+function render(){
+ $("viewTeam").classList.toggle("hide", view !== "team");
+ $("viewPoints").classList.toggle("hide", view !== "points");
+ $("viewBoard").classList.toggle("hide", view !== "board");
+ if(view === "team") renderTeam();
+ else if(view === "points") renderPoints();
+ else renderBoard();
+}
+
+function renderTeam(){
+ const full = squad.length === SQUAD_SIZE;
+ $("viewTeam").innerHTML = budgetHtml() + pitchHtml(false)
+  + '<button type="button" class="btn" onclick="openPicker()">'
+  + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>"
+  + (full && !captain ? '<button type="button" class="btn ghost" onclick="openCaptain()">' + esc(t("capTitle")) + "</button>" : "")
+  + '<button type="button" class="btn ghost" onclick="resetDemo()">' + esc(t("resetDemo")) + "</button>";
+ if(squad.length) maybeCoach("budget", "budBox", t("coachBudget"));
+}
+
+function renderPoints(){
+ if(!squad.length){ $("viewPoints").innerHTML = '<div class="card"><div class="muted">' + esc(t("demoNote")) + "</div></div>"; return; }
+ const gw = CURRENT_GW;
+ $("viewPoints").innerHTML =
+  '<div class="card"><div class="muted" style="text-align:center">' + esc(t("gwTitle")) + " " + num(gw) + "</div>"
+  + '<div class="ptsbig" dir="ltr">' + num(gwTotal(gw)) + "</div>"
+  + '<div class="muted" style="text-align:center;margin-top:4px">' + esc(t("gwPts")) + "</div></div>"
+  + '<div class="card"><h3>' + esc(t("totalPts")) + '</h3><div class="ptsrow"><span class="dim">'
+  + esc(t("gwTitle")) + " 1–" + num(gw) + '</span><span class="v" dir="ltr">' + num(seasonTotal()) + "</span></div></div>"
+  + '<div class="note">' + esc(t("simNote")) + "</div>"
+  + pitchHtml(true, gw);
+ maybeCoach("pts", "viewPoints", t("coachPts"));
+}
+
+function renderBoard(){
+ const me = seasonTotal();
+ const rivals = [
+  {n:"Yahia", s:hash("yahia") % 40 + me - 18}, {n:"Hegazy", s:hash("hegazy") % 40 + me - 22},
+  {n:"Omar", s:hash("omar") % 40 + me - 12}, {n:"Kareem", s:hash("kareem") % 40 + me - 30},
+  {n:"Mostafa", s:hash("mostafa") % 40 + me - 26}
+ ];
+ const rows = rivals.concat([{n:t("you"), s:me, me:true}]).sort((a, b) => b.s - a.s);
+ $("viewBoard").innerHTML = '<div class="card"><h3>' + esc(t("segBoard")) + "</h3>"
+  + rows.map((r, i) => '<div class="lbrow' + (r.me ? " me" : "") + '"><span class="lbrank" dir="ltr">' + num(i + 1) + "</span>"
+   + '<span class="lbname">' + esc(r.n) + '</span><span class="lbpts" dir="ltr">' + num(Math.max(0, r.s)) + "</span></div>").join("")
+  + "</div>" + '<div class="note">' + esc(t("simNote")) + "</div>";
+}
+
+/* ---------------- sheets ---------------- */
+function openSheet(html){
+ $("sheetBox").innerHTML = '<button type="button" class="sx" onclick="closeSheet()" aria-label="' + esc(t("done")) + '">✕</button>' + html;
+ $("sheet").classList.remove("hide");
+ document.body.classList.add("gk-lock");
+ $("sheetBox").focus({preventScroll:true});
+}
+function closeSheet(){ $("sheet").classList.add("hide"); document.body.classList.remove("gk-lock"); render(); }
+$("sheet").addEventListener("click", e => { if(e.target === $("sheet")) closeSheet(); });
+
+function openPicker(){
+ pickFilter = "all";
+ paintPicker();
+ $("sheet").classList.remove("hide");
+ document.body.classList.add("gk-lock");
+}
+function paintPicker(){
+ const lgs = [{id:"all", ar:t("allLg"), en:t("allLg")}].concat(LEAGUES);
+ const list = CLUBS
+  .filter(c => pickFilter === "all" || c.lg === pickFilter)
+  .sort((a, b) => priceOf(b.id) - priceOf(a.id));
+ const rows = list.map(c => {
+  const picked = squad.includes(c.id);
+  const why = blockReason(c);
+  return '<button type="button" class="clubrow' + (picked ? " on" : "") + '"' + (why ? " disabled" : "")
+   + ' onclick="togglePick(\'' + esc(c.id) + '\')">'
+   + kitHtml(c, "k34")
+   + '<span class="crname"><span class="crn">' + esc(clubName(c)) + "</span>"
+   + '<span class="' + (why ? "crwhy" : "crl") + '">' + esc(why || leagueName(c.lg)) + "</span></span>"
+   + '<span class="crprice" dir="ltr">' + num(priceOf(c.id).toFixed(1)) + "M</span>"
+   + '<span class="crpick">' + (picked ? "✓" : "+") + "</span></button>";
+ }).join("");
+ $("sheetBox").innerHTML =
+  '<button type="button" class="sx" onclick="closeSheet()" aria-label="' + esc(t("done")) + '">✕</button>'
+  + "<h2>" + esc(t("pickTitle")) + "</h2>"
+  + budgetHtml()
+  + '<div class="filters">' + lgs.map(l => '<button type="button" class="fchip' + (pickFilter === l.id ? " on" : "")
+    + '" onclick="setFilter(\'' + esc(l.id) + '\')">' + esc(LANG === "ar" ? l.ar : l.en) + "</button>").join("") + "</div>"
+  + rows
+  + (squad.length === SQUAD_SIZE
+     ? '<button type="button" class="btn" onclick="closeSheet();openCaptain()">' + esc(t("confirmSquad")) + "</button>"
+     : '<button type="button" class="btn ghost" onclick="autoFill()">' + esc(t("autoPick")) + "</button>");
+}
+function setFilter(id){ pickFilter = id; paintPicker(); }
+function togglePick(id){
+ const i = squad.indexOf(id);
+ if(i >= 0){ squad.splice(i, 1); if(captain === id) captain = null; }
+ else{
+  const c = CLUBS.find(x => x.id === id);
+  if(blockReason(c)) return;
+  squad.push(id);
+ }
+ save(); paintPicker();
+}
+
+/* a complete legal squad, built for the user, so step 3 of the wizard is never an empty board */
+function autoFill(){
+ const pool = CLUBS.slice().sort((a, b) => priceOf(b.id) - priceOf(a.id));
+ while(squad.length < SQUAD_SIZE){
+  let added = false;
+  for(const c of pool){
+   if(squad.includes(c.id)) continue;
+   if(blockReason(c)) continue;
+   squad.push(c.id); added = true; break;
+  }
+  if(!added) break;
+ }
+ save(); paintPicker();
+}
+
+function openClub(id){
+ const c = CLUBS.find(x => x.id === id); if(!c) return;
+ openSheet("<h2>" + esc(clubName(c)) + "</h2>"
+  + '<div class="muted" style="margin-bottom:12px">' + esc(leagueName(c.lg)) + "</div>"
+  + '<div style="display:flex;gap:14px;align-items:center;margin-bottom:14px">' + kitHtml(c, "k60")
+  + '<div><div class="dim" style="font-size:12px">' + esc(t("priceLab")) + '</div>'
+  + '<div style="font-size:22px;font-weight:900;color:var(--fx-gold)" dir="ltr">' + num(priceOf(id).toFixed(1)) + "M</div></div></div>"
+  + (squad.includes(id) && squad.length === SQUAD_SIZE
+     ? '<button type="button" class="btn" onclick="captain=\'' + esc(id) + '\';save();closeSheet()">' + esc(t("setCap")) + "</button>"
+     : ""));
+}
+
+function openCaptain(){
+ if(squad.length !== SQUAD_SIZE) return;
+ const rows = squad.map(id => {
+  const c = CLUBS.find(x => x.id === id); if(!c) return "";
+  return '<button type="button" class="clubrow' + (captain === id ? " on" : "") + '" onclick="captain=\'' + esc(id) + '\';save();openCaptain()">'
+   + kitHtml(c, "k34") + '<span class="crname"><span class="crn">' + esc(clubName(c)) + "</span>"
+   + '<span class="crl">' + esc(leagueName(c.lg)) + "</span></span>"
+   + '<span class="crpick">' + (captain === id ? "C" : "+") + "</span></button>";
+ }).join("");
+ openSheet("<h2>" + esc(t("capTitle")) + "</h2><div class='muted' style='margin-bottom:12px'>" + esc(t("capNote")) + "</div>"
+  + rows + (captain ? '<button type="button" class="btn" onclick="closeSheet()">' + esc(t("done")) + "</button>" : ""));
+}
+
+/* the trust screen: never show a total without being able to explain it */
+function openBreakdown(id, gw){
+ const c = CLUBS.find(x => x.id === id); if(!c) return;
+ const m = simMatch(id, gw);
+ const isCap = id === captain;
+ if(m.blank){
+  openSheet("<h2>" + esc(clubName(c)) + "</h2><div class='muted'>" + esc(t("noPlay")) + "</div>");
+  return;
+ }
+ const row = (lab, val, cls) => '<div class="ptsrow"><span class="dim">' + esc(lab) + '</span><span class="v ' + (cls || "")
+   + '" dir="ltr">' + (val > 0 ? "+" : "") + num(val) + "</span></div>";
+ const tierCol = ["","var(--t1)","var(--t2)","var(--t3)","var(--t4)","var(--t5)"][m.oppTier];
+ openSheet("<h2>" + esc(clubName(c)) + "</h2>"
+  + '<div class="muted" style="margin-bottom:10px">' + esc(t("gwTitle")) + " " + num(gw) + " · "
+  + '<span dir="ltr">' + num(m.gf) + "–" + num(m.ga) + "</span></div>"
+  + '<div class="card" style="margin-bottom:10px"><h3>' + esc(t("breakdown")) + "</h3>"
+  + row(m.win ? t("bdWin") : m.draw ? t("bdDraw") : t("bdLoss"), m.res, m.res > 0 ? "pos" : "")
+  + (m.clean ? row(t("bdClean"), m.clean, "pos") : "")
+  + (m.goals ? row(t("bdGoals"), m.goals, "pos") : "")
+  + (m.conc ? row(t("bdConc"), m.conc, "neg") : "")
+  + (m.tierBonus ? row(t("bdTier"), m.tierBonus, "pos") : "")
+  + (isCap ? row(t("bdCap"), m.pts, "pos") : "")
+  + '<div class="ptsrow" style="border-top:1px solid var(--fx-line-2);margin-top:6px;padding-top:10px">'
+  + '<span style="font-weight:900">' + esc(t("gwPts")) + '</span><span class="v" style="color:var(--fx-gold);font-size:17px" dir="ltr">'
+  + num(m.pts * (isCap ? 2 : 1)) + "</span></div></div>"
+  + '<div class="tier"><span>' + esc(t("tierLab")) + '</span><span class="tdot" style="background:' + tierCol + '"></span>'
+  + '<span dir="ltr">T' + num(m.oppTier) + "</span> · <span>" + esc(t("tier" + m.oppTier)) + "</span></div>");
+}
+
+/* ---------------- help + glossary ----------------
+   Arabic fantasy vocabulary does not exist in most fans' heads, so every term is
+   given in Arabic with a plain one-line explanation, English underneath. */
+const GLOSSARY = [
+ ["الجولة","Gameweek","مجموعة المباريات اللي بتتحسب مع بعض. النقط بتتجمع لكل جولة."],
+ ["الكابتن","Captain","نادي واحد بس في فريقك بياخد ضعف نقطه كل جولة."],
+ ["الميزانية","Budget","الـ ١٠٠ مليون اللي بتشتري بيها أنديتك. مش فلوس حقيقية."],
+ ["الانتقالات","Transfers","تغيير نادي بنادي تاني بعد ما تبدأ."],
+ ["شباك نظيفة","Clean sheet","النادي خلّص الماتش من غير ما يستقبل أي هدف."],
+ ["مكافأة قوة الخصم","Opponent strength bonus","لو نادي ضعيف كسب نادي كبير، بياخد نقط زيادة."],
+ ["الجوكرات","Chips","مزايا بتستخدمها مرة واحدة في الموسم."],
+ ["تغيير شامل","Wildcard","تغير فريقك كله مرة واحدة من غير خصم نقط."],
+ ["فريق مؤقت","Free Hit","فريق لجولة واحدة بس، وبعدها يرجع فريقك الأصلي."],
+ ["لا يلعب","No fixture","النادي مالوش ماتش في الجولة دي، فمش هياخد نقط."]
+];
+function openHelp(){
+ openSheet("<h2>" + esc(t("rulesTitle")) + "</h2>"
+  + '<div class="card"><h3>' + esc(t("wiz1h")) + '</h3><div class="dim" style="font-size:13px;line-height:1.7">' + t("wiz1p") + "</div></div>"
+  + '<div class="card"><h3>' + esc(t("wiz2h")) + '</h3><div class="dim" style="font-size:13px;line-height:1.7">' + t("wiz2p") + "</div></div>"
+  + '<div class="card"><h3>' + esc(t("glossTitle")) + "</h3>"
+  + GLOSSARY.map(g => '<div class="gloss"><div class="gterm">' + esc(g[0]) + '</div><div class="gen" dir="ltr">' + esc(g[1]) + "</div>"
+    + '<div class="gdef">' + esc(g[2]) + "</div></div>").join("") + "</div>"
+  + '<button type="button" class="btn" onclick="closeSheet()">' + esc(t("done")) + "</button>");
+}
+
+/* ---------------- coach marks: at most one per session, never repeated ---------------- */
+let coachShownThisSession = false;
+function maybeCoach(key, anchorId, text){
+ if(coachShownThisSession || seenCoach[key]) return;
+ const el = $(anchorId); if(!el) return;
+ coachShownThisSession = true;
+ seenCoach[key] = 1;
+ try{ localStorage.setItem("fx_coach", JSON.stringify(seenCoach)); }catch(_){}
+ const r = el.getBoundingClientRect();
+ const c = $("coach");
+ c.innerHTML = text + '<div class="cdo" onclick="$(\'coach\').classList.add(\'hide\')">' + esc(t("gotIt")) + "</div>";
+ c.style.top = Math.min(window.innerHeight - 130, r.bottom + 8) + "px";
+ c.style.insetInlineStart = "16px";
+ c.classList.remove("hide");
+}
+
+/* ---------------- first-run wizard ----------------
+   Target: a complete team in under 3 minutes, and the fast path is 8 taps because
+   step 3 hands the user a finished squad instead of an empty board. */
+function openWizard(){
+ wizStep = 0; paintWizard();
+ $("wiz").classList.remove("hide");
+ document.body.classList.add("gk-lock");
+}
+function closeWizard(){
+ $("wiz").classList.add("hide");
+ document.body.classList.remove("gk-lock");
+ try{ localStorage.setItem("fx_onboarded", "1"); }catch(_){}
+ render();
+}
+function wizNext(){ wizStep++; if(wizStep > 3) return closeWizard(); paintWizard(); }
+function paintWizard(){
+ const dots = '<div class="wizdots">' + [0,1,2,3].map(i => '<span class="wizdot' + (i === wizStep ? " on" : "") + '"></span>').join("") + "</div>";
+ let body = "";
+ if(wizStep === 0){
+  body = '<div class="wizart">⚽</div><div class="wizh">' + esc(t("wiz1h")) + '</div><div class="wizp">' + t("wiz1p") + "</div>";
+ } else if(wizStep === 1){
+  body = '<div class="wizart">💰</div><div class="wizh">' + esc(t("wiz2h")) + '</div><div class="wizp">' + t("wiz2p") + "</div>";
+ } else if(wizStep === 2){
+  if(squad.length < SQUAD_SIZE) autoFill();
+  body = '<div class="wizh">' + esc(LANG === "ar" ? "جهزنا لك فريق" : "We built you a team") + "</div>"
+   + '<div class="wizp">' + t("wiz3p") + "</div>" + budgetHtml() + pitchHtml(false)
+   + '<button type="button" class="btn ghost" onclick="closeWizard();openPicker()">' + esc(t("changeTeam")) + "</button>";
+ } else {
+  if(!captain && squad.length) captain = squad[0];
+  body = '<div class="wizart">🎖️</div><div class="wizh">' + esc(t("wiz4h")) + '</div>'
+   + '<div class="wizp">' + esc(t("wiz4p")) + "</div>"
+   + squad.map(id => { const c = CLUBS.find(x => x.id === id); if(!c) return "";
+      return '<button type="button" class="clubrow' + (captain === id ? " on" : "") + '" onclick="captain=\'' + esc(id) + '\';save();paintWizard()">'
+       + kitHtml(c, "k34") + '<span class="crname"><span class="crn">' + esc(clubName(c)) + "</span></span>"
+       + '<span class="crpick">' + (captain === id ? "C" : "+") + "</span></button>"; }).join("");
+ }
+ $("wizBox").innerHTML = dots + body
+  + '<button type="button" class="btn" onclick="wizNext()">' + esc(wizStep === 3 ? t("done") : t("next")) + "</button>"
+  + (wizStep < 3 ? '<button type="button" class="btn ghost" onclick="closeWizard()">' + esc(t("skip")) + "</button>" : "");
+ save();
+}
+
+function resetDemo(){
+ squad = []; captain = null;
+ try{ localStorage.removeItem("fx_squad"); localStorage.removeItem("fx_cap");
+      localStorage.removeItem("fx_onboarded"); localStorage.removeItem("fx_coach"); }catch(_){}
+ seenCoach = {}; coachShownThisSession = false;
+ render(); openWizard();
+}
+
+function toggleLang(){
+ LANG = LANG === "ar" ? "en" : "ar";
+ try{ localStorage.setItem("fx_lang", LANG); }catch(_){}
+ paintChrome(); render();
+ if(!$("sheet").classList.contains("hide")) closeSheet();
+}
+
+/* ---------------- boot ---------------- */
+(async function boot(){
+ try{
+  const [cj, pj] = await Promise.all([
+   fetch("clubs.json", {cache:"no-store"}).then(r => r.json()),
+   fetch("prices.json", {cache:"no-store"}).then(r => r.json())
+  ]);
+  CLUBS = cj.clubs; LEAGUES = cj.leagues;
+  for(const p of pj.clubs) PRICES[p.id] = p;
+ }catch(e){
+  document.querySelector(".wrap").innerHTML = '<div class="card">Could not load club data.</div>';
+  return;
+ }
+ load();
+ paintChrome();
+ render();
+ let onboarded = "";
+ try{ onboarded = localStorage.getItem("fx_onboarded") || ""; }catch(_){}
+ if(!onboarded) openWizard();
+})();
+</script>
+</body>
+</html>

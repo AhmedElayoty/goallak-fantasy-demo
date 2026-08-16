@@ -1,0 +1,764 @@
+{
+ "provisional": true,
+ "budget": 100,
+ "squad": 8,
+ "note": "Provisional. Superseded by design/fantasy-prices.json when the pricing model lands.",
+ "clubs": [
+  {
+   "id": "349",
+   "price": 7.5,
+   "xpts": 2.386,
+   "tier": "value"
+  },
+  {
+   "id": "359",
+   "price": 12.5,
+   "xpts": 3.251,
+   "tier": "strong"
+  },
+  {
+   "id": "362",
+   "price": 8.5,
+   "xpts": 2.602,
+   "tier": "mid"
+  },
+  {
+   "id": "337",
+   "price": 7.5,
+   "xpts": 2.318,
+   "tier": "value"
+  },
+  {
+   "id": "331",
+   "price": 7.5,
+   "xpts": 2.385,
+   "tier": "value"
+  },
+  {
+   "id": "363",
+   "price": 8.5,
+   "xpts": 2.537,
+   "tier": "mid"
+  },
+  {
+   "id": "388",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "384",
+   "price": 6.5,
+   "xpts": 2.079,
+   "tier": "value"
+  },
+  {
+   "id": "368",
+   "price": 6.5,
+   "xpts": 2.089,
+   "tier": "value"
+  },
+  {
+   "id": "370",
+   "price": 7,
+   "xpts": 2.207,
+   "tier": "value"
+  },
+  {
+   "id": "306",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "373",
+   "price": 4,
+   "xpts": 1.026,
+   "tier": "budget"
+  },
+  {
+   "id": "357",
+   "price": 6,
+   "xpts": 2.011,
+   "tier": "value"
+  },
+  {
+   "id": "364",
+   "price": 10.5,
+   "xpts": 2.953,
+   "tier": "mid"
+  },
+  {
+   "id": "382",
+   "price": 11.5,
+   "xpts": 3.085,
+   "tier": "strong"
+  },
+  {
+   "id": "360",
+   "price": 7.5,
+   "xpts": 2.354,
+   "tier": "value"
+  },
+  {
+   "id": "361",
+   "price": 8,
+   "xpts": 2.425,
+   "tier": "mid"
+  },
+  {
+   "id": "393",
+   "price": 7.5,
+   "xpts": 2.304,
+   "tier": "value"
+  },
+  {
+   "id": "366",
+   "price": 7,
+   "xpts": 2.195,
+   "tier": "value"
+  },
+  {
+   "id": "367",
+   "price": 5.5,
+   "xpts": 1.841,
+   "tier": "budget"
+  },
+  {
+   "id": "96",
+   "price": 5.5,
+   "xpts": 1.861,
+   "tier": "budget"
+  },
+  {
+   "id": "93",
+   "price": 7.5,
+   "xpts": 2.384,
+   "tier": "value"
+  },
+  {
+   "id": "1068",
+   "price": 10.5,
+   "xpts": 2.97,
+   "tier": "mid"
+  },
+  {
+   "id": "83",
+   "price": 16,
+   "xpts": 3.737,
+   "tier": "elite"
+  },
+  {
+   "id": "85",
+   "price": 7.5,
+   "xpts": 2.295,
+   "tier": "value"
+  },
+  {
+   "id": "90",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "3751",
+   "price": 6,
+   "xpts": 1.901,
+   "tier": "value"
+  },
+  {
+   "id": "88",
+   "price": 5.5,
+   "xpts": 1.894,
+   "tier": "budget"
+  },
+  {
+   "id": "2922",
+   "price": 6,
+   "xpts": 2.012,
+   "tier": "value"
+  },
+  {
+   "id": "1538",
+   "price": 5.5,
+   "xpts": 1.821,
+   "tier": "budget"
+  },
+  {
+   "id": "99",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "97",
+   "price": 6,
+   "xpts": 2.029,
+   "tier": "value"
+  },
+  {
+   "id": "87",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "101",
+   "price": 6.5,
+   "xpts": 2.143,
+   "tier": "value"
+  },
+  {
+   "id": "244",
+   "price": 8,
+   "xpts": 2.483,
+   "tier": "mid"
+  },
+  {
+   "id": "86",
+   "price": 13.5,
+   "xpts": 3.403,
+   "tier": "strong"
+  },
+  {
+   "id": "89",
+   "price": 6,
+   "xpts": 1.99,
+   "tier": "value"
+  },
+  {
+   "id": "243",
+   "price": 5.5,
+   "xpts": 1.826,
+   "tier": "budget"
+  },
+  {
+   "id": "94",
+   "price": 6,
+   "xpts": 2,
+   "tier": "value"
+  },
+  {
+   "id": "102",
+   "price": 10,
+   "xpts": 2.887,
+   "tier": "mid"
+  },
+  {
+   "id": "103",
+   "price": 9.5,
+   "xpts": 2.728,
+   "tier": "mid"
+  },
+  {
+   "id": "104",
+   "price": 10.5,
+   "xpts": 2.901,
+   "tier": "mid"
+  },
+  {
+   "id": "105",
+   "price": 10,
+   "xpts": 2.82,
+   "tier": "mid"
+  },
+  {
+   "id": "107",
+   "price": 8,
+   "xpts": 2.435,
+   "tier": "mid"
+  },
+  {
+   "id": "2925",
+   "price": 5.5,
+   "xpts": 1.754,
+   "tier": "budget"
+  },
+  {
+   "id": "2572",
+   "price": 8.5,
+   "xpts": 2.552,
+   "tier": "mid"
+  },
+  {
+   "id": "109",
+   "price": 7,
+   "xpts": 2.284,
+   "tier": "value"
+  },
+  {
+   "id": "4057",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "3263",
+   "price": 5.5,
+   "xpts": 1.849,
+   "tier": "budget"
+  },
+  {
+   "id": "110",
+   "price": 14,
+   "xpts": 3.451,
+   "tier": "strong"
+  },
+  {
+   "id": "111",
+   "price": 10,
+   "xpts": 2.868,
+   "tier": "mid"
+  },
+  {
+   "id": "112",
+   "price": 8,
+   "xpts": 2.447,
+   "tier": "mid"
+  },
+  {
+   "id": "113",
+   "price": 5,
+   "xpts": 1.556,
+   "tier": "budget"
+  },
+  {
+   "id": "4007",
+   "price": 4,
+   "xpts": 0.972,
+   "tier": "budget"
+  },
+  {
+   "id": "114",
+   "price": 11.5,
+   "xpts": 3.124,
+   "tier": "strong"
+  },
+  {
+   "id": "115",
+   "price": 5.5,
+   "xpts": 1.765,
+   "tier": "budget"
+  },
+  {
+   "id": "3997",
+   "price": 6.5,
+   "xpts": 2.088,
+   "tier": "value"
+  },
+  {
+   "id": "239",
+   "price": 5.5,
+   "xpts": 1.897,
+   "tier": "budget"
+  },
+  {
+   "id": "118",
+   "price": 6,
+   "xpts": 1.992,
+   "tier": "value"
+  },
+  {
+   "id": "17530",
+   "price": 4.5,
+   "xpts": 1.404,
+   "tier": "budget"
+  },
+  {
+   "id": "598",
+   "price": 5.5,
+   "xpts": 1.849,
+   "tier": "budget"
+  },
+  {
+   "id": "131",
+   "price": 10.5,
+   "xpts": 2.946,
+   "tier": "mid"
+  },
+  {
+   "id": "132",
+   "price": 18.5,
+   "xpts": 4.076,
+   "tier": "elite"
+  },
+  {
+   "id": "124",
+   "price": 11,
+   "xpts": 3.004,
+   "tier": "strong"
+  },
+  {
+   "id": "268",
+   "price": 6,
+   "xpts": 1.993,
+   "tier": "value"
+  },
+  {
+   "id": "125",
+   "price": 8,
+   "xpts": 2.446,
+   "tier": "mid"
+  },
+  {
+   "id": "3841",
+   "price": 6,
+   "xpts": 1.937,
+   "tier": "value"
+  },
+  {
+   "id": "122",
+   "price": 5,
+   "xpts": 1.65,
+   "tier": "budget"
+  },
+  {
+   "id": "127",
+   "price": 5.5,
+   "xpts": 1.818,
+   "tier": "budget"
+  },
+  {
+   "id": "2950",
+   "price": 7,
+   "xpts": 2.201,
+   "tier": "value"
+  },
+  {
+   "id": "11420",
+   "price": 9,
+   "xpts": 2.644,
+   "tier": "mid"
+  },
+  {
+   "id": "126",
+   "price": 7,
+   "xpts": 2.274,
+   "tier": "value"
+  },
+  {
+   "id": "3307",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "10388",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "133",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "7911",
+   "price": 6.5,
+   "xpts": 2.153,
+   "tier": "value"
+  },
+  {
+   "id": "134",
+   "price": 9,
+   "xpts": 2.635,
+   "tier": "mid"
+  },
+  {
+   "id": "137",
+   "price": 6,
+   "xpts": 1.926,
+   "tier": "value"
+  },
+  {
+   "id": "172",
+   "price": 5.5,
+   "xpts": 1.895,
+   "tier": "budget"
+  },
+  {
+   "id": "174",
+   "price": 9,
+   "xpts": 2.651,
+   "tier": "mid"
+  },
+  {
+   "id": "7868",
+   "price": 5,
+   "xpts": 1.7,
+   "tier": "budget"
+  },
+  {
+   "id": "6997",
+   "price": 6.5,
+   "xpts": 2.046,
+   "tier": "value"
+  },
+  {
+   "id": "3236",
+   "price": 5,
+   "xpts": 1.643,
+   "tier": "budget"
+  },
+  {
+   "id": "2697",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "175",
+   "price": 9.5,
+   "xpts": 2.779,
+   "tier": "mid"
+  },
+  {
+   "id": "166",
+   "price": 9.5,
+   "xpts": 2.75,
+   "tier": "mid"
+  },
+  {
+   "id": "273",
+   "price": 6.5,
+   "xpts": 2.126,
+   "tier": "value"
+  },
+  {
+   "id": "167",
+   "price": 9,
+   "xpts": 2.699,
+   "tier": "mid"
+  },
+  {
+   "id": "176",
+   "price": 10,
+   "xpts": 2.864,
+   "tier": "mid"
+  },
+  {
+   "id": "2502",
+   "price": 7,
+   "xpts": 2.196,
+   "tier": "value"
+  },
+  {
+   "id": "6851",
+   "price": 6.5,
+   "xpts": 2.099,
+   "tier": "value"
+  },
+  {
+   "id": "160",
+   "price": 15.5,
+   "xpts": 3.66,
+   "tier": "elite"
+  },
+  {
+   "id": "169",
+   "price": 7.5,
+   "xpts": 2.349,
+   "tier": "value"
+  },
+  {
+   "id": "180",
+   "price": 8.5,
+   "xpts": 2.555,
+   "tier": "mid"
+  },
+  {
+   "id": "179",
+   "price": 6.5,
+   "xpts": 2.131,
+   "tier": "value"
+  },
+  {
+   "id": "170",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "9078",
+   "price": 6,
+   "xpts": 1.977,
+   "tier": "value"
+  },
+  {
+   "id": "132335",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "1895",
+   "price": 9.5,
+   "xpts": 2.766,
+   "tier": "mid"
+  },
+  {
+   "id": "7656",
+   "price": 6.5,
+   "xpts": 2.059,
+   "tier": "value"
+  },
+  {
+   "id": "19267",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "20729",
+   "price": 6,
+   "xpts": 2.007,
+   "tier": "value"
+  },
+  {
+   "id": "436",
+   "price": 14,
+   "xpts": 3.496,
+   "tier": "strong"
+  },
+  {
+   "id": "432",
+   "price": 16,
+   "xpts": 3.763,
+   "tier": "elite"
+  },
+  {
+   "id": "20070",
+   "price": 6,
+   "xpts": 1.909,
+   "tier": "value"
+  },
+  {
+   "id": "996",
+   "price": 5.5,
+   "xpts": 1.737,
+   "tier": "budget"
+  },
+  {
+   "id": "789",
+   "price": 8,
+   "xpts": 2.423,
+   "tier": "mid"
+  },
+  {
+   "id": "7914",
+   "price": 8.5,
+   "xpts": 2.547,
+   "tier": "mid"
+  },
+  {
+   "id": "6870",
+   "price": 6,
+   "xpts": 1.922,
+   "tier": "value"
+  },
+  {
+   "id": "995",
+   "price": 5.5,
+   "xpts": 1.81,
+   "tier": "budget"
+  },
+  {
+   "id": "7648",
+   "price": 6,
+   "xpts": 2.005,
+   "tier": "value"
+  },
+  {
+   "id": "11429",
+   "price": 8.5,
+   "xpts": 2.53,
+   "tier": "mid"
+  },
+  {
+   "id": "997",
+   "price": 9.5,
+   "xpts": 2.713,
+   "tier": "mid"
+  },
+  {
+   "id": "132334",
+   "price": 4,
+   "xpts": 1.25,
+   "tier": "budget"
+  },
+  {
+   "id": "263",
+   "price": 6,
+   "xpts": 1.934,
+   "tier": "value"
+  },
+  {
+   "id": "256",
+   "price": 15,
+   "xpts": 3.618,
+   "tier": "elite"
+  },
+  {
+   "id": "261",
+   "price": 5.5,
+   "xpts": 1.758,
+   "tier": "budget"
+  },
+  {
+   "id": "264",
+   "price": 6,
+   "xpts": 2.033,
+   "tier": "value"
+  },
+  {
+   "id": "254",
+   "price": 6,
+   "xpts": 2.014,
+   "tier": "value"
+  },
+  {
+   "id": "262",
+   "price": 9.5,
+   "xpts": 2.725,
+   "tier": "mid"
+  },
+  {
+   "id": "258",
+   "price": 8,
+   "xpts": 2.457,
+   "tier": "mid"
+  },
+  {
+   "id": "260",
+   "price": 5.5,
+   "xpts": 1.78,
+   "tier": "budget"
+  },
+  {
+   "id": "266",
+   "price": 7.5,
+   "xpts": 2.303,
+   "tier": "value"
+  },
+  {
+   "id": "257",
+   "price": 11.5,
+   "xpts": 3.069,
+   "tier": "strong"
+  },
+  {
+   "id": "267",
+   "price": 4.5,
+   "xpts": 1.424,
+   "tier": "budget"
+  },
+  {
+   "id": "250",
+   "price": 5.5,
+   "xpts": 1.807,
+   "tier": "budget"
+  }
+ ]
+}
