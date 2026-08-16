@@ -413,11 +413,13 @@
 }
 .gwj-nm{ flex:1 1 auto; min-inline-size:0; }
 .gwj-n{
+  display:block;
   font-size:13.5px; font-weight:800;
   color:var(--fx-ink);                       /* #F2F5FF on #101736 = 16.10 */
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .gwj-sub{
+  display:block;
   margin-block-start:2px;
   font-size:11px; font-weight:700;
   color:var(--fx-ink-dim);                   /* #A9B7E4 on #182246 = 7.80 */
