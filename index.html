@@ -751,7 +751,12 @@ const STR = {
     sliced to «مالوش» on the owner's phone, a fragment that reads as nonsense. «راحة» is 30px,
     is a complete word, and is what a commentator actually says about a club with no fixture.
     The literal phrase survives in aria-label, the breakdown and the glossary. */
- noMatch:["راحة","No match"],
+    Measured both languages on the live page against a 44px bench line:
+      «مالوش ماتش» 81.8   "No match" 65.2   "No fixture" 66.0
+      «راحة»       25.1   "Rest"     27.8
+    Only the last pair fits, and the two are the same word — which is the right answer
+    anyway: a club with no fixture is resting, and both languages should say so. */
+ noMatch:["راحة","Rest"],
  noMatchFull:["مالوش ماتش","No match this round"],
  /* full words, for the screen reader and the breakdown sheet — the card shows H/A */
  venH:["على أرضه","Home"], venA:["بره","Away"],
