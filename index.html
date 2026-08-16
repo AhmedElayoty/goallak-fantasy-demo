@@ -747,7 +747,8 @@ const STR = {
  emptySlot:["فاضي","Empty"],
  /* the card's second line, and the head-to-head band */
  noMatch:["مالوش ماتش","No match"],
- venH:["(أرضه)","(H)"], venA:["(بره)","(A)"],
+ /* full words, for the screen reader and the breakdown sheet — the card shows H/A */
+ venH:["على أرضه","Home"], venA:["بره","Away"],
  capLab:["الكابتن","Captain"],
  h2hLab:["دوس عشان تغيّر منافسك","Tap to change your rival"],
  partialTeam:["(فريق ناقص)","(incomplete)"],
@@ -1132,21 +1133,30 @@ function cardHtml(c, withPoints, gw, slotIndex){
  const isCap = c.id === captain;
  /* LINE 2 IS THE REASON THIS CARD IS INTERESTING. Before the round it is who you play;
     after it, what you scored. Both change every week. The price never did. */
- let l2, sign = "";
+ /* Line 1 carries the venue, line 2 carries ONLY the opponent. Putting both on line 2 made it
+    "▸ ELC (أرضه)", which needs 78px of a 64px plate — the Arabic words for home and away are
+    far wider than (H)/(A), and it clipped on 563 of 1,095 cards measured. H/A stay Latin in
+    both languages because they sit inside an LTR run beside a Latin club code; the full Arabic
+    word is on the card's aria-label, where width costs nothing. */
+ let l2, sign = "", ven = "";
  if(m.blank){
   l2 = t("noMatch");
  }else if(withPoints){
   const p = m.pts * (isCap ? 2 : 1);
   sign = ' data-sign="' + signOf(p) + '"';
   l2 = signed(p);
+  ven = m.home ? "H" : "A";
  }else{
-  l2 = "▸ " + (m.opp ? m.opp.code : "—") + " " + (m.home ? t("venH") : t("venA"));
+  l2 = "▸ " + (m.opp ? m.opp.code : "—");
+  ven = m.home ? "H" : "A";
  }
  const act = withPoints ? "openBreakdown('" + esc(c.id) + "'," + g + ")"
    : (slotIndex == null ? "openClub('" + esc(c.id) + "')" : "swapArm(" + slotIndex + ")");
  return '<button type="button" class="cc' + (m.blank ? " cc--blank" : "") + '"'
   + ' data-band="' + bandOf(c.id) + '" data-tier="' + m.oppTier + '"'
-  + ' onclick="' + act + '" aria-label="' + esc(clubName(c) + (m.blank ? " · " + t("noMatch") : "")) + '">'
+  + ' onclick="' + act + '" aria-label="' + esc(clubName(c)
+      + (m.blank ? " · " + t("noMatch")
+                 : " · " + (m.opp ? clubName(m.opp) : "") + " · " + (m.home ? t("venH") : t("venA")))) + '">'
   + '<span class="cc__kit fxkit" data-pat="' + esc(c.pat) + '"'
   + (c.iso ? ' data-iso="1"' : "") + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + '"></span>'
   + '<span class="cc__lg" style="--lgc:var(--lg-' + esc(c.lg) + ')"></span>'
@@ -1154,7 +1164,7 @@ function cardHtml(c, withPoints, gw, slotIndex){
   + '<span class="cc__nm">' + esc(clubName(c)) + "</span>"
   + '<span class="cc__plate">'
   +  '<span class="cc__l1"><span class="cc__code" dir="ltr">' + esc(c.code) + "</span>"
-  +   '<span class="cc__ven" dir="ltr">' + num(Math.round(priceOf(c.id))) + "</span></span>"
+  +   '<span class="cc__ven" dir="ltr">' + esc(ven) + "</span></span>"
   +  '<span class="cc__l2"><span class="cc__fx"' + sign + ' dir="' + (m.blank ? "auto" : "ltr") + '">'
   +   esc(l2) + "</span></span>"
   + "</span></button>";
