@@ -131,9 +131,24 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  --st-rake:24deg;
  --cw:clamp(54px, 15.4vw, 68px);               /* card width. 54 floor x .90 GK depth = 48.6px > 48 */
 }
+/* ---- THE SECOND ACT ----
+   A stadium that is identical on open #40 and open #1 is a screenshot, not a product.
+   Four things drift across a season. Nothing is random, nothing is announced, and none of
+   it confers any advantage — it is only ever a reflection of what you already did.
+     · the SKY moves dusk -> night -> December Nights -> golden hour at the run-in
+     · the CROWD fills as your group fills (one number, driven by friends joined)
+     · the TURF wears: the centre circle's trodden ring grows, a goalmouth scuff appears
+     · the PERIMETER goes gold while you are alive in the cup                          */
 .st{position:relative;border-radius:var(--r);overflow:hidden;isolation:isolate;
  aspect-ratio:10/13;max-height:66vh;border:1px solid var(--fx-line-2);
- background:radial-gradient(120% 80% at 50% -10%, #14204A 0%, #0A1130 46%, #070B1A 100%)}
+ --crowd-a:.34; --wear:.055; --scuff:0;
+ background:radial-gradient(120% 80% at 50% -10%, var(--sky-1,#14204A) 0%, var(--sky-2,#0A1130) 46%, #070B1A 100%)}
+.st[data-sky="dusk"]    {--sky-1:#2A2560;--sky-2:#141A44}
+.st[data-sky="night"]   {--sky-1:#14204A;--sky-2:#0A1130}
+.st[data-sky="december"]{--sky-1:#0E1838;--sky-2:#070C24}
+.st[data-sky="golden"]  {--sky-1:#3A2E58;--sky-2:#161B42}
+/* alive in the cup: a gold hairline round the whole ground */
+.st[data-cup="1"]{border-color:rgba(255,210,74,.50);box-shadow:0 0 0 1px rgba(255,210,74,.28) inset}
 /* --- the four floodlight pools, painted on the sky --- */
 .st__sky{position:absolute;inset:0;z-index:1;
  background:
@@ -147,11 +162,13 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .st__pylon u{position:absolute;inset-inline-start:50%;top:9px;bottom:0;width:2px;margin-inline-start:-1px;
  background:linear-gradient(180deg,#3D4C82,#1A2244)}
 /* --- the stands: three crowd grids at different scales so it never visibly repeats --- */
+/* the crowd density IS your group: --crowd-a = .34 + .072 x friends joined.
+   The social loop made visible in the object you look at every day, for one number. */
 .st__stand{position:absolute;inset-inline:-2%;top:9%;height:15%;z-index:2;opacity:.85;
  background:
-  radial-gradient(circle at 25% 30%, rgba(255,255,255,.13) 0 1px, transparent 1.6px) 0 0/7px 6px,
-  radial-gradient(circle at 70% 65%, rgba(255,255,255,.10) 0 1px, transparent 1.6px) 3px 2px/11px 9px,
-  radial-gradient(circle at 45% 50%, rgba(120,150,220,.14) 0 1px, transparent 1.6px) 1px 4px/5px 8px,
+  radial-gradient(circle at 25% 30%, rgba(255,255,255,calc(var(--crowd-a) * .38)) 0 1px, transparent 1.6px) 0 0/7px 6px,
+  radial-gradient(circle at 70% 65%, rgba(255,255,255,calc(var(--crowd-a) * .30)) 0 1px, transparent 1.6px) 3px 2px/11px 9px,
+  radial-gradient(circle at 45% 50%, rgba(120,150,220,calc(var(--crowd-a) * .41)) 0 1px, transparent 1.6px) 1px 4px/5px 8px,
   linear-gradient(180deg,#141C3E,#0C1330);
  border-bottom:1px solid rgba(255,255,255,.10)}
 /* --- the playing surface --- */
@@ -159,7 +176,8 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .st__turf{position:absolute;inset-inline:-3%;top:23%;bottom:0;transform-origin:50% 100%;
  transform:rotateX(var(--st-rake));
  background:
-  radial-gradient(circle at 50% 47%, rgba(255,255,255,.055) 0 16.5%, transparent 17.4%),
+  radial-gradient(ellipse 26% 9% at 50% 2%, rgba(255,255,255,calc(var(--scuff) * .07)) 0 60%, transparent 72%),
+  radial-gradient(circle at 50% 47%, rgba(255,255,255,var(--wear)) 0 16.5%, transparent 17.4%),
   repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 1px, transparent 1px 3px),
   repeating-linear-gradient(90deg, rgba(0,0,0,.030) 0 1px, transparent 1px 3px),
   repeating-linear-gradient(90deg, var(--fx-turf-a) 0 8.3333%, var(--fx-turf-b) 8.3333% 16.6667%),
@@ -190,11 +208,23 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  background:#0B1024;border:1.5px solid var(--metal,#3D4C82);
  box-shadow:0 4px 10px -4px rgba(0,0,0,.75), 0 0 0 1px rgba(0,0,0,.35);
  display:flex;flex-direction:column;padding:0}
-.cc[data-band="elite"]  {--metal:#FFD24A;box-shadow:0 4px 14px -4px rgba(255,210,74,.35),0 4px 10px -4px rgba(0,0,0,.75)}
-.cc[data-band="strong"] {--metal:#D9DEEF}
-.cc[data-band="mid"]    {--metal:#B08D57}
-.cc[data-band="value"]  {--metal:#6D7CA8}
-.cc[data-band="budget"] {--metal:#46527E}
+/* The bands escalate on FOUR properties, not just hue — rim weight, gloss, elevation and
+   ground. Sorare's own designers put it best: scarcity is expressed as DEPTH, with common
+   cards "clean and simple and more or less flat" and the rarest ones darker "so we can
+   better highlight the contrast between light and dark". Hue alone is the weak half of the
+   idea; a budget card here is deliberately flat, an elite card is an object. */
+.cc[data-band="elite"] {--metal:#FFD24A;--rim:2px;--gloss:.20;background:#080C1C;
+ box-shadow:0 6px 18px -5px rgba(255,210,74,.30), 0 5px 12px -4px rgba(0,0,0,.80)}
+.cc[data-band="strong"]{--metal:#D9DEEF;--rim:1.75px;--gloss:.15;
+ box-shadow:0 5px 14px -5px rgba(0,0,0,.75)}
+.cc[data-band="mid"]   {--metal:#B08D57;--rim:1.5px;--gloss:.11;
+ box-shadow:0 4px 11px -5px rgba(0,0,0,.70)}
+.cc[data-band="value"] {--metal:#6D7CA8;--rim:1.25px;--gloss:.08;
+ box-shadow:0 3px 8px -4px rgba(0,0,0,.62)}
+.cc[data-band="budget"]{--metal:#46527E;--rim:1px;--gloss:.06;box-shadow:none}
+.cc{border-width:var(--rim,1.5px)}
+.cc__shirtwrap::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:linear-gradient(150deg, rgba(255,255,255,var(--gloss,.08)) 0 34%, rgba(255,255,255,0) 62%)}
 .cc__shirtwrap{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
 /* one clip-path, mirror-symmetric, so RTL never has to flip it */
 .cc__shirt{width:67%;aspect-ratio:40/44;position:relative;
@@ -620,7 +650,17 @@ function cardHtml(c, withPoints, gw){
 /* The squad as a TEAM SHEET standing on a raked pitch — not a grid of squares. */
 function pitchHtml(withPoints, gw){
  const rows = FORMATIONS[formation] || FORMATIONS["4-4-2"];
- let h = '<div class="st st--enter">'
+ /* The season state that drives the second act. All of it is derived from things the game
+    already knows — no new data, and none of it changes a single point scored. */
+ const gwNow = CURRENT_GW;
+ const sky = gwNow <= 4 ? "dusk" : gwNow >= 33 ? "golden" : (gwNow >= 15 && gwNow <= 24) ? "december" : "night";
+ const friends = 5;                                   /* demo: the five rivals on the board */
+ const crowd = (0.34 + 0.072 * friends).toFixed(3);
+ const wear = (0.055 + (0.030 * Math.min(1, gwNow / 36))).toFixed(3);   /* trodden ring grows */
+ const scuff = gwNow >= 12 ? 1 : 0;                   /* goalmouth scuff from GW12 */
+ const inCup = gwNow >= 15 ? 1 : 0;
+ let h = '<div class="st st--enter" data-sky="' + sky + '" data-cup="' + inCup + '"'
+  + ' style="--crowd-a:' + crowd + ';--wear:' + wear + ';--scuff:' + scuff + '">'
   + '<div class="st__sky"></div>'
   + '<div class="st__pylon a"><i></i><u></u></div><div class="st__pylon b"><i></i><u></u></div>'
   + '<div class="st__stand"></div>'
