@@ -534,6 +534,9 @@ const STR = {
  swapTip:["دوس على أي نادي، وبعدين على اللي عايز تبدله بيه","Tap a club, then tap the one you want to swap it with"],
  coveredLab:["بدلاء دخلوا لوحدهم","Automatic substitutions"],
  uncoveredLab:["مالقاش بديل يدخل مكانه","Left uncovered"],
+ shareTitle:["شارك جولتك","Share your round"],
+ shareHint:["دوس مطوّل على الصورة عشان تحفظها وتبعتها لأصحابك","Press and hold the image to save it and send it to your friends"],
+ chipsLab:["الجوكرات","Chips"],
  scrubHint:["اسحب عشان تشوف نقط أي جولة","Swipe to see any round"],
  repaired:["الأسعار اتغيرت، فشيلنا الأندية اللي مابقتش تدخل في ميزانيتك. اختار بدلها.",
            "Prices changed, so clubs that no longer fit your budget were removed. Pick replacements."],
@@ -774,6 +777,14 @@ const ROW_GEOM = [{top:49, depth:0.90}, {top:61, depth:0.94}, {top:73, depth:0.9
    evenly and you get 11px there, and the row instantly reads as a table instead of a back four. */
 const ROW_X = {1:[50], 2:[33,67], 3:[20,50,80], 4:[11,35,65,89], 5:[11,30,50,70,89]};
 
+/* Derived from the same deterministic simulation the scoring uses, so the badge can never
+   disagree with the points that follow it. Real data would replace only this function. */
+function fixtureState(id, gw){
+ const m = simMatch(id, gw);
+ if(m.blank) return {kind:"blank", matches:0};
+ const dbl = (hash(id + "|d|" + gw) % 17) === 0;      /* a double round is rare */
+ return dbl ? {kind:"double", matches:2} : {kind:"plays", matches:1};
+}
 function bandOf(id){
  const p = priceOf(id);
  return p >= 15 ? "elite" : p >= 11 ? "strong" : p >= 8 ? "mid" : p >= 6 ? "value" : "budget";
@@ -781,6 +792,11 @@ function bandOf(id){
 function cardHtml(c, withPoints, gw, slotIndex){
  const m = withPoints ? simMatch(c.id, gw) : null;
  const isCap = c.id === captain;
+ /* A club with no fixture scores nothing, and until now the only way to discover that was
+    to score nothing. The badge says it BEFORE the round, which is the whole point. */
+ const fx = fixtureState(c.id, gw == null ? CURRENT_GW : gw);
+ const badge = (typeof gwBadge === "function")
+   ? gwBadge({lang: LANG, kind: fx.kind, matches: fx.matches}) : "";
  const val = withPoints
   ? (m.blank ? '<span class="cc__val" style="color:var(--fx-blank)">–</span>'
              : '<span class="cc__val pts" dir="ltr">' + num(m.pts * (isCap ? 2 : 1)) + "</span>")
@@ -788,7 +804,7 @@ function cardHtml(c, withPoints, gw, slotIndex){
  const act = withPoints ? "openBreakdown('" + esc(c.id) + "'," + gw + ")"
    : (slotIndex == null ? "openClub('" + esc(c.id) + "')" : "swapArm(" + slotIndex + ")");
  return '<button type="button" class="cc" data-band="' + bandOf(c.id) + '" onclick="' + act + '">'
-  + (isCap ? '<span class="cc__arm">C</span>' : "")
+  + (isCap ? '<span class="cc__arm">C</span>' : "") + badge
   + '<span class="cc__shirtwrap"><span class="cc__shirt fxkit" data-pat="' + esc(c.pat) + '"'
   + (c.iso ? ' data-iso="1"' : "") + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + '"></span></span>'
   + '<span class="cc__plate"><span class="cc__code" dir="ltr">' + esc(c.code) + "</span>" + val + "</span>"
@@ -942,6 +958,8 @@ function renderTeam(){
   + '<button type="button" class="btn" onclick="openPicker()">'
   + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>"
   + (full ? '<button type="button" class="btn ghost" onclick="openCaptain()">' + esc(t("capTitle")) + "</button>" : "")
+  + (full ? '<button type="button" class="btn ghost" onclick="openChips()">' + esc(t("chipsLab")) + "</button>" : "")
+  + (full ? '<button type="button" class="btn ghost" onclick="openShare()">' + esc(t("shareTitle")) + "</button>" : "")
   + '<button type="button" class="btn ghost" onclick="resetDemo()">' + esc(t("resetDemo")) + "</button>";
  if(squad.length) maybeCoach("budget", "budBox", "coachBudget");
 }
@@ -998,6 +1016,24 @@ function rivalTotal(name){
  for(let g = 1; g <= CURRENT_GW; g++)
   for(const id of sq) total += simMatch(id, g).pts * (id === cap ? 2 : 1);
  return total;
+}
+/* الشريط - the share artifact. The captain is the shared referent: one decision, same pool,
+   same deadline, settled in 48 hours. That is what makes two managers' rounds comparable. */
+function openShare(){
+ if(typeof shareStripHtml !== "function" || squad.length < SQUAD_SIZE) return;
+ const capClub = CLUBS.find(c => c.id === captain);
+ /* starters + bench as SEPARATE arrays - the module orders the grid itself (captain first,
+    bench last) and a single `clubs` array silently rendered one tile. */
+ const tile = id => { const c = CLUBS.find(x => x.id === id) || {};
+   return {code: c.code, name: clubName(c), c1: c.c1, c2: c.c2, pat: c.pat,
+           rim: c.rim, ink: c.ink, iso: c.iso}; };
+ const st = {lang: LANG, variant: "report", gw: CURRENT_GW, score: gwTotal(CURRENT_GW),
+   captain: capClub ? tile(captain) : null,
+   starters: squad.slice(0, START_SIZE).map(tile),
+   bench: squad.slice(START_SIZE).map(tile)};
+ if(st.captain) st.captain.pts = simMatch(captain, CURRENT_GW).pts * 2;
+ openSheet('<h2>' + esc(t("shareTitle")) + "</h2>" + shareStripHtml(st)
+  + '<div class="note">' + esc(t("shareHint")) + "</div>");
 }
 function renderBoard(){
  const me = seasonTotal();
@@ -1202,6 +1238,37 @@ const GLOSSARY = [
  ["مالوش ماتش","No fixture",["النادي مالوش ماتش في الجولة دي، فمش هياخد نقط.",
    "The club has no match this round, so it scores nothing."]]
 ];
+/* الجوكرات - eight chips, two of each, expiring at the halfway deadline. The module owns
+   every rule; this only supplies the ledger and the current round. */
+let chipPlays = [];
+function chipSave(){
+ return {lang: LANG, plays: chipPlays, firstGw: 1, halfwayGw: 18, lastGw: 36, deadlinePassed: false};
+}
+function openChips(){
+ if(typeof chipState !== "function") return;
+ const st = chipState(chipSave(), CURRENT_GW);
+ openSheet(chipsHtml(st));
+ const box = $("sheetBox");
+ box.onclick = function(e){
+  const play = e.target.closest("[data-chip-play]");
+  if(play){
+   const id = play.getAttribute("data-chip-play");
+   openSheet(chipConfirmHtml(chipState(chipSave(), CURRENT_GW).byId[id]));
+   $("sheetBox").onclick = function(ev){
+    const ok = ev.target.closest("[data-chip-confirm]");
+    if(ok){ chipPlays.push({chip: id.split("-")[0], half: +id.split("-")[1], gw: CURRENT_GW, state:"active"}); openChips(); }
+    else if(ev.target.closest("[data-chip-dismiss]")) openChips();
+   };
+   return;
+  }
+  const cancel = e.target.closest("[data-chip-cancel]");
+  if(cancel){
+   const id = cancel.getAttribute("data-chip-cancel");
+   chipPlays = chipPlays.filter(x => (x.chip + "-" + x.half) !== id);
+   openChips();
+  }
+ };
+}
 function openHelp(){
  openSheet("<h2>" + esc(t("rulesTitle")) + "</h2>"
   + '<div class="card"><h3>' + esc(t("wiz1h")) + '</h3><div class="dim" style="font-size:13px;line-height:1.7">' + t("wiz1p") + "</div></div>"
