@@ -88,8 +88,19 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  align-items:center;justify-content:center;background:var(--c1)}
 /* SOLID kits must still use --c2, or 61 clubs discard it and the 12 white ones
    (Real Madrid, Leeds, Spurs, Sevilla, Fulham, Valencia...) render as identical blank
-   rectangles. A collar and cuffs is what a real plain kit actually has. */
+   rectangles. A collar and cuffs is what a real plain kit actually has.
+   STRENGTHENED after the owner looked at the 76px card and said the white clubs still read
+   as blank paper: at 29px the old 12% collar was 3px and invisible, and the card is 2.6x
+   bigger now, so the trim gets real proportions — a collar, a placket down the chest, cuffs,
+   and a hem band. Every one of them is a thing a plain kit actually has. */
 .fxkit[data-pat="solid"]{background:
+ linear-gradient(180deg, var(--c2) 0 9%, transparent 9%),                       /* collar */
+ linear-gradient(90deg, transparent 0 46%, var(--c2) 46% 54%, transparent 54%), /* placket */
+ linear-gradient(90deg, var(--c2) 0 11%, transparent 11% 89%, var(--c2) 89%),   /* sleeves */
+ linear-gradient(0deg, var(--c2) 0 5%, transparent 5%),                         /* hem */
+ var(--c1)}
+/* the placket only reads on a jersey-shaped block, so keep it off the tiny list tiles */
+.k34.fxkit[data-pat="solid"], .k44.fxkit[data-pat="solid"]{background:
  linear-gradient(180deg, var(--c2) 0 12%, transparent 12%),
  linear-gradient(90deg, var(--c2) 0 10%, transparent 10% 90%, var(--c2) 90%),
  var(--c1)}
@@ -278,9 +289,21 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    rows absolutely positioned there was nothing left to give .st a height and it collapsed to
    2px — the whole stadium gone. The card stack now DEFINES the pitch's height and the sky,
    stands and turf are painted behind it. */
+/* REAL DEPTH, not a drop shadow pretending to be depth.
+   The turf is a rotated plane, so the cards standing on it should share its vanishing point.
+   One perspective on the stack, and each row leans back a little less than the one behind
+   it: the back four sit further into the picture, the front two stand nearest the camera.
+   The cards themselves are never rotated on Y or Z — a tilted card is unreadable, and it
+   stops looking like an object you own. Only the depth axis moves. */
 .st__cards{position:relative;z-index:6;display:flex;flex-direction:column;
- gap:var(--row-gap);padding-block:22px 10px;justify-content:flex-start}
-.st__row{display:flex;justify-content:center;gap:12px}
+ gap:var(--row-gap);padding-block:22px 10px;justify-content:flex-start;
+ perspective:900px;perspective-origin:50% 130%;transform-style:preserve-3d}
+.st__row{display:flex;justify-content:center;gap:12px;
+ transform:translateZ(var(--z,0px)) rotateX(var(--lean,0deg));transform-origin:50% 100%}
+.st__row:nth-child(1){--z:-30px;--lean:5deg}
+.st__row:nth-child(2){--z:-20px;--lean:3.5deg}
+.st__row:nth-child(3){--z:-10px;--lean:2deg}
+.st__row:nth-child(4){--z:0px;  --lean:0deg}
 /* ~18px of open turf down the spine, so a back four reads as a back four and not a table */
 .st__row[data-n="4"] > :nth-child(2){margin-inline-end:18px}
 /* five across does not fit 360 (416px needed): the midfield fans, leaning the same way in
@@ -336,15 +359,29 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .cc__kit{position:absolute;inset-block-start:0;inset-inline:0;block-size:calc(var(--ch) - 34px);
  background:var(--c1)}
 /* The scrim is FIXED and kit-independent: it is what lets text sit over 126 unknown colour
-   combinations and still meet contrast. Without it, white type on Real Madrid's white kit. */
+   combinations and still meet contrast. Without it, white type on Real Madrid's white kit.
+   It also does the lighting: a soft key from the top left, a cool rim down the trailing
+   edge, and a shadow in the shoulder fold — which is what stops a flat fill reading as
+   paper. The dark foot is the part contrast depends on and it never moves. */
 .cc__kit::after{content:"";position:absolute;inset:0;pointer-events:none;
  background:
-  radial-gradient(120% 80% at 30% 12%, rgba(255,255,255,.22), rgba(255,255,255,0) 60%),
+  radial-gradient(120% 80% at 30% 12%, rgba(255,255,255,.20), rgba(255,255,255,0) 60%),
+  linear-gradient(255deg, rgba(255,255,255,.14) 0 12%, rgba(255,255,255,0) 34%),
+  linear-gradient(90deg, rgba(4,7,18,.20) 0 6%, rgba(4,7,18,0) 22%),
   linear-gradient(180deg, transparent 0 58%, rgba(4,7,18,.72) 82%, rgba(4,7,18,.94) 100%)}
-/* the league mark: a 3px rail up the card's leading edge. See --lg-* for why it exists. */
+/* THE LEAGUE, NAMED. A 3px rail was measured to separate 70 of 79 identical-kit pairs, but
+   the owner's complaint was different and fairer: he could not tell WHICH league a club was
+   in. A colour with no key is a decoration. So the rail keeps the edge and a chip names it —
+   three letters on the league's own colour, which is also how you see the three-per-league
+   rule at a glance instead of discovering it when a pick is refused. */
 .cc__lg{position:absolute;inset-block-start:0;inset-inline-start:0;z-index:2;
  inline-size:3px;block-size:calc(var(--ch) - 34px);background:var(--lgc,transparent);
  box-shadow:0 0 0 .5px rgba(4,7,18,.55)}
+.cc__lgc{position:absolute;inset-block-start:4px;inset-inline-end:4px;z-index:3;
+ padding:1px 4px;border-radius:4px;background:var(--lgc,#3D4C82);color:#080C1A;
+ font:900 8.5px/1.35 system-ui;letter-spacing:.4px;direction:ltr;
+ box-shadow:0 1px 3px rgba(0,0,0,.55)}
+.subslot .cc__lgc{font-size:7.5px;padding:1px 3px}
 /* THE PLATE CARRIES ONE THING, NOT TWO.
    It used to hold the price AND the code at a fixed 11px on a card that renders 45px wide
    (the goalkeeper, at .90 depth) and 39px on the bench. Measured on the live page at 360px:
@@ -495,6 +532,23 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .subslot.on .camein{font-size:8.5px;font-weight:900;color:#08210F;background:var(--fx-pos);
  padding:1px 5px;border-radius:4px;text-shadow:none}
 
+/* THE ROUND BAR. Moving the 36-chip scrubber off the team screen took the gameweek with
+   it, and the team screen is where a manager asks "which round is this and when does it
+   close?" — the one question the product could not answer without hunting. It is answered
+   here in one line: which round, the window it covers, and how far through it we are. */
+.rndb{display:flex;align-items:center;gap:8px;margin-block-end:6px;padding:6px 10px;
+ border-radius:var(--r);background:var(--fx-surface-2);border:1px solid var(--fx-line-2)}
+.rndb__n{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;line-height:1;
+ padding-inline-end:8px;border-inline-end:1px solid var(--fx-line-2)}
+.rndb__n b{font-size:19px;font-weight:900;color:var(--fx-gold);font-variant-numeric:tabular-nums}
+.rndb__n span{font-size:8.5px;font-weight:800;color:var(--fx-ink-mute);letter-spacing:.3px}
+.rndb__w{flex:1;min-inline-size:0}
+.rndb__d{font-size:12px;font-weight:800;color:var(--fx-ink);font-variant-numeric:tabular-nums}
+.rndb__s{font-size:10.5px;font-weight:700;color:var(--fx-ink-dim);margin-block-start:1px}
+.rndb__bar{margin-block-start:4px;block-size:3px;border-radius:2px;background:var(--fx-line-2);
+ overflow:hidden}
+.rndb__fill{block-size:100%;background:linear-gradient(90deg,var(--fx-acc),var(--fx-gold))}
+
 /* ============================================================================
    THE GAP BAND — «إنت بتلعب ضد حد» / you are playing somebody.
    The one thing this screen was missing: an opponent. Without it the screen shows
@@ -504,6 +558,10 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    ============================================================================ */
 .gapb{display:block;inline-size:100%;text-align:start;margin-block-end:6px;padding:4px 10px;
  border-radius:var(--r);background:var(--fx-surface-2);border:1px solid var(--fx-line-2)}
+.gapb__nums{display:flex;inline-size:100%;background:none;border:0;padding:0}
+.gapb__swap{flex:0 0 auto;min-block-size:28px;padding:2px 8px;border-radius:7px;
+ background:var(--fx-surface-3);border:1px solid var(--fx-line-3);
+ color:var(--fx-ink-dim);font-size:10px;font-weight:800;white-space:nowrap}
 .gapb__who{display:flex;align-items:center;justify-content:space-between;gap:8px;
  font-size:12.5px;font-weight:800;margin-block-end:2px}
 .gapb__me{color:var(--fx-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -760,6 +818,11 @@ const STR = {
  venH:["على أرضه","Home"], venA:["بره","Away"],
  capLab:["الكابتن","Captain"],
  h2hLab:["دوس عشان تغيّر منافسك","Tap to change your rival"],
+ h2hNext:["غيّر المنافس","Change rival"],
+ gwWord:["جولة","ROUND"],
+ gwOf:["الجولة {n} من {of}","Round {n} of {of}"],
+ sharedLab:["الباهت = منافسك عنده نفس النادي، فمش هيفرق بينكم",
+            "Faded = your rival owns them too, so they cannot change the gap"],
  partialTeam:["(فريق ناقص)","(incomplete)"],
  swapWith:["تبدّل {club} بمين؟","Swap {club} with who?"],
  swapPick:["اختار اللي هيتبدّل","Pick a club to swap"],
@@ -1134,6 +1197,10 @@ function bandOf(id){
 /* A MINUS SIGN IS U+2212, NOT A HYPHEN. A hyphen is narrower than a digit, so a column of
    scores jitters horizontally as it ticks — and tabular-nums cannot fix a character that is
    not a number. */
+/* Latin three-letter league codes, deliberately not translated: they sit beside a Latin club
+   code inside an LTR run, and the full league name is on the card's aria-label and in the
+   club sheet. Same reasoning as H/A. */
+const LG_ABBR = {epl:"ENG", liga:"ESP", seriea:"ITA", bun:"GER", fl1:"FRA", tsl:"TUR", spl:"SCO"};
 const MINUS = "−";
 function signed(n){ return n > 0 ? "+" + num(n) : n < 0 ? MINUS + num(Math.abs(n)) : num(0); }
 function signOf(n){ return n > 0 ? "pos" : n < 0 ? "neg" : "nil"; }
@@ -1170,6 +1237,8 @@ function cardHtml(c, withPoints, gw, slotIndex){
   + '<span class="cc__kit fxkit" data-pat="' + esc(c.pat) + '"'
   + (c.iso ? ' data-iso="1"' : "") + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + '"></span>'
   + '<span class="cc__lg" style="--lgc:var(--lg-' + esc(c.lg) + ')"></span>'
+  + '<span class="cc__lgc" style="--lgc:var(--lg-' + esc(c.lg) + ')" dir="ltr">'
+  +   esc(LG_ABBR[c.lg] || String(c.lg).toUpperCase().slice(0, 3)) + "</span>"
   + (isCap ? '<span class="cc__arm" aria-label="' + esc(t("capLab")) + '"></span>' : "")
   + '<span class="cc__nm">' + esc(clubName(c)) + "</span>"
   + '<span class="cc__plate">'
@@ -1347,8 +1416,13 @@ function renderTeam(){
     once and then never again — they move behind «عدّل فريقك». What is left above the pitch is
     the one thing worth 52px: who you are playing and by how much. */
  $("viewTeam").innerHTML = capNote + (squadWasRepaired ? '<div class="note">⚠️ ' + esc(t("repaired")) + "</div>" : "")
+  + roundBarHtml()
   + (squad.length ? gapBandHtml() : "")
   + pitchHtml(false)
+  /* Dimmed cards read as a rendering fault until someone tells you what they mean. They are
+     the whole head-to-head idea, so the one line that explains them earns its space. */
+  + (squad.length && rivalOwned().size
+     ? '<div class="note">' + esc(t("sharedLab")) + "</div>" : "")
   + '<button type="button" class="btn" onclick="openPicker()">'
   + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>";
  /* the budget coach mark pointed at #budBox, which now lives in the settings sheet */
@@ -1554,6 +1628,19 @@ function rivalOwned(){
  return new Set(rivalSquad(r.name));
 }
 function cycleRival(){ h2hIdx++; render(); }
+/* WHICH ROUND, AND WHEN. The owner's words: "i want it clear which game week are we in and
+   when it will start and when it will finish." */
+function roundBarHtml(){
+ const gw = CURRENT_GW, r = gwRound(gw);
+ const pct = Math.round((gw / 36) * 100);
+ return '<div class="rndb">'
+  + '<span class="rndb__n"><b dir="ltr">' + num(gw) + "</b><span>" + esc(t("gwWord")) + "</span></span>"
+  + '<span class="rndb__w">'
+  +  '<span class="rndb__d" dir="ltr">' + esc(r ? gwDates(gw) : "—") + "</span>"
+  +  '<div class="rndb__s">' + esc(t("gwOf", {n: gw, of: 36})) + "</div>"
+  +  '<div class="rndb__bar"><div class="rndb__fill" style="inline-size:' + pct + '%"></div></div>'
+  + "</span></div>";
+}
 function gapBandHtml(){
  const r = nearestRival();
  if(!r) return "";
@@ -1561,13 +1648,20 @@ function gapBandHtml(){
  const glyph = d > 0 ? "▲ " : d < 0 ? "▼ " : "= ";
  const partial = squad.length && squad.length < SQUAD_SIZE
    ? ' <span class="gapb__part">' + esc(t("partialTeam")) + "</span>" : "";
- return '<button type="button" class="gapb" onclick="cycleRival()" aria-label="' + esc(t("h2hLab")) + '">'
+ /* The BAND opens the table — the predictable thing a score comparison should do. Cycling
+    the rival is its own small labelled control. It used to be the whole band's tap target,
+    and the owner tapped it and thought the standings had changed under him. A control that
+    silently rewrites the number you are reading is not a control, it is a surprise. */
+ return '<div class="gapb">'
   + '<span class="gapb__who"><span class="gapb__me">' + esc(teamName()) + partial + "</span>"
-  + '<span class="gapb__vs">⟷</span>'
+  + '<button type="button" class="gapb__swap" onclick="cycleRival()" aria-label="'
+  +   esc(t("h2hLab")) + '">⇄ ' + esc(t("h2hNext")) + "</button>"
   + '<span class="gapb__them">' + esc(r.name) + "</span></span>"
-  + '<span class="gapb__nums"><span class="gapb__n me" dir="ltr">' + num(mine) + "</span>"
+  + '<button type="button" class="gapb__nums" onclick="navTo(\'board\')" aria-label="'
+  +   esc(t("segBoard")) + '">'
+  + '<span class="gapb__n me" dir="ltr">' + num(mine) + "</span>"
   + '<span class="gapb__d" data-s="' + signOf(d) + '" dir="ltr">' + glyph + signed(d) + "</span>"
-  + '<span class="gapb__n them" dir="ltr">' + num(r.s) + "</span></span></button>";
+  + '<span class="gapb__n them" dir="ltr">' + num(r.s) + "</span></button></div>";
 }
 /* الشريط - the share artifact. The captain is the shared referent: one decision, same pool,
    same deadline, settled in 48 hours. That is what makes two managers' rounds comparable. */
