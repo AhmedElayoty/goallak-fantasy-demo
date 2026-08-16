@@ -26,6 +26,17 @@
  --fx-gold:#FFC53D; --fx-pos:#3BE07F; --fx-neg:#FF6070; --fx-acc:#FF7A45;
  --fx-live:#35D0F5; --fx-chip:#A77BFF; --fx-urgent:#FF3B5C; --fx-blank:#63719C;
  --t1:#FFD24A; --t2:#FF8A3D; --t3:#7E8CC8; --t4:#49578A; --t5:#2A3560;
+ /* LEAGUE COLOURS. Not decoration: 79 pairs of clubs were pixel-identical to each other
+    (Juventus and Udinese, Man United and Monza and Brest — dE 0.0 on both colours), because
+    78% of the 126 clubs use just two of the nine kit patterns. Measured, a league mark
+    separates 70 of those 79 pairs, taking the confusable share from 46.8% to 13.5%; the nine
+    that remain are genuine real-world look-alikes (Man United #DA291C vs Forest #DD0000) and
+    are carried by the code and the name. It also makes the three-per-league rule visible on
+    the pitch, which is the rule players most often break by accident. */
+ --lg-epl:#A855F7; --lg-liga:#FF6B00; --lg-seriea:#2E9BFF; --lg-bun:#FF3B3B;
+ --lg-fl1:#17D4A7; --lg-tsl:#C7F000; --lg-spl:#FF5CA8;
+ /* motion tokens — specified in fantasy-spectacle.md and never added to the build */
+ --e-out:cubic-bezier(.22,.61,.36,1); --e-pop:cubic-bezier(.34,1.56,.64,1);
  --r:14px; --pad:14px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -150,9 +161,20 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    Everything is CSS. No images anywhere in this file.
    ============================================================================ */
 :root{
- --fx-turf-a:#0E5E33; --fx-turf-b:#0C5430;    /* the two mow stripes, CR 1.16 apart */
- --st-rake:17deg;
- --cw:clamp(48px, 14vw, 62px);               /* card width. 54 floor x .90 GK depth = 48.6px > 48 */
+ /* turf-b darkened #0C5430 -> #0A4A2A: the mow stripes were 1.147 apart, which is invisible.
+    1.317 now, and club names still measure 7.23:1 on it. */
+ --fx-turf-a:#0E5E33; --fx-turf-b:#0A4A2A;
+ --st-rake:20deg;
+ /* THE CARD IS SIZED FROM THE VIEWPORT, NOT CLAMPED.
+    The pitch goes full-bleed (see .st) so all 100vw is available: four cards plus three 12px
+    gaps plus 10px of touchline each side. 360 -> 76px, 375 -> 79.75, 390 -> 83.5.
+    --depth is GONE. The old 90%-100% ramp bought a depth cue invisible at 47px and cost 5px
+    of width on the back row, where four of the eleven cards live. Depth is carried by the
+    raked turf, the row spacing and the plinth blur ramp, all of which are free. */
+ --cw:calc((100vw - 56px) / 4);
+ --ch:calc(var(--cw) * 1.32);
+ --cw-sub:calc(var(--cw) * .76);
+ --row-gap:8px;
 }
 /* ---- THE SECOND ACT ----
    A stadium that is identical on open #40 and open #1 is a screenshot, not a product.
@@ -162,8 +184,14 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
      · the CROWD fills as your group fills (one number, driven by friends joined)
      · the TURF wears: the centre circle's trodden ring grows, a goalmouth scuff appears
      · the PERIMETER goes gold while you are alive in the cup                          */
-.st{position:relative;border-radius:var(--r);overflow:hidden;isolation:isolate;
- aspect-ratio:10/16;max-height:78vh;border:1px solid var(--fx-line-2);
+/* FULL BLEED. Measured at 360x640, the old layout put 478px of chrome above the pitch and
+   250px of stacked buttons below it, leaving 19px of a 499px pitch on screen — 3.9%. On the
+   width most of the audience actually owns, the stadium was never seen. This is the single
+   change that fixes it: ignoring .wrap's padding reclaims 48px, which is the entire budget
+   for growing the card from 47px to 76px. */
+.st{position:relative;border-radius:0;overflow:hidden;isolation:isolate;
+ margin-inline:calc(50% - 50vw);inline-size:100vw;border-inline:none;
+ border-block:1px solid var(--fx-line-2);
  --crowd-a:.34; --wear:.055; --scuff:0;
  background:radial-gradient(120% 80% at 50% -10%, var(--sky-1,#14204A) 0%, var(--sky-2,#0A1130) 46%, #070B1A 100%)}
 .st[data-sky="dusk"]    {--sky-1:#2A2560;--sky-2:#141A44}
@@ -214,45 +242,79 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .st__box{position:absolute;inset-inline:26%;top:0;height:15%;border:2px solid rgba(255,255,255,.24);
  border-top:none;pointer-events:none}
 /* --- the card layer: flat, upright, never rotated --- */
-.st__cards{position:absolute;inset:0;z-index:6}
-.slot .plinth{display:none}
-/* translate(-50%) is PHYSICAL: it always moves left. Anchored with inset-inline-start, that
-   centres the card correctly in LTR and throws it a full card-width off the pitch in RTL —
-   which is Arabic, the default. The shift is a token so the keyframes inherit it too. */
-.slot{position:absolute;--tx:-50%;transform:translate(var(--tx),-50%);display:flex;flex-direction:column;
- align-items:center;gap:3px;width:calc(var(--cw) * var(--depth,1))}
-[dir=rtl] .slot{--tx:50%}
+/* A VERTICAL STACK OF ROWS, not eleven absolutely-positioned percentages.
+   The old approach authored slot tops against a FLAT turf and then rotated the turf, which
+   moved the grass out from under them — it put the goalkeeper over the stands and had to be
+   re-measured twice. A flex column cannot drift: the rows sit on the grass because they are
+   laid out inside it. It also deletes the translate(-50%) RTL trap, since nothing is
+   centred by a physical transform any more. */
+.st__cards{position:absolute;inset:0;z-index:6;display:flex;flex-direction:column;
+ gap:var(--row-gap);padding-block:36px 12px;justify-content:flex-start}
+.st__row{display:flex;justify-content:center;gap:12px}
+/* ~18px of open turf down the spine, so a back four reads as a back four and not a table */
+.st__row[data-n="4"] > :nth-child(2){margin-inline-end:18px}
+/* five across does not fit 360 (416px needed): the midfield fans, leaning the same way in
+   both directions so RTL never mirrors it */
+.st__row[data-n="5"]{gap:0}
+.st__row[data-n="5"] > *{margin-inline-end:-9px}
+.st__row[data-n="5"] > :last-child{margin-inline-end:0}
+.slot{display:flex;flex-direction:column;align-items:center;gap:3px;inline-size:var(--cw)}
 /* ============================================================================
    THE CLUB CARD — the kit becomes a JERSEY on a card, not a coloured square.
    The 3-letter code moves off the kit onto a plate, which takes it from a
    per-club outline hack to a flat 18.1:1 for all 126 clubs.
    The rim metal encodes the price band, so value reads at a glance.
    ============================================================================ */
-.cc{position:relative;width:100%;aspect-ratio:60/79;border-radius:9px;overflow:hidden;
- background:#0B1024;border:1.5px solid var(--metal,#3D4C82);
- box-shadow:0 4px 10px -4px rgba(0,0,0,.75), 0 0 0 1px rgba(0,0,0,.35);
- display:flex;flex-direction:column;padding:0}
+.cc{position:relative;inline-size:100%;block-size:var(--ch);border-radius:9px 9px 12px 12px;
+ overflow:hidden;border:var(--band-w,1.5px) solid transparent;
+ background:linear-gradient(var(--band-ground,#0B1024),var(--band-ground,#0B1024)) padding-box,
+            var(--band,#3D4C82) border-box;
+ box-shadow:var(--band-elev,0 4px 10px -4px rgba(0,0,0,.75));
+ display:flex;flex-direction:column;padding:0;contain:paint;
+ transition:opacity 260ms var(--e-out), filter 260ms var(--e-out), transform 180ms var(--e-pop)}
+.cc:active{transform:scale(.965)}          /* there was no press state anywhere in the build */
 /* The bands escalate on FOUR properties, not just hue — rim weight, gloss, elevation and
    ground. Sorare's own designers put it best: scarcity is expressed as DEPTH, with common
    cards "clean and simple and more or less flat" and the rarest ones darker "so we can
    better highlight the contrast between light and dark". Hue alone is the weak half of the
    idea; a budget card here is deliberately flat, an elite card is an object. */
-.cc[data-band="elite"] {--metal:#FFD24A;--rim:2px;--gloss:.20;background:#080C1C;
- box-shadow:0 6px 18px -5px rgba(255,210,74,.30), 0 5px 12px -4px rgba(0,0,0,.80)}
-.cc[data-band="strong"]{--metal:#D9DEEF;--rim:1.75px;--gloss:.15;
- box-shadow:0 5px 14px -5px rgba(0,0,0,.75)}
-.cc[data-band="mid"]   {--metal:#B08D57;--rim:1.5px;--gloss:.11;
- box-shadow:0 4px 11px -5px rgba(0,0,0,.70)}
-.cc[data-band="value"] {--metal:#6D7CA8;--rim:1.25px;--gloss:.08;
- box-shadow:0 3px 8px -4px rgba(0,0,0,.62)}
-.cc[data-band="budget"]{--metal:#46527E;--rim:1px;--gloss:.06;box-shadow:none}
-.cc{border-width:var(--rim,1.5px)}
-.cc__shirtwrap::after{content:"";position:absolute;inset:0;pointer-events:none;
- background:linear-gradient(150deg, rgba(255,255,255,var(--gloss,.08)) 0 34%, rgba(255,255,255,0) 62%)}
-.cc__shirtwrap{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
-/* one clip-path, mirror-symmetric, so RTL never has to flip it */
-.cc__shirt{width:67%;aspect-ratio:40/44;position:relative;
- clip-path:polygon(31% 0%,40% 5%,60% 5%,69% 0%,100% 13%,100% 36%,84% 41%,84% 100%,16% 100%,16% 41%,0% 36%,0% 13%)}
+/* The metals are real gradients, not five flat colours — a flat fill is a coloured line, a
+   gradient is an edge that catches light and reads as an object. */
+.cc[data-band="elite"] {--band:linear-gradient(160deg,#FFE39A,#FFC53D 42%,#B8801A);
+ --band-w:2px;--band-ground:#080C1C;
+ --band-elev:0 5px 12px -2px rgba(0,0,0,.68), 0 14px 28px -12px rgba(0,0,0,.62)}
+.cc[data-band="strong"]{--band:linear-gradient(160deg,#F0D9A8,#D2A85C 44%,#8A6320);
+ --band-w:1.75px;--band-ground:#0A0F20;
+ --band-elev:0 4px 11px -2px rgba(0,0,0,.65), 0 12px 25px -11px rgba(0,0,0,.58)}
+.cc[data-band="mid"]   {--band:linear-gradient(160deg,#EFF3FF,#C6D0EE 44%,#7C8AB8);
+ --band-w:1.5px;--band-ground:#0B1024;
+ --band-elev:0 4px 10px -2px rgba(0,0,0,.62), 0 10px 22px -10px rgba(0,0,0,.55)}
+.cc[data-band="value"] {--band:linear-gradient(160deg,#F0C79A,#C08A52 44%,#7A4E24);
+ --band-w:1.25px;--band-ground:#0B1024;
+ --band-elev:0 3px 8px -2px rgba(0,0,0,.58), 0 8px 18px -9px rgba(0,0,0,.48)}
+.cc[data-band="budget"]{--band:linear-gradient(160deg,#7C8AB8,#55689F 44%,#2A3560);
+ --band-w:1px;--band-ground:#0C1128;--band-elev:0 2px 6px -2px rgba(0,0,0,.52)}
+
+/* ============================================================================
+   THE CARD *IS* THE KIT.
+   Before this, the club — the only reason any of this exists — occupied 31.4% of
+   its own card and the other 68.6% was #0B1024, the same navy on all eleven. That
+   is why eleven cards read as eleven identical dark rectangles: their dominant
+   surface WAS identical. The kit now fills the card above the plate, taking the
+   kit area from 925px² to 5,016px² — 5.4x.
+   ============================================================================ */
+.cc__kit{position:absolute;inset-block-start:0;inset-inline:0;block-size:calc(var(--ch) - 34px);
+ background:var(--c1)}
+/* The scrim is FIXED and kit-independent: it is what lets text sit over 126 unknown colour
+   combinations and still meet contrast. Without it, white type on Real Madrid's white kit. */
+.cc__kit::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:
+  radial-gradient(120% 80% at 30% 12%, rgba(255,255,255,.22), rgba(255,255,255,0) 60%),
+  linear-gradient(180deg, transparent 0 58%, rgba(4,7,18,.72) 82%, rgba(4,7,18,.94) 100%)}
+/* the league mark: a 3px rail up the card's leading edge. See --lg-* for why it exists. */
+.cc__lg{position:absolute;inset-block-start:0;inset-inline-start:0;z-index:2;
+ inline-size:3px;block-size:calc(var(--ch) - 34px);background:var(--lgc,transparent);
+ box-shadow:0 0 0 .5px rgba(4,7,18,.55)}
 /* The name sits BELOW the card and is allowed to be WIDER than it. Inside a 45px card it
    could only render at 6.7px - unreadable - and still truncated. The row gaps now hold it. */
 .slot .nm{margin-top:2px;text-align:center;font-size:clamp(9px,2.5vw,11px);font-weight:800;
@@ -278,43 +340,87 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    8.6px on a 47px card and 7.6px on the goalkeeper at the 48px floor. Scanning all 36
    rounds this way clipped the code on 73 of 540 cards.
 
-   So the plate holds exactly ONE thing, always at a full 11px:
-     · before the deadline, the CODE   — which club is this
-     · after it, the SCORE             — the only reason to open the screen at all
-   Neither view loses anything, because the club's full name sits under every card and the
-   rim metal carries the price band. */
-.cc__plate{height:26%;min-height:18px;display:flex;align-items:center;justify-content:center;
- padding:0 3px;overflow:hidden;border-top:1px solid rgba(255,255,255,.09);
- background:rgba(6,10,26,.72);font-size:11px}
-.cc__code{font-size:1em;font-weight:900;letter-spacing:.3px;color:#F2F5FF;white-space:nowrap}
-.cc__val{font-size:1em;font-weight:900;color:var(--fx-gold);white-space:nowrap;display:none}
-.cc__plate--pts .cc__code{display:none}
-.cc__plate--pts .cc__val{display:inline;color:var(--fx-pos)}
-.subslot .cc__plate{font-size:10px}
-/* On a 45px card the fixture badge's words do not fit - "مالوش ماتش" rendered as a sliced
-   "مالوش". The pill keeps its shape and colour (both non-colour channels survive) but the
-   label is moved to aria-label, where it is read but never clipped. */
-.st__cards .gwb, .dug .gwb{max-width:calc(100% - 6px);overflow:hidden;font-size:0;
- padding:1px 4px;gap:0}
-.st__cards .gwb i, .dug .gwb i{font-size:11px}
-.st__cards .gwb *:not(i), .dug .gwb *:not(i){display:none}
-.cc__arm{position:absolute;inset-block-start:5px;inset-inline-start:0;z-index:4;
- background:var(--fx-gold);color:#0B1020;font-size:8.5px;font-weight:900;padding:1px 5px;
- border-start-end-radius:4px;border-end-end-radius:4px;letter-spacing:.4px}
+   At 47px the plate could hold exactly one thing. At 76px it holds TWO LINES, and the second
+   one is the whole point: the FIXTURE. The price was the one field on the card frozen for the
+   entire season, which is precisely why eleven cards looked the same on every open. Who you
+   play changes every round; whether you are winning changes every few minutes.
+       line 1   ARS               (H)      code + venue
+       line 2   > TOT   /   1-0   /   +8   opponent, then live score, then points
+   The price is not lost: it is in the shop, in the club sheet and in the budget line, and
+   the rim metal carries the band. It was never the card's job. */
+.cc__plate{margin-block-start:auto;block-size:34px;padding-inline:6px;
+ display:grid;grid-template-rows:17px 17px;align-content:center;overflow:hidden;
+ background:linear-gradient(180deg, rgba(11,16,36,.55), rgba(6,9,22,.94));
+ border-block-start:1px solid rgba(255,255,255,.09);
+ border-block-end:3px solid var(--tier,var(--fx-line-2))}
+.cc__l1,.cc__l2{display:flex;align-items:center;justify-content:space-between;gap:4px;min-inline-size:0}
+.cc__code{font:900 13px/1 system-ui;letter-spacing:.4px;direction:ltr;color:var(--fx-ink);
+ white-space:nowrap}
+.cc__ven{font:800 10px/1 system-ui;direction:ltr;color:var(--fx-ink-mute);white-space:nowrap;
+ font-variant-numeric:tabular-nums}
+.cc__fx{font:800 11px/1 system-ui;color:var(--fx-ink-dim);font-variant-numeric:tabular-nums;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-inline-size:0}
+/* opponent strength on the bottom rail. --t1..--t5 shipped in :root and were referenced
+   nowhere at all — five dead tokens that are exactly what this line needs. */
+.cc[data-tier="1"]{--tier:var(--t1)}
+.cc[data-tier="2"]{--tier:var(--t2)}
+.cc[data-tier="3"]{--tier:var(--t3)}
+.cc[data-tier="4"]{--tier:var(--t4)}
+.cc[data-tier="5"]{--tier:var(--t5)}
+.cc[data-st="live"]{border-color:var(--fx-live);--band:var(--fx-live);--band-w:2px}
+.cc[data-st="live"] .cc__ven,.cc[data-st="live"] .cc__fx{color:var(--fx-live)}
+.cc[data-st="live"] .cc__plate{border-block-end-color:var(--fx-live)}
+/* colour by SIGN only, never by magnitude, and a zero is always printed and never coloured */
+.cc__fx[data-sign="pos"]{color:var(--fx-pos)}
+.cc__fx[data-sign="neg"]{color:var(--fx-neg)}
+.cc__fx[data-sign="nil"]{color:var(--fx-ink-mute)}
+/* a blank is a state of one CARD, not of the screen. At 76px the words finally fit, so the
+   label comes back out of aria-label where it had to hide at 47px. */
+.cc--blank{filter:saturate(.45) brightness(.82)}
+.cc--blank .cc__plate{border-block-end-color:var(--fx-blank)}
+.cc--blank .cc__fx{color:var(--fx-ink-dim)}   /* 8.83:1 — the blank hue alone is 3.16 and fails */
+/* THE DIFFERENTIAL RULE — the entire head-to-head idea, in two properties. A club you and
+   your rival both own cannot change the gap between you, so it recedes. */
+.st[data-h2h="on"] .slot[data-shared="1"] .cc,
+.st[data-h2h="on"] .subslot[data-shared="1"] .cc{opacity:.52;filter:saturate(.55)}
+/* the armband as an actual armband, not 8.5px of text. Must NOT mirror: a captain's armband
+   is worn on the left arm in every league on earth. */
+.cc__arm{position:absolute;inset-block-start:24%;inset-inline-start:5%;z-index:4;
+ inline-size:calc(var(--cw) * .20);block-size:calc(var(--cw) * .13);border-radius:2px;
+ background:linear-gradient(180deg,#FFE39A,#FFC53D 46%,#C98F14);
+ box-shadow:0 1px 0 rgba(255,255,255,.55) inset, 0 1px 3px rgba(0,0,0,.6);font-size:0}
+.cc__arm::before{content:"";position:absolute;inset-inline:14%;top:38%;block-size:22%;
+ background:rgba(11,16,32,.72);border-radius:1px}
+[dir=rtl] .cc__arm{inset-inline-start:auto;inset-inline-end:5%}
  /* The name scales with the viewport and may take TWO lines. Fixed 10px with nowrap+ellipsis
     turned a long Arabic club name into an ellipsis on a small phone, which is the same as no
     name at all. */
-.slot .nm{font-size:clamp(8.5px, 2.6vw, 11px);font-weight:800;color:#F2F5FF;
- width:calc(var(--cw) * 1.6);max-width:26vw;line-height:1.15;text-align:center;
+.slot .nm{font-size:10.5px;font-weight:800;color:#F2F5FF;
+ inline-size:calc(var(--cw) * 1.24);line-height:1.15;text-align:center;
  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
  text-shadow:0 1px 3px rgba(0,0,0,.95), 0 0 6px rgba(0,0,0,.7)}
-.slot .plinth{width:62%;height:6px;border-radius:50%;margin-top:-2px;
- background:radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.55), transparent 70%)}
-/* an empty slot should look like a shirt waiting on a peg, not a failed image */
-.cc--empty{border-style:dashed;border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.05);
- align-items:center;justify-content:center;color:rgba(255,255,255,.72);font-size:20px;font-weight:300}
-.cc--empty .cc__shirtwrap{opacity:.34}
-.cc--empty .cc__plus{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px}
+/* THE PLINTH. It was written, then killed with display:none — and it is item one on the
+   spectacle spec's own list ("if you build one thing from C.4, build the plinth"). It is
+   what makes a card look like it is STANDING on the grass rather than floating over it.
+   The blur deepens row by row, which is the depth cue the --depth ramp was failing to buy. */
+.slot .plinth{display:block;inline-size:calc(var(--cw) * .70);block-size:7px;
+ margin-block-start:-3px;filter:blur(var(--plinth-blur,1.5px));
+ background:radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,.62), transparent 72%)}
+.st__row:nth-child(1) .plinth{--plinth-blur:1px}
+.st__row:nth-child(2) .plinth{--plinth-blur:1.4px}
+.st__row:nth-child(3) .plinth{--plinth-blur:1.8px}
+.st__row:nth-child(4) .plinth{--plinth-blur:2.2px}
+/* An empty slot is a shirt waiting on a peg, and it carries the ONE number that turns
+   "pick another club" into a decision: the most you can still afford. Specified in the
+   spectacle doc and never built. The breathe stops the moment the XI is complete. */
+.cc--empty{border:1.5px dashed var(--fx-line-3);background:rgba(255,255,255,.045);
+ box-shadow:none;color:var(--fx-ink-mute);align-items:center;justify-content:center}
+.cc--empty .cc__num{position:absolute;inset-block-start:26%;inset-inline:0;text-align:center;
+ font:900 15px/1 system-ui;color:var(--fx-ink-mute);font-variant-numeric:tabular-nums}
+.cc--empty .cc__hook{position:absolute;inset-block-end:8px;inset-inline:0;text-align:center;
+ font:900 13px/1 system-ui;color:var(--fx-gold);font-variant-numeric:tabular-nums;direction:ltr}
+.st:not([data-full="1"]) .cc--empty{animation:ccBreathe 2600ms ease-in-out infinite}
+@keyframes ccBreathe{0%,100%{opacity:.72}50%{opacity:1}}
 
 /* ---------- the dugout ---------- */
 .dug{margin-top:10px;background:linear-gradient(180deg,#0E1430,#0A1026);border:1px solid var(--fx-line-2);
@@ -322,21 +428,70 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .dug__lab{font-size:10.5px;color:var(--fx-ink-mute);margin-bottom:8px;text-align:center}
 .dug__row{display:flex;gap:8px;justify-content:space-between}
 .subslot{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px}
-/* a substitute must never out-weigh a starter: the bench rendered at 75x99 against the
-   XI's 49x64, making the reserves the biggest objects on the screen */
-.subslot .cc{width:min(100%, calc(var(--cw) * .78))}
-.slot.armed .cc, .subslot.armed .cc{outline:3px solid var(--fx-gold);outline-offset:2px}
-.swaphint{position:relative;z-index:6;font-size:8.5px;font-weight:900;color:#0B1020;
- background:var(--fx-gold);padding:1px 5px;border-radius:4px;white-space:nowrap}
+/* A substitute must be subordinate to a starter but still tappable. The bench used to render
+   39.3px wide — 18% under the 48px tap floor — while an earlier version had it at 2.4x the
+   AREA of the eleven clubs that actually play. At .76 it is 58% of a starter's area and
+   passes 48px. */
+.subslot .cc{inline-size:var(--cw-sub);block-size:calc(var(--cw-sub) * 1.32);
+ filter:saturate(.86) brightness(.90)}
+.subslot.on .cc{filter:none}
 .subslot .ord{position:absolute;inset-block-start:-4px;inset-inline-start:-3px;z-index:5;width:16px;height:16px;
  border-radius:50%;background:var(--fx-surface-3);border:1px solid var(--fx-line-3);color:var(--fx-ink-dim);
  font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center}
+
+/* ============================================================================
+   THE SWAP — SUBTRACTIVE, NOT ADDITIVE.
+   Arming a card used to paint a gold "بدّل" badge on all fifteen at once: 6,286px²
+   of gold in a single tap, on a screen whose own colour spec assigns gold to VALUE
+   and --fx-acc to INTERACTIVE. Now the armed card lifts and everything else steps
+   back, which is how selection works everywhere else in the world. A sticky bar
+   names the club and offers the only escape, which also deletes the bug where the
+   armed state leaked through ten different code paths into an accidental swap.
+   ============================================================================ */
+.slot.armed .cc, .subslot.armed .cc{outline:3px solid var(--fx-acc);outline-offset:2px;
+ transform:translateY(-4px) scale(1.04);filter:none;z-index:8}
+.st[data-arm="1"] .slot:not(.armed) .cc,
+.dug[data-arm="1"] .subslot:not(.armed) .cc{filter:brightness(.55) saturate(.7)}
+.swapbar{position:sticky;inset-block-end:calc(62px + env(safe-area-inset-bottom));z-index:70;
+ display:flex;align-items:center;gap:10px;min-block-size:44px;margin-block-start:8px;
+ padding:8px 12px;border-radius:var(--r);background:var(--fx-surface-3);
+ border:1px solid var(--fx-acc);box-shadow:0 -6px 18px -8px rgba(0,0,0,.7)}
+.swapbar b{flex:1;font-size:12.5px;font-weight:800;color:var(--fx-ink)}
+.swapbar button{flex:0 0 auto;min-block-size:32px;padding:0 12px;border-radius:8px;
+ background:var(--fx-surface-2);color:var(--fx-ink-dim);font-size:12px;font-weight:800}
 .subslot .nm{font-size:9px;font-weight:700;color:var(--fx-ink-dim);max-width:100%;white-space:nowrap;
  overflow:hidden;text-overflow:ellipsis}
 /* a sub that actually came on: the fourth official's board, lit */
 .subslot.on .cc{border-color:var(--fx-pos)}
 .subslot.on .camein{font-size:8.5px;font-weight:900;color:#08210F;background:var(--fx-pos);
  padding:1px 5px;border-radius:4px;text-shadow:none}
+
+/* ============================================================================
+   THE GAP BAND — «إنت بتلعب ضد حد» / you are playing somebody.
+   The one thing this screen was missing: an opponent. Without it the screen shows
+   a number with nothing to compare it to, which is why it produced nothing on the
+   fortieth open, or the first. Every card is then read against that rival: clubs
+   you BOTH own cannot move the gap between you, so they recede.
+   ============================================================================ */
+.gapb{display:block;inline-size:100%;text-align:start;margin-block-end:8px;padding:6px 10px;
+ border-radius:var(--r);background:var(--fx-surface-2);border:1px solid var(--fx-line-2)}
+.gapb__who{display:flex;align-items:center;justify-content:space-between;gap:8px;
+ font-size:12.5px;font-weight:800;margin-block-end:2px}
+.gapb__me{color:var(--fx-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gapb__vs{color:var(--fx-ink-mute);font-size:11px;flex:0 0 auto}
+.gapb__them{color:var(--fx-ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+ text-align:end}
+.gapb__nums{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.gapb__n{font:900 28px/1 system-ui;font-variant-numeric:tabular-nums;direction:ltr}
+.gapb__n.me{color:var(--fx-ink)}
+.gapb__n.them{color:var(--fx-ink-dim)}
+/* The gap always carries a GLYPH and a SIGN as well as a hue: deuteranopia collapses
+   --fx-pos and --fx-neg to 1.32:1, so colour alone is unreadable for ~8% of men. */
+.gapb__d{font:900 15px/1 system-ui;font-variant-numeric:tabular-nums;direction:ltr;flex:0 0 auto}
+.gapb__d[data-s="pos"]{color:var(--fx-pos)}
+.gapb__d[data-s="neg"]{color:var(--fx-neg)}
+.gapb__d[data-s="nil"]{color:var(--fx-ink-mute)}
+.gapb__part{font-size:11px;font-weight:800;color:var(--fx-ink-mute)}
 
 /* ---------- tier dots ---------- */
 .tier{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--fx-ink-dim)}
@@ -465,9 +620,9 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 <header class="hdr">
  <div class="hbrand">
   <div class="hname">جولك <b>فانتازي</b></div>
-  <div class="hsub" id="hsub">11 + 4 بدلاء · 120 مليون</div>
+  <div class="hsub" id="hsub"></div>
  </div>
- <span class="demoTag" id="demoTag">DEMO</span>
+ <button class="hbtn" id="toolsBtn" onclick="openTools()" aria-label="الإعدادات">⚙</button>
  <button class="hbtn" id="langBtn" onclick="toggleLang()" aria-label="اللغة">EN</button>
 </header>
 
@@ -531,7 +686,7 @@ const FORMATIONS = {
    ============================================================================ */
 (function resetOnOpen(){
  try{
-  for(const k of ["fx_squad","fx_cap","fx_form","fx_lang","fx_coach","fx_onboarded","fx_gw","fx_chips"]) localStorage.removeItem(k);
+  for(const k of ["fx_squad","fx_cap","fx_form","fx_lang","fx_coach","fx_onboarded","fx_gw","fx_chips","fx_team"]) localStorage.removeItem(k);
  }catch(_){}
 })();
 
@@ -558,6 +713,22 @@ const STR = {
  pickTitle:["اختار أنديتك","Pick your clubs"],
  allLg:["الكل","All"],
  emptySlot:["فاضي","Empty"],
+ /* the card's second line, and the head-to-head band */
+ noMatch:["مالوش ماتش","No match"],
+ venH:["(أرضه)","(H)"], venA:["(بره)","(A)"],
+ capLab:["الكابتن","Captain"],
+ h2hLab:["دوس عشان تغيّر منافسك","Tap to change your rival"],
+ partialTeam:["(فريق ناقص)","(incomplete)"],
+ swapWith:["تبدّل {club} بمين؟","Swap {club} with who?"],
+ swapPick:["اختار اللي هيتبدّل","Pick a club to swap"],
+ cancel:["إلغاء","Cancel"],
+ /* identity */
+ teamDefault:["فريقي","My team"],
+ mgrDefault:["المدير","Manager"],
+ renameTeam:["اسم الفريق","Team name"],
+ renameAsk:["سمّي فريقك","Name your team"],
+ toolsTitle:["إعدادات الفريق","Team settings"],
+ formLab:["الخطة","Formation"],
  tooExpensive:["أغلى من اللي فاضل معاك","Over your remaining budget"],
  leagueFull:["خلاص عندك 3 أندية من الدوري ده","3 clubs from this league already"],
  squadFull:["فريقك كمل — شيل نادي الأول","Your squad is full"],
@@ -725,14 +896,38 @@ function simMatch(clubId, gw){
  const ga = win ? (h >> 9) % 2 : draw ? gf : 1 + (h >> 11) % 2;
  const oppTier = 1 + (h >> 13) % 5;
  const blank = ((h >> 17) % 11) === 0;      /* no fixture this week */
- if(blank) return {blank:true, pts:0};
+ if(blank) return {blank:true, pts:0, opp:null, home:false, oppTier:oppTier};
+ /* WHO you play, drawn from the same hash as everything else so it can never contradict the
+    result. The card needs this: the price was the one field on it frozen for the whole
+    season, which is exactly why eleven cards looked identical on every open. A real build
+    replaces this function with the fixture list and nothing above it changes. */
+ const opp = leagueMate(clubId, h);
+ const home = ((h >> 21) & 1) === 1;
  const res = win ? 6 : draw ? 2 : 0;
  const clean = ga === 0 ? 4 : 0;
  const goals = gf * 1;
  const conc = -Math.floor(ga / 2);
  const tierBonus = win ? [0,3,2,1,0,0][oppTier] : 0;
  return {blank:false, win, draw, gf, ga, oppTier, res, clean, goals, conc, tierBonus,
+         opp: opp, home: home,
          pts: res + clean + goals + conc + tierBonus};
+}
+/* Built once, on first use — a per-league index so picking an opponent is O(1) and not a
+   126-club scan on every card, every round, every render. */
+let _lgIdx = null;
+function leagueMate(clubId, h){
+ if(!_lgIdx){
+  _lgIdx = {};
+  for(const c of CLUBS) (_lgIdx[c.lg] || (_lgIdx[c.lg] = [])).push(c);
+ }
+ const me = CLUBS.find(x => x.id === clubId);
+ if(!me) return null;
+ const pool = _lgIdx[me.lg] || [];
+ if(pool.length < 2) return null;
+ /* never draw yourself: step past your own index rather than reject-and-retry */
+ const mine = pool.indexOf(me);
+ const k = (h >> 23) % (pool.length - 1);
+ return pool[k >= mine ? k + 1 : k];
 }
 /* AUTOMATIC SUBSTITUTION.
    A club with no fixture scores nothing, and the scenario analysis measured that an XI with no
@@ -819,8 +1014,9 @@ function paintChrome(){
  document.documentElement.lang = LANG;
  document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
  $("langBtn").textContent = LANG === "ar" ? "EN" : "ع";
- $("hsub").textContent = t("brandSub");
- $("demoNote").textContent = t("demoNote");
+ /* the subtitle is the MANAGER now, not a rules recap the wizard already gave once */
+ $("hsub").textContent = squad.length ? teamName() : t("brandSub");
+ $("demoNote").textContent = "";
  $("segbar").innerHTML =
   ['team','points','board'].map(v =>
    '<button type="button" class="' + (view === v ? "on" : "") + '" onclick="setView(\'' + v + '\')">'
@@ -850,23 +1046,11 @@ function budgetHtml(){
   + '<span>' + esc(t("slotsLeft")) + ' <b dir="ltr">' + num(slotsLeft()) + '</b></span></div></div>';
 }
 
-/* Row depth: the plane compresses toward the viewer, so cards grow 90% -> 100% back to front.
-   10% is the smallest ramp that reads as depth and the largest that keeps the GK card above
-   the 48px tap minimum (54 floor x .90 = 48.6). */
-/* Measured against the RENDERED turf, not the flat one. rotateX(24deg) about the bottom
-   edge lifts the far edge from 23% to 42.6%, so a row authored at 28% put the goalkeeper
-   entirely above the grass — hit-testing under his feet returned sky. */
-/* Rows pulled up so the club NAME under the front row still lands inside the pitch. At 91%
-   the name fell past the bottom edge and .st{overflow:hidden} ate it - which is why only
-   some names were readable on a real phone. */
-/* Spread across the RENDERED grass, measured rather than guessed: four cards at this size
-   need ~332px and the grass gives ~355px, so the rows sit 17 percentage points apart with a
-   little air top and bottom. Any tighter and each name is buried under the row in front. */
-const ROW_GEOM = [{top:34, depth:0.90}, {top:53, depth:0.94}, {top:71, depth:0.97}, {top:90, depth:1.00}];
-/* Horizontal centres by row width. The FOUR-card row is deliberately uneven — 11/35/65/89,
-   gaps 24/30/24 — leaving ~46px of open turf down the spine of the team. Distribute those four
-   evenly and you get 11px there, and the row instantly reads as a table instead of a back four. */
-const ROW_X = {1:[50], 2:[33,67], 3:[20,50,80], 4:[11,35,65,89], 5:[11,30,50,70,89]};
+/* ROW_GEOM and ROW_X are GONE. Eleven cards positioned by percentage against a turf that is
+   then rotated is a bug generator: the tops were authored flat, the rake moved the grass out
+   from under them, and it had to be re-measured twice — once because the goalkeeper floated
+   over the stands, once because the front row's names fell out of the bottom. The rows are a
+   flex column inside the pitch now, so they cannot drift by construction. */
 
 /* Derived from the same deterministic simulation the scoring uses, so the badge can never
    disagree with the points that follow it. Real data would replace only this function. */
@@ -883,30 +1067,43 @@ function bandOf(id){
  const p = priceOf(id);
  return p >= 15 ? "elite" : p >= 11 ? "strong" : p >= 8 ? "mid" : p >= 6 ? "value" : "budget";
 }
+/* A MINUS SIGN IS U+2212, NOT A HYPHEN. A hyphen is narrower than a digit, so a column of
+   scores jitters horizontally as it ticks — and tabular-nums cannot fix a character that is
+   not a number. */
+const MINUS = "−";
+function signed(n){ return n > 0 ? "+" + num(n) : n < 0 ? MINUS + num(Math.abs(n)) : num(0); }
+function signOf(n){ return n > 0 ? "pos" : n < 0 ? "neg" : "nil"; }
 function cardHtml(c, withPoints, gw, slotIndex){
- const m = withPoints ? simMatch(c.id, gw) : null;
+ const g = gw == null ? CURRENT_GW : gw;
+ const m = simMatch(c.id, g);
  const isCap = c.id === captain;
- /* A club with no fixture scores nothing, and until now the only way to discover that was
-    to score nothing. The badge says it BEFORE the round, which is the whole point. */
- const fx = fixtureState(c.id, gw == null ? CURRENT_GW : gw);
- const badge = (typeof gwBadge === "function")
-   ? gwBadge({lang: LANG, kind: fx.kind, matches: fx.matches}) : "";
- const val = withPoints
-  /* class "pts" is what marks the plate as showing a RESULT rather than a price - the bench
-     hides the price but must never hide the score. The inline colour still wins over .pts. */
-  ? (m.blank ? '<span class="cc__val pts" style="color:var(--fx-blank)">–</span>'
-             : '<span class="cc__val pts" dir="ltr">' + num(m.pts * (isCap ? 2 : 1)) + "</span>")
-  : '<span class="cc__val" dir="ltr">' + num(priceOf(c.id).toFixed(1)) + "</span>";
- const act = withPoints ? "openBreakdown('" + esc(c.id) + "'," + gw + ")"
+ /* LINE 2 IS THE REASON THIS CARD IS INTERESTING. Before the round it is who you play;
+    after it, what you scored. Both change every week. The price never did. */
+ let l2, sign = "";
+ if(m.blank){
+  l2 = t("noMatch");
+ }else if(withPoints){
+  const p = m.pts * (isCap ? 2 : 1);
+  sign = ' data-sign="' + signOf(p) + '"';
+  l2 = signed(p);
+ }else{
+  l2 = "▸ " + (m.opp ? m.opp.code : "—") + " " + (m.home ? t("venH") : t("venA"));
+ }
+ const act = withPoints ? "openBreakdown('" + esc(c.id) + "'," + g + ")"
    : (slotIndex == null ? "openClub('" + esc(c.id) + "')" : "swapArm(" + slotIndex + ")");
- return '<button type="button" class="cc" data-band="' + bandOf(c.id) + '" onclick="' + act + '">'
-  + (isCap ? '<span class="cc__arm">C</span>' : "") + badge
-  + '<span class="cc__shirtwrap"><span class="cc__shirt fxkit" data-pat="' + esc(c.pat) + '"'
-  + (c.iso ? ' data-iso="1"' : "") + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + '"></span></span>'
-  /* the plate holds ONE datum: the code before the deadline, the score after it */
-  + '<span class="cc__plate' + (withPoints ? " cc__plate--pts" : "") + '">'
-  + '<span class="cc__code" dir="ltr">' + esc(c.code) + "</span>" + val + "</span>"
-  + "</button>";
+ return '<button type="button" class="cc' + (m.blank ? " cc--blank" : "") + '"'
+  + ' data-band="' + bandOf(c.id) + '" data-tier="' + m.oppTier + '"'
+  + ' onclick="' + act + '" aria-label="' + esc(clubName(c) + (m.blank ? " · " + t("noMatch") : "")) + '">'
+  + '<span class="cc__kit fxkit" data-pat="' + esc(c.pat) + '"'
+  + (c.iso ? ' data-iso="1"' : "") + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + '"></span>'
+  + '<span class="cc__lg" style="--lgc:var(--lg-' + esc(c.lg) + ')"></span>'
+  + (isCap ? '<span class="cc__arm" aria-label="' + esc(t("capLab")) + '"></span>' : "")
+  + '<span class="cc__plate">'
+  +  '<span class="cc__l1"><span class="cc__code" dir="ltr">' + esc(c.code) + "</span>"
+  +   '<span class="cc__ven" dir="ltr">' + num(Math.round(priceOf(c.id))) + "</span></span>"
+  +  '<span class="cc__l2"><span class="cc__fx"' + sign + ' dir="' + (m.blank ? "auto" : "ltr") + '">'
+  +   esc(l2) + "</span></span>"
+  + "</span></button>";
 }
 /* The squad as a TEAM SHEET standing on a raked pitch — not a grid of squares. */
 function pitchHtml(withPoints, gw){
@@ -924,7 +1121,11 @@ function pitchHtml(withPoints, gw){
     the season slider strobed eleven staggered card animations per input event. */
  const enter = _entryPlayed ? "" : " st--enter";
  _entryPlayed = true;
+ const full = squad.length >= SQUAD_SIZE;
+ const shared = rivalOwned();          /* the head-to-head set; empty when the band is off */
  let h = '<div class="st' + enter + '" data-sky="' + sky + '" data-cup="' + inCup + '"'
+  + ' data-full="' + (full ? 1 : 0) + '" data-arm="' + (swapFrom !== null ? 1 : 0) + '"'
+  + ' data-h2h="' + (shared.size ? "on" : "off") + '"'
   + ' style="--crowd-a:' + crowd + ';--wear:' + wear + ';--scuff:' + scuff + '">'
   + '<div class="st__sky"></div>'
   + '<div class="st__pylon a"><i></i><u></u></div><div class="st__pylon b"><i></i><u></u></div>'
@@ -933,58 +1134,69 @@ function pitchHtml(withPoints, gw){
   + '<div class="st__cards">';
  let i = 0;
  const starters = squad.slice(0, START_SIZE);
- rows.forEach((count, r) => {
-  const g = ROW_GEOM[r] || ROW_GEOM[3];
-  const xs = ROW_X[count] || ROW_X[4];
+ /* Rows, back to front. No percentages and no --depth: a row cannot slide off the grass if
+    it is laid out inside it. */
+ rows.forEach(count => {
+  h += '<div class="st__row" data-n="' + count + '">';
   for(let k = 0; k < count; k++, i++){
    const id = starters[i];
    const c = id ? CLUBS.find(x => x.id === id) : null;
-   const pos = 'style="inset-inline-start:' + xs[k] + '%;top:' + g.top + '%;--depth:' + g.depth + ';--i:' + i + '"';
+   const sh = c && shared.has(c.id) ? ' data-shared="1"' : "";
    if(!c){
-    h += '<div class="slot' + (swapFrom === i ? " armed" : "") + '" ' + pos + '>'
+    h += '<div class="slot' + (swapFrom === i ? " armed" : "") + '">'
      + '<button type="button" class="cc cc--empty" onclick="' + (swapFrom !== null ? "swapArm(" + i + ")" : "openPicker()") + '"'
-     + ' aria-label="' + esc(t("emptySlot")) + '"><span class="cc__plus">+</span></button>'
-     + '<span class="plinth"></span>'
-     + (!withPoints && swapFrom !== null ? '<span class="swaphint">' + esc(swapLabel(i)) + "</span>" : "") + "</div>";
+     + ' aria-label="' + esc(t("emptySlot")) + '">'
+     + '<span class="cc__num" dir="ltr">' + num(i + 1) + "</span>"
+     + '<span class="cc__hook" dir="ltr">≤ ' + num(maxNextPrice().toFixed(1)) + "</span></button>"
+     + '<span class="plinth"></span></div>';
     continue;
    }
-   h += '<div class="slot' + (swapFrom === i ? " armed" : "") + '" ' + pos + '>'
+   h += '<div class="slot' + (swapFrom === i ? " armed" : "") + '"' + sh + '>'
     + cardHtml(c, withPoints, gw, withPoints ? null : i)
-    + '<span class="nm">' + esc(clubName(c)) + "</span>"
-    + (!withPoints && swapFrom !== null ? '<span class="swaphint">' + esc(swapLabel(i)) + "</span>" : "") + "</div>";
+    + '<span class="plinth"></span>'
+    + '<span class="nm">' + esc(clubName(c)) + "</span></div>";
   }
+  h += "</div>";
  });
  h += "</div></div>";
- return h + dugoutHtml(withPoints, gw);
+ return h + dugoutHtml(withPoints, gw, shared);
 }
 /* THE DUGOUT — the bench lives at the touchline, below the pitch, where a real one does.
    A bench is not a compromise on the XI metaphor; it completes it. */
-function dugoutHtml(withPoints, gw){
+function dugoutHtml(withPoints, gw, shared){
  const bench = squad.slice(START_SIZE);
  const res = withPoints ? scoreGw(gw) : null;
- let h = '<div class="dug"><div class="dug__lab">' + esc(t("benchLab")) + "</div><div class="
-  + '"dug__row">';
+ shared = shared || new Set();
+ let h = '<div class="dug" data-arm="' + (swapFrom !== null ? 1 : 0) + '">'
+  + '<div class="dug__lab">' + esc(t("benchLab")) + '</div><div class="dug__row">';
  for(let i = 0; i < BENCH_SIZE; i++){
   const id = bench[i];
   const c = id ? CLUBS.find(x => x.id === id) : null;
+  const bi = START_SIZE + i;
   if(!c){
-   const bi0 = START_SIZE + i;
    h += '<div class="subslot"><button type="button" class="cc cc--empty cc--sub" onclick="'
-    + (swapFrom !== null ? "swapArm(" + bi0 + ")" : "openPicker()") + '"'
-    + ' aria-label="' + esc(t("emptySlot")) + '"><span class="cc__plus">+</span></button>'
+    + (swapFrom !== null ? "swapArm(" + bi + ")" : "openPicker()") + '"'
+    + ' aria-label="' + esc(t("emptySlot")) + '">'
+    + '<span class="cc__num" dir="ltr">' + num(i + 1) + "</span></button>"
     + '<span class="ord" dir="ltr">' + num(i + 1) + "</span></div>";
    continue;
   }
   const cameOn = res && res.used[c.id];
-  const bi = START_SIZE + i;
-  const armed = swapFrom === bi;
-  h += '<div class="subslot' + (cameOn ? " on" : "") + (armed ? " armed" : "") + '">' + cardHtml(c, withPoints, gw, bi)
+  h += '<div class="subslot' + (cameOn ? " on" : "") + (swapFrom === bi ? " armed" : "") + '"'
+   + (shared.has(c.id) ? ' data-shared="1"' : "") + ">" + cardHtml(c, withPoints, gw, bi)
    + '<span class="ord" dir="ltr">' + num(i + 1) + "</span>"
    + '<span class="nm">' + esc(clubName(c)) + "</span>"
-   + (cameOn ? '<span class="camein">' + esc(t("cameOn")) + "</span>" : "")
-   + (swapFrom !== null ? '<span class="swaphint">' + esc(swapLabel(bi)) + "</span>" : "") + "</div>";
+   + (cameOn ? '<span class="camein">' + esc(t("cameOn")) + "</span>" : "") + "</div>";
  }
- return h + "</div></div>";
+ h += "</div></div>";
+ /* ONE bar, named, with the only escape on it — instead of fifteen gold badges at once */
+ if(swapFrom !== null && !withPoints){
+  const from = squad[swapFrom];
+  const fc = from ? CLUBS.find(x => x.id === from) : null;
+  h += '<div class="swapbar"><b>' + esc(fc ? t("swapWith", {club: clubName(fc)}) : t("swapPick")) + "</b>"
+   + '<button type="button" onclick="clearArm();render()">' + esc(t("cancel")) + "</button></div>";
+ }
+ return h;
 }
 function formationBar(){
  return '<div class="filters">' + Object.keys(FORMATIONS).map(f =>
@@ -1053,26 +1265,26 @@ function renderTeam(){
  const full = squad.length === SQUAD_SIZE;
  const capNote = _capDropped ? '<div class="note">⚠️ ' + esc(t("capCleared")) + "</div>" : "";
  _capDropped = false;
+ /* THE ORDER IS THE WHOLE FIX. Measured at 360x640, the old stack put 478px of chrome above
+    the pitch and 250px of buttons below it, leaving 3.9% of the stadium on screen. The budget
+    meter, the formation chips, the swap tip and the gameweek strip are all things you touch
+    once and then never again — they move behind «عدّل فريقك». What is left above the pitch is
+    the one thing worth 52px: who you are playing and by how much. */
  $("viewTeam").innerHTML = capNote + (squadWasRepaired ? '<div class="note">⚠️ ' + esc(t("repaired")) + "</div>" : "")
-  + budgetHtml() + formationBar()
-  + '<div class="note" style="margin-bottom:10px">⇄ ' + esc(t('swapTip')) + '</div>'
-  + gwBarHtml()
+  + (squad.length ? gapBandHtml() : "")
   + pitchHtml(false)
   + '<button type="button" class="btn" onclick="openPicker()">'
-  + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>"
-  + (full ? '<button type="button" class="btn ghost" onclick="openCaptain()">' + esc(t("capTitle")) + "</button>" : "")
-  + (full ? '<button type="button" class="btn ghost" onclick="openChips()">' + esc(t("chipsLab")) + "</button>" : "")
-  + (full ? '<button type="button" class="btn ghost" onclick="openShare()">' + esc(t("shareTitle")) + "</button>" : "")
-  + '<button type="button" class="btn ghost" onclick="resetDemo()">' + esc(t("resetDemo")) + "</button>";
- if(squad.length) maybeCoach("budget", "budBox", "coachBudget");
- centreGwChip();
+  + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>";
+ /* the budget coach mark pointed at #budBox, which now lives in the settings sheet */
 }
 
 function renderPoints(){
  if(!squad.length){ $("viewPoints").innerHTML = '<div class="card"><div class="muted">' + esc(t("demoNote")) + "</div></div>"; return; }
  const gw = CURRENT_GW;
- $("viewPoints").innerHTML =
-  '<div class="card"><div class="muted" style="text-align:center">' + esc(t("gwTitle")) + " " + num(gw) + "</div>"
+ /* The round scrubber lives HERE now, on the screen whose whole subject is the round. On the
+    team screen it was 96px of chrome above a pitch nobody could see. */
+ $("viewPoints").innerHTML = gwBarHtml()
+  + '<div class="card"><div class="muted" style="text-align:center">' + esc(t("gwTitle")) + " " + num(gw) + "</div>"
   + '<div class="ptsbig" dir="ltr">' + num(gwTotal(gw)) + "</div>"
   + '<div class="muted" style="text-align:center;margin-top:4px">' + esc(t("gwPts")) + "</div></div>"
   + '<div class="card"><h3>' + esc(t("totalPts")) + '</h3><div class="ptsrow"><span class="dim">'
@@ -1085,6 +1297,37 @@ function renderPoints(){
   + '<div class="note">' + esc(t('simNote')) + '</div>'
   + pitchHtml(true, gw);
  maybeCoach("pts", "viewPoints", "coachPts");
+ centreGwChip();
+}
+/* Everything you touch once and then never again. It used to sit permanently above the
+   pitch: the budget meter, the formation chips, the swap tip, the round strip, and four
+   stacked ghost buttons — 728px of chrome around a 499px stadium. */
+function openTools(){
+ const full = squad.length === SQUAD_SIZE;
+ openSheet("<h2>" + esc(t("toolsTitle")) + "</h2>"
+  + (squad.length ? budgetHtml() : "")
+  + '<div class="dim" style="font-size:12px;margin:12px 0 4px">' + esc(t("formLab")) + "</div>"
+  + formationBar()
+  + '<div class="note" style="margin:10px 0">⇄ ' + esc(t('swapTip')) + "</div>"
+  + (full ? '<button type="button" class="btn ghost" onclick="closeSheet();openCaptain()">' + esc(t("capTitle")) + "</button>" : "")
+  + (full ? '<button type="button" class="btn ghost" onclick="closeSheet();openChips()">' + esc(t("chipsLab")) + "</button>" : "")
+  + (full ? '<button type="button" class="btn ghost" onclick="closeSheet();openShare()">' + esc(t("shareTitle")) + "</button>" : "")
+  + '<button type="button" class="btn ghost" onclick="closeSheet();openRename()">' + esc(t("renameTeam")) + "</button>"
+  + '<button type="button" class="btn ghost" onclick="resetDemo()">' + esc(t("resetDemo")) + "</button>"
+  + '<div class="muted" style="margin-top:14px;text-align:center">DEMO · ' + esc(t("demoNote")) + "</div>");
+}
+/* IDENTITY. `managerName` returned zero hits across the whole codebase: there was no manager,
+   no team, nothing on the screen that was yours rather than generic. One prompt, one name. */
+function teamName(){
+ try{ return localStorage.getItem("fx_team") || t("teamDefault"); }catch(_){ return t("teamDefault"); }
+}
+function openRename(){
+ const cur = teamName();
+ const v = window.prompt(t("renameAsk"), cur === t("teamDefault") ? "" : cur);
+ if(v === null) return;
+ const name = v.trim().slice(0, 24);
+ try{ if(name) localStorage.setItem("fx_team", name); else localStorage.removeItem("fx_team"); }catch(_){}
+ paintChrome(); render();
 }
 
 /* Rivals own REAL squads and are scored by the same engine as the user.
@@ -1128,6 +1371,47 @@ function rivalTotal(name){
     Summing all 15 here is what made the board unwinnable. */
  for(let g = 1; g <= CURRENT_GW; g++) total += resolveSquad(sq, cap, g).total;
  return total;
+}
+/* ============================================================================
+   THE HEAD-TO-HEAD. Your nearest rival on the board — whoever is directly above you,
+   or directly below if you lead. Everything on the team screen is then read against
+   them, which is the difference between a score and a contest.
+   ============================================================================ */
+let h2hIdx = 0;
+function boardRows(){
+ return RIVALS.map((r, i) => ({i: i, name: rivalName(r), s: rivalTotal(rivalName(r)), me: false}))
+   .concat([{i: -1, name: teamName(), s: seasonTotal(), me: true}])
+   .sort((a, b) => b.s - a.s);
+}
+function nearestRival(){
+ const rows = boardRows();
+ const at = rows.findIndex(r => r.me);
+ if(at < 0 || rows.length < 2) return null;
+ /* the one above you; if you lead, the one breathing down your neck */
+ const order = [];
+ for(let d = 1; d < rows.length; d++){ if(rows[at - d]) order.push(rows[at - d]); if(rows[at + d]) order.push(rows[at + d]); }
+ return order.length ? order[h2hIdx % order.length] : null;
+}
+function rivalOwned(){
+ const r = nearestRival();
+ if(!r || !squad.length) return new Set();
+ return new Set(rivalSquad(r.name));
+}
+function cycleRival(){ h2hIdx++; render(); }
+function gapBandHtml(){
+ const r = nearestRival();
+ if(!r) return "";
+ const mine = seasonTotal(), d = mine - r.s;
+ const glyph = d > 0 ? "▲ " : d < 0 ? "▼ " : "= ";
+ const partial = squad.length && squad.length < SQUAD_SIZE
+   ? ' <span class="gapb__part">' + esc(t("partialTeam")) + "</span>" : "";
+ return '<button type="button" class="gapb" onclick="cycleRival()" aria-label="' + esc(t("h2hLab")) + '">'
+  + '<span class="gapb__who"><span class="gapb__me">' + esc(teamName()) + partial + "</span>"
+  + '<span class="gapb__vs">⟷</span>'
+  + '<span class="gapb__them">' + esc(r.name) + "</span></span>"
+  + '<span class="gapb__nums"><span class="gapb__n me" dir="ltr">' + num(mine) + "</span>"
+  + '<span class="gapb__d" data-s="' + signOf(d) + '" dir="ltr">' + glyph + signed(d) + "</span>"
+  + '<span class="gapb__n them" dir="ltr">' + num(r.s) + "</span></span></button>";
 }
 /* الشريط - the share artifact. The captain is the shared referent: one decision, same pool,
    same deadline, settled in 48 hours. That is what makes two managers' rounds comparable. */
@@ -1501,9 +1785,10 @@ function paintWizard(){
 function resetDemo(){
  squad = []; captain = null; swapFrom = null;
  try{ localStorage.removeItem("fx_squad"); localStorage.removeItem("fx_cap");
-      localStorage.removeItem("fx_onboarded"); localStorage.removeItem("fx_coach"); }catch(_){}
+      localStorage.removeItem("fx_onboarded"); localStorage.removeItem("fx_coach");
+      localStorage.removeItem("fx_team"); }catch(_){}
  seenCoach = {}; coachShownThisSession = false;
- render(); openWizard();
+ closeSheet(); paintChrome(); render(); openWizard();
 }
 
 function toggleLang(){
