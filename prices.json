@@ -6,759 +6,1137 @@
  "clubs": [
   {
    "id": "349",
-   "price": 7.5,
+   "price": 8.5,
    "xpts": 2.386,
-   "tier": "value"
+   "tier": "mid",
+   "fameLeague": 1.18,
+   "fameClub": 0.951,
+   "priceSporting": 7.5
   },
   {
    "id": "359",
-   "price": 12.5,
+   "price": 17.5,
    "xpts": 3.251,
-   "tier": "strong"
+   "tier": "elite",
+   "fameLeague": 1.18,
+   "fameClub": 1.182,
+   "priceSporting": 12.5
   },
   {
    "id": "362",
-   "price": 8.5,
+   "price": 10.5,
    "xpts": 2.602,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 1.18,
+   "fameClub": 1.041,
+   "priceSporting": 8.5
   },
   {
    "id": "337",
-   "price": 7.5,
+   "price": 8.5,
    "xpts": 2.318,
-   "tier": "value"
+   "tier": "mid",
+   "fameLeague": 1.18,
+   "fameClub": 0.958,
+   "priceSporting": 7.5
   },
   {
    "id": "331",
-   "price": 7.5,
+   "price": 9,
    "xpts": 2.385,
-   "tier": "value"
+   "tier": "mid",
+   "fameLeague": 1.18,
+   "fameClub": 0.977,
+   "priceSporting": 7.5
   },
   {
    "id": "363",
-   "price": 8.5,
+   "price": 11.5,
    "xpts": 2.537,
-   "tier": "mid"
+   "tier": "strong",
+   "fameLeague": 1.18,
+   "fameClub": 1.175,
+   "priceSporting": 8.5
   },
   {
    "id": "388",
-   "price": 4,
+   "price": 4.5,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.18,
+   "fameClub": 0.938,
+   "priceSporting": 4
   },
   {
    "id": "384",
-   "price": 6.5,
+   "price": 7.5,
    "xpts": 2.079,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.18,
+   "fameClub": 0.983,
+   "priceSporting": 6.5
   },
   {
    "id": "368",
-   "price": 6.5,
+   "price": 8,
    "xpts": 2.089,
-   "tier": "value"
+   "tier": "mid",
+   "fameLeague": 1.18,
+   "fameClub": 1.034,
+   "priceSporting": 6.5
   },
   {
    "id": "370",
-   "price": 7,
+   "price": 8,
    "xpts": 2.207,
-   "tier": "value"
+   "tier": "mid",
+   "fameLeague": 1.18,
+   "fameClub": 0.97,
+   "priceSporting": 7
   },
   {
    "id": "306",
-   "price": 4,
+   "price": 4.5,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.18,
+   "fameClub": 0.938,
+   "priceSporting": 4
   },
   {
    "id": "373",
-   "price": 4,
+   "price": 4.5,
    "xpts": 1.026,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.18,
+   "fameClub": 0.945,
+   "priceSporting": 4
   },
   {
    "id": "357",
-   "price": 6,
+   "price": 7.5,
    "xpts": 2.011,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.18,
+   "fameClub": 1.015,
+   "priceSporting": 6
   },
   {
    "id": "364",
-   "price": 10.5,
+   "price": 15,
    "xpts": 2.953,
-   "tier": "mid"
+   "tier": "elite",
+   "fameLeague": 1.18,
+   "fameClub": 1.204,
+   "priceSporting": 10.5
   },
   {
    "id": "382",
-   "price": 11.5,
+   "price": 15.5,
    "xpts": 3.085,
-   "tier": "strong"
+   "tier": "elite",
+   "fameLeague": 1.18,
+   "fameClub": 1.169,
+   "priceSporting": 11.5
   },
   {
    "id": "360",
-   "price": 7.5,
+   "price": 10.5,
    "xpts": 2.354,
-   "tier": "value"
+   "tier": "mid",
+   "fameLeague": 1.18,
+   "fameClub": 1.204,
+   "priceSporting": 7.5
   },
   {
    "id": "361",
-   "price": 8,
+   "price": 10,
    "xpts": 2.425,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 1.18,
+   "fameClub": 1.079,
+   "priceSporting": 8
   },
   {
    "id": "393",
-   "price": 7.5,
+   "price": 8.5,
    "xpts": 2.304,
-   "tier": "value"
+   "tier": "mid",
+   "fameLeague": 1.18,
+   "fameClub": 0.99,
+   "priceSporting": 7.5
   },
   {
    "id": "366",
-   "price": 7,
+   "price": 8,
    "xpts": 2.195,
-   "tier": "value"
+   "tier": "mid",
+   "fameLeague": 1.18,
+   "fameClub": 0.977,
+   "priceSporting": 7
   },
   {
    "id": "367",
-   "price": 5.5,
+   "price": 7.5,
    "xpts": 1.841,
-   "tier": "budget"
+   "tier": "value",
+   "fameLeague": 1.18,
+   "fameClub": 1.137,
+   "priceSporting": 5.5
   },
   {
    "id": "96",
-   "price": 5.5,
+   "price": 6,
    "xpts": 1.861,
-   "tier": "budget"
+   "tier": "value",
+   "fameLeague": 1.12,
+   "fameClub": 0.945,
+   "priceSporting": 5.5
   },
   {
    "id": "93",
-   "price": 7.5,
+   "price": 9,
    "xpts": 2.384,
-   "tier": "value"
+   "tier": "mid",
+   "fameLeague": 1.12,
+   "fameClub": 1.066,
+   "priceSporting": 7.5
   },
   {
    "id": "1068",
-   "price": 10.5,
+   "price": 14,
    "xpts": 2.97,
-   "tier": "mid"
+   "tier": "strong",
+   "fameLeague": 1.12,
+   "fameClub": 1.162,
+   "priceSporting": 10.5
   },
   {
    "id": "83",
-   "price": 16,
+   "price": 18.5,
    "xpts": 3.737,
-   "tier": "elite"
+   "tier": "elite",
+   "fameLeague": 1.12,
+   "fameClub": 1.22,
+   "priceSporting": 16
   },
   {
    "id": "85",
-   "price": 7.5,
+   "price": 8,
    "xpts": 2.295,
-   "tier": "value"
+   "tier": "mid",
+   "fameLeague": 1.12,
+   "fameClub": 0.977,
+   "priceSporting": 7.5
   },
   {
    "id": "90",
-   "price": 4,
+   "price": 4.5,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.12,
+   "fameClub": 0.97,
+   "priceSporting": 4
   },
   {
    "id": "3751",
    "price": 6,
    "xpts": 1.901,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.12,
+   "fameClub": 0.932,
+   "priceSporting": 6
   },
   {
    "id": "88",
-   "price": 5.5,
+   "price": 6.5,
    "xpts": 1.894,
-   "tier": "budget"
+   "tier": "value",
+   "fameLeague": 1.12,
+   "fameClub": 0.977,
+   "priceSporting": 5.5
   },
   {
    "id": "2922",
-   "price": 6,
+   "price": 6.5,
    "xpts": 2.012,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.12,
+   "fameClub": 0.951,
+   "priceSporting": 6
   },
   {
    "id": "1538",
-   "price": 5.5,
+   "price": 6,
    "xpts": 1.821,
-   "tier": "budget"
+   "tier": "value",
+   "fameLeague": 1.12,
+   "fameClub": 0.945,
+   "priceSporting": 5.5
   },
   {
    "id": "99",
-   "price": 4,
+   "price": 4.5,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.12,
+   "fameClub": 0.951,
+   "priceSporting": 4
   },
   {
    "id": "97",
-   "price": 6,
+   "price": 6.5,
    "xpts": 2.029,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.12,
+   "fameClub": 0.964,
+   "priceSporting": 6
   },
   {
    "id": "87",
-   "price": 4,
+   "price": 4.5,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.12,
+   "fameClub": 0.932,
+   "priceSporting": 4
   },
   {
    "id": "101",
-   "price": 6.5,
+   "price": 7,
    "xpts": 2.143,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.12,
+   "fameClub": 0.964,
+   "priceSporting": 6.5
   },
   {
    "id": "244",
-   "price": 8,
+   "price": 9.5,
    "xpts": 2.483,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 1.12,
+   "fameClub": 1.041,
+   "priceSporting": 8
   },
   {
    "id": "86",
-   "price": 13.5,
+   "price": 18.5,
    "xpts": 3.403,
-   "tier": "strong"
+   "tier": "elite",
+   "fameLeague": 1.12,
+   "fameClub": 1.22,
+   "priceSporting": 13.5
   },
   {
    "id": "89",
-   "price": 6,
+   "price": 7,
    "xpts": 1.99,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.12,
+   "fameClub": 1.054,
+   "priceSporting": 6
   },
   {
    "id": "243",
-   "price": 5.5,
+   "price": 7,
    "xpts": 1.826,
-   "tier": "budget"
+   "tier": "value",
+   "fameLeague": 1.12,
+   "fameClub": 1.098,
+   "priceSporting": 5.5
   },
   {
    "id": "94",
-   "price": 6,
+   "price": 7,
    "xpts": 2,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.12,
+   "fameClub": 1.06,
+   "priceSporting": 6
   },
   {
    "id": "102",
-   "price": 10,
+   "price": 12,
    "xpts": 2.887,
-   "tier": "mid"
+   "tier": "strong",
+   "fameLeague": 1.12,
+   "fameClub": 1.041,
+   "priceSporting": 10
   },
   {
    "id": "103",
-   "price": 9.5,
+   "price": 11.5,
    "xpts": 2.728,
-   "tier": "mid"
+   "tier": "strong",
+   "fameLeague": 1.04,
+   "fameClub": 1.182,
+   "priceSporting": 9.5
   },
   {
    "id": "104",
-   "price": 10.5,
+   "price": 12,
    "xpts": 2.901,
-   "tier": "mid"
+   "tier": "strong",
+   "fameLeague": 1.04,
+   "fameClub": 1.124,
+   "priceSporting": 10.5
   },
   {
    "id": "105",
-   "price": 10,
+   "price": 10.5,
    "xpts": 2.82,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 1.04,
+   "fameClub": 1.047,
+   "priceSporting": 10
   },
   {
    "id": "107",
    "price": 8,
    "xpts": 2.435,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 1.04,
+   "fameClub": 0.983,
+   "priceSporting": 8
   },
   {
    "id": "2925",
-   "price": 5.5,
+   "price": 5,
    "xpts": 1.754,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.04,
+   "fameClub": 0.945,
+   "priceSporting": 5.5
   },
   {
    "id": "2572",
    "price": 8.5,
    "xpts": 2.552,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 1.04,
+   "fameClub": 0.945,
+   "priceSporting": 8.5
   },
   {
    "id": "109",
-   "price": 7,
+   "price": 8,
    "xpts": 2.284,
-   "tier": "value"
+   "tier": "mid",
+   "fameLeague": 1.04,
+   "fameClub": 1.054,
+   "priceSporting": 7
   },
   {
    "id": "4057",
    "price": 4,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.04,
+   "fameClub": 0.926,
+   "priceSporting": 4
   },
   {
    "id": "3263",
    "price": 5.5,
    "xpts": 1.849,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.04,
+   "fameClub": 0.958,
+   "priceSporting": 5.5
   },
   {
    "id": "110",
-   "price": 14,
+   "price": 17,
    "xpts": 3.451,
-   "tier": "strong"
+   "tier": "elite",
+   "fameLeague": 1.04,
+   "fameClub": 1.169,
+   "priceSporting": 14
   },
   {
    "id": "111",
-   "price": 10,
+   "price": 12.5,
    "xpts": 2.868,
-   "tier": "mid"
+   "tier": "strong",
+   "fameLeague": 1.04,
+   "fameClub": 1.188,
+   "priceSporting": 10
   },
   {
    "id": "112",
-   "price": 8,
+   "price": 9,
    "xpts": 2.447,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 1.04,
+   "fameClub": 1.086,
+   "priceSporting": 8
   },
   {
    "id": "113",
-   "price": 5,
+   "price": 4.5,
    "xpts": 1.556,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.04,
+   "fameClub": 0.932,
+   "priceSporting": 5
   },
   {
    "id": "4007",
    "price": 4,
    "xpts": 0.972,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.04,
+   "fameClub": 0.932,
+   "priceSporting": 4
   },
   {
    "id": "114",
-   "price": 11.5,
+   "price": 13.5,
    "xpts": 3.124,
-   "tier": "strong"
+   "tier": "strong",
+   "fameLeague": 1.04,
+   "fameClub": 1.111,
+   "priceSporting": 11.5
   },
   {
    "id": "115",
    "price": 5.5,
    "xpts": 1.765,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.04,
+   "fameClub": 0.964,
+   "priceSporting": 5.5
   },
   {
    "id": "3997",
-   "price": 6.5,
+   "price": 6,
    "xpts": 2.088,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.04,
+   "fameClub": 0.932,
+   "priceSporting": 6.5
   },
   {
    "id": "239",
-   "price": 5.5,
+   "price": 6,
    "xpts": 1.897,
-   "tier": "budget"
+   "tier": "value",
+   "fameLeague": 1.04,
+   "fameClub": 0.977,
+   "priceSporting": 5.5
   },
   {
    "id": "118",
    "price": 6,
    "xpts": 1.992,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.04,
+   "fameClub": 0.958,
+   "priceSporting": 6
   },
   {
    "id": "17530",
    "price": 4.5,
    "xpts": 1.404,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.04,
+   "fameClub": 0.932,
+   "priceSporting": 4.5
   },
   {
    "id": "598",
    "price": 5.5,
    "xpts": 1.849,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.02,
+   "fameClub": 0.951,
+   "priceSporting": 5.5
   },
   {
    "id": "131",
-   "price": 10.5,
+   "price": 12,
    "xpts": 2.946,
-   "tier": "mid"
+   "tier": "strong",
+   "fameLeague": 1.02,
+   "fameClub": 1.092,
+   "priceSporting": 10.5
   },
   {
    "id": "132",
    "price": 18.5,
    "xpts": 4.076,
-   "tier": "elite"
+   "tier": "elite",
+   "fameLeague": 1.02,
+   "fameClub": 1.204,
+   "priceSporting": 18.5
   },
   {
    "id": "124",
-   "price": 11,
+   "price": 13,
    "xpts": 3.004,
-   "tier": "strong"
+   "tier": "strong",
+   "fameLeague": 1.02,
+   "fameClub": 1.15,
+   "priceSporting": 11
   },
   {
    "id": "268",
-   "price": 6,
+   "price": 6.5,
    "xpts": 1.993,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.02,
+   "fameClub": 1.015,
+   "priceSporting": 6
   },
   {
    "id": "125",
    "price": 8,
    "xpts": 2.446,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 1.02,
+   "fameClub": 1.015,
+   "priceSporting": 8
   },
   {
    "id": "3841",
-   "price": 6,
+   "price": 5.5,
    "xpts": 1.937,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 1.02,
+   "fameClub": 0.938,
+   "priceSporting": 6
   },
   {
    "id": "122",
    "price": 5,
    "xpts": 1.65,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.02,
+   "fameClub": 0.964,
+   "priceSporting": 5
   },
   {
    "id": "127",
    "price": 5.5,
    "xpts": 1.818,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.02,
+   "fameClub": 0.996,
+   "priceSporting": 5.5
   },
   {
    "id": "2950",
-   "price": 7,
+   "price": 6.5,
    "xpts": 2.201,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.02,
+   "fameClub": 0.945,
+   "priceSporting": 7
   },
   {
    "id": "11420",
-   "price": 9,
+   "price": 9.5,
    "xpts": 2.644,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 1.02,
+   "fameClub": 1.066,
+   "priceSporting": 9
   },
   {
    "id": "126",
    "price": 7,
    "xpts": 2.274,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.02,
+   "fameClub": 0.958,
+   "priceSporting": 7
   },
   {
    "id": "3307",
    "price": 4,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.02,
+   "fameClub": 0.97,
+   "priceSporting": 4
   },
   {
    "id": "10388",
    "price": 4,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.02,
+   "fameClub": 0.97,
+   "priceSporting": 4
   },
   {
    "id": "133",
-   "price": 4,
+   "price": 4.5,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 1.02,
+   "fameClub": 1.009,
+   "priceSporting": 4
   },
   {
    "id": "7911",
    "price": 6.5,
    "xpts": 2.153,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.02,
+   "fameClub": 0.951,
+   "priceSporting": 6.5
   },
   {
    "id": "134",
    "price": 9,
    "xpts": 2.635,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 1.02,
+   "fameClub": 0.996,
+   "priceSporting": 9
   },
   {
    "id": "137",
    "price": 6,
    "xpts": 1.926,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 1.02,
+   "fameClub": 0.99,
+   "priceSporting": 6
   },
   {
    "id": "172",
    "price": 5.5,
    "xpts": 1.895,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.96,
+   "fameClub": 0.97,
+   "priceSporting": 5.5
   },
   {
    "id": "174",
    "price": 9,
    "xpts": 2.651,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 0.96,
+   "fameClub": 1.06,
+   "priceSporting": 9
   },
   {
    "id": "7868",
-   "price": 5,
+   "price": 4.5,
    "xpts": 1.7,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.96,
+   "fameClub": 0.926,
+   "priceSporting": 5
   },
   {
    "id": "6997",
-   "price": 6.5,
+   "price": 5.5,
    "xpts": 2.046,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 0.96,
+   "fameClub": 0.938,
+   "priceSporting": 6.5
   },
   {
    "id": "3236",
-   "price": 5,
+   "price": 4.5,
    "xpts": 1.643,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.96,
+   "fameClub": 0.932,
+   "priceSporting": 5
   },
   {
    "id": "2697",
    "price": 4,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.96,
+   "fameClub": 0.97,
+   "priceSporting": 4
   },
   {
    "id": "175",
-   "price": 9.5,
+   "price": 9,
    "xpts": 2.779,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 0.96,
+   "fameClub": 0.977,
+   "priceSporting": 9.5
   },
   {
    "id": "166",
    "price": 9.5,
    "xpts": 2.75,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 0.96,
+   "fameClub": 1.041,
+   "priceSporting": 9.5
   },
   {
    "id": "273",
-   "price": 6.5,
+   "price": 6,
    "xpts": 2.126,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 0.96,
+   "fameClub": 0.932,
+   "priceSporting": 6.5
   },
   {
    "id": "167",
-   "price": 9,
+   "price": 9.5,
    "xpts": 2.699,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 0.96,
+   "fameClub": 1.086,
+   "priceSporting": 9
   },
   {
    "id": "176",
-   "price": 10,
+   "price": 10.5,
    "xpts": 2.864,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 0.96,
+   "fameClub": 1.098,
+   "priceSporting": 10
   },
   {
    "id": "2502",
-   "price": 7,
+   "price": 6.5,
    "xpts": 2.196,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 0.96,
+   "fameClub": 0.983,
+   "priceSporting": 7
   },
   {
    "id": "6851",
-   "price": 6.5,
+   "price": 6,
    "xpts": 2.099,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 0.96,
+   "fameClub": 0.932,
+   "priceSporting": 6.5
   },
   {
    "id": "160",
-   "price": 15.5,
+   "price": 17.5,
    "xpts": 3.66,
-   "tier": "elite"
+   "tier": "elite",
+   "fameLeague": 0.96,
+   "fameClub": 1.182,
+   "priceSporting": 15.5
   },
   {
    "id": "169",
-   "price": 7.5,
+   "price": 7,
    "xpts": 2.349,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 0.96,
+   "fameClub": 0.97,
+   "priceSporting": 7.5
   },
   {
    "id": "180",
-   "price": 8.5,
+   "price": 7.5,
    "xpts": 2.555,
-   "tier": "mid"
+   "tier": "value",
+   "fameLeague": 0.96,
+   "fameClub": 0.951,
+   "priceSporting": 8.5
   },
   {
    "id": "179",
-   "price": 6.5,
+   "price": 6,
    "xpts": 2.131,
-   "tier": "value"
+   "tier": "value",
+   "fameLeague": 0.96,
+   "fameClub": 0.945,
+   "priceSporting": 6.5
   },
   {
    "id": "170",
    "price": 4,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.96,
+   "fameClub": 0.97,
+   "priceSporting": 4
   },
   {
    "id": "9078",
-   "price": 6,
+   "price": 4.5,
    "xpts": 1.977,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 0.78,
+   "fameClub": 0.926,
+   "priceSporting": 6
   },
   {
    "id": "132335",
    "price": 4,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.78,
+   "fameClub": 0.916,
+   "priceSporting": 4
   },
   {
    "id": "1895",
-   "price": 9.5,
+   "price": 8,
    "xpts": 2.766,
-   "tier": "mid"
+   "tier": "mid",
+   "fameLeague": 0.78,
+   "fameClub": 1.079,
+   "priceSporting": 9.5
   },
   {
    "id": "7656",
-   "price": 6.5,
+   "price": 4.5,
    "xpts": 2.059,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 0.78,
+   "fameClub": 0.938,
+   "priceSporting": 6.5
   },
   {
    "id": "19267",
    "price": 4,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.78,
+   "fameClub": 0.916,
+   "priceSporting": 4
   },
   {
    "id": "20729",
-   "price": 6,
+   "price": 4.5,
    "xpts": 2.007,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 0.78,
+   "fameClub": 0.916,
+   "priceSporting": 6
   },
   {
    "id": "436",
-   "price": 14,
+   "price": 12,
    "xpts": 3.496,
-   "tier": "strong"
+   "tier": "strong",
+   "fameLeague": 0.78,
+   "fameClub": 1.098,
+   "priceSporting": 14
   },
   {
    "id": "432",
-   "price": 16,
+   "price": 14,
    "xpts": 3.763,
-   "tier": "elite"
+   "tier": "strong",
+   "fameLeague": 0.78,
+   "fameClub": 1.111,
+   "priceSporting": 16
   },
   {
    "id": "20070",
-   "price": 6,
+   "price": 4,
    "xpts": 1.909,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 0.78,
+   "fameClub": 0.926,
+   "priceSporting": 6
   },
   {
    "id": "996",
-   "price": 5.5,
+   "price": 4,
    "xpts": 1.737,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.78,
+   "fameClub": 0.919,
+   "priceSporting": 5.5
   },
   {
    "id": "789",
-   "price": 8,
+   "price": 6,
    "xpts": 2.423,
-   "tier": "mid"
+   "tier": "value",
+   "fameLeague": 0.78,
+   "fameClub": 0.945,
+   "priceSporting": 8
   },
   {
    "id": "7914",
-   "price": 8.5,
+   "price": 6.5,
    "xpts": 2.547,
-   "tier": "mid"
+   "tier": "value",
+   "fameLeague": 0.78,
+   "fameClub": 0.97,
+   "priceSporting": 8.5
   },
   {
    "id": "6870",
-   "price": 6,
+   "price": 4,
    "xpts": 1.922,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 0.78,
+   "fameClub": 0.932,
+   "priceSporting": 6
   },
   {
    "id": "995",
-   "price": 5.5,
+   "price": 4,
    "xpts": 1.81,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.78,
+   "fameClub": 0.919,
+   "priceSporting": 5.5
   },
   {
    "id": "7648",
-   "price": 6,
+   "price": 4.5,
    "xpts": 2.005,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 0.78,
+   "fameClub": 0.938,
+   "priceSporting": 6
   },
   {
    "id": "11429",
-   "price": 8.5,
+   "price": 6,
    "xpts": 2.53,
-   "tier": "mid"
+   "tier": "value",
+   "fameLeague": 0.78,
+   "fameClub": 0.932,
+   "priceSporting": 8.5
   },
   {
    "id": "997",
-   "price": 9.5,
+   "price": 7.5,
    "xpts": 2.713,
-   "tier": "mid"
+   "tier": "value",
+   "fameLeague": 0.78,
+   "fameClub": 1.028,
+   "priceSporting": 9.5
   },
   {
    "id": "132334",
    "price": 4,
    "xpts": 1.25,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.78,
+   "fameClub": 0.916,
+   "priceSporting": 4
   },
   {
    "id": "263",
-   "price": 6,
+   "price": 4,
    "xpts": 1.934,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 0.72,
+   "fameClub": 0.964,
+   "priceSporting": 6
   },
   {
    "id": "256",
-   "price": 15,
+   "price": 12,
    "xpts": 3.618,
-   "tier": "elite"
+   "tier": "strong",
+   "fameLeague": 0.72,
+   "fameClub": 1.098,
+   "priceSporting": 15
   },
   {
    "id": "261",
-   "price": 5.5,
+   "price": 4,
    "xpts": 1.758,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.72,
+   "fameClub": 0.926,
+   "priceSporting": 5.5
   },
   {
    "id": "264",
-   "price": 6,
+   "price": 4,
    "xpts": 2.033,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 0.72,
+   "fameClub": 0.926,
+   "priceSporting": 6
   },
   {
    "id": "254",
-   "price": 6,
+   "price": 4,
    "xpts": 2.014,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 0.72,
+   "fameClub": 0.916,
+   "priceSporting": 6
   },
   {
    "id": "262",
-   "price": 9.5,
+   "price": 6.5,
    "xpts": 2.725,
-   "tier": "mid"
+   "tier": "value",
+   "fameLeague": 0.72,
+   "fameClub": 0.977,
+   "priceSporting": 9.5
   },
   {
    "id": "258",
-   "price": 8,
+   "price": 5.5,
    "xpts": 2.457,
-   "tier": "mid"
+   "tier": "budget",
+   "fameLeague": 0.72,
+   "fameClub": 0.977,
+   "priceSporting": 8
   },
   {
    "id": "260",
-   "price": 5.5,
+   "price": 4,
    "xpts": 1.78,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.72,
+   "fameClub": 0.932,
+   "priceSporting": 5.5
   },
   {
    "id": "266",
-   "price": 7.5,
+   "price": 5,
    "xpts": 2.303,
-   "tier": "value"
+   "tier": "budget",
+   "fameLeague": 0.72,
+   "fameClub": 0.938,
+   "priceSporting": 7.5
   },
   {
    "id": "257",
-   "price": 11.5,
+   "price": 9,
    "xpts": 3.069,
-   "tier": "strong"
+   "tier": "mid",
+   "fameLeague": 0.72,
+   "fameClub": 1.079,
+   "priceSporting": 11.5
   },
   {
    "id": "267",
-   "price": 4.5,
+   "price": 4,
    "xpts": 1.424,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.72,
+   "fameClub": 0.919,
+   "priceSporting": 4.5
   },
   {
    "id": "250",
-   "price": 5.5,
+   "price": 4,
    "xpts": 1.807,
-   "tier": "budget"
+   "tier": "budget",
+   "fameLeague": 0.72,
+   "fameClub": 0.919,
+   "priceSporting": 5.5
   }
  ]
 }
