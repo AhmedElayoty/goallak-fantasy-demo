@@ -745,8 +745,14 @@ const STR = {
  pickTitle:["اختار أنديتك","Pick your clubs"],
  allLg:["الكل","All"],
  emptySlot:["فاضي","Empty"],
- /* the card's second line, and the head-to-head band */
- noMatch:["مالوش ماتش","No match"],
+ /* THE CARD LABEL AND THE FULL LABEL ARE DIFFERENT STRINGS, and that is deliberate.
+    Measured on the live page: «مالوش ماتش» needs 81.8px at 11px, against 72px of a starter's
+    plate and 56px of a bench card's. It never fitted on ANY card — which is how it came to be
+    sliced to «مالوش» on the owner's phone, a fragment that reads as nonsense. «راحة» is 30px,
+    is a complete word, and is what a commentator actually says about a club with no fixture.
+    The literal phrase survives in aria-label, the breakdown and the glossary. */
+ noMatch:["راحة","No match"],
+ noMatchFull:["مالوش ماتش","No match this round"],
  /* full words, for the screen reader and the breakdown sheet — the card shows H/A */
  venH:["على أرضه","Home"], venA:["بره","Away"],
  capLab:["الكابتن","Captain"],
@@ -1155,7 +1161,7 @@ function cardHtml(c, withPoints, gw, slotIndex){
  return '<button type="button" class="cc' + (m.blank ? " cc--blank" : "") + '"'
   + ' data-band="' + bandOf(c.id) + '" data-tier="' + m.oppTier + '"'
   + ' onclick="' + act + '" aria-label="' + esc(clubName(c)
-      + (m.blank ? " · " + t("noMatch")
+      + (m.blank ? " · " + t("noMatchFull")
                  : " · " + (m.opp ? clubName(m.opp) : "") + " · " + (m.home ? t("venH") : t("venA")))) + '">'
   + '<span class="cc__kit fxkit" data-pat="' + esc(c.pat) + '"'
   + (c.iso ? ' data-iso="1"' : "") + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + '"></span>'
