@@ -278,6 +278,8 @@ const STR = {
  startWiz:["ابدأ فريقك","Build your team"],
  changeTeam:["عدّل فريقك","Edit your team"],
  resetDemo:["ابدأ من جديد","Reset demo"],
+ repaired:["الأسعار اتغيرت، فشيلنا الأندية اللي مابقتش تدخل في ميزانيتك. اختر بدلها.",
+           "Prices changed, so clubs that no longer fit your budget were removed. Pick replacements."],
  done:["تمام","Done"], next:["التالي","Next"], back:["رجوع","Back"], skip:["تخطى الشرح","Skip"],
  confirmSquad:["أكد الفريق","Confirm squad"],
  wiz1h:["أهلاً بيك في جولك فانتازي","Welcome to Goallak Fantasy"],
@@ -346,12 +348,35 @@ function save(){
   localStorage.setItem("fx_cap", captain || "");
  }catch(_){}
 }
+let squadWasRepaired = false;
 function load(){
  try{
   squad = JSON.parse(localStorage.getItem("fx_squad") || "[]");
   captain = localStorage.getItem("fx_cap") || null;
  }catch(_){ squad = []; captain = null; }
  if(!Array.isArray(squad)) squad = [];
+ validateSquad();
+}
+/* A STORED squad can become illegal without the user touching anything: prices move, a club
+   is relegated out of the pool, the rules change. Never trust what came out of storage —
+   rebuild it into a legal state and say so, rather than rendering an over-budget team. */
+function validateSquad(){
+ const before = squad.length;
+ squad = squad.filter(id => CLUBS.some(c => c.id === id));      /* club no longer in the pool */
+ const kept = [], seenLg = {};
+ for(const id of squad){
+  const c = CLUBS.find(x => x.id === id);
+  const lg = c.lg;
+  if((seenLg[lg] || 0) >= MAX_PER_LEAGUE) continue;             /* league cap tightened */
+  const cost = kept.reduce((a, k) => a + priceOf(k), 0) + priceOf(id);
+  if(cost > BUDGET) continue;                                    /* prices rose past the budget */
+  seenLg[lg] = (seenLg[lg] || 0) + 1;
+  kept.push(id);
+ }
+ if(kept.length !== before || squad.length !== before) squadWasRepaired = true;
+ squad = kept;
+ if(captain && !squad.includes(captain)) captain = null;
+ save();
 }
 
 /* ---------------- simulated scoring (demo only) ----------------
@@ -457,7 +482,8 @@ function render(){
 
 function renderTeam(){
  const full = squad.length === SQUAD_SIZE;
- $("viewTeam").innerHTML = budgetHtml() + pitchHtml(false)
+ $("viewTeam").innerHTML = (squadWasRepaired ? '<div class="note">⚠️ ' + esc(t("repaired")) + "</div>" : "")
+  + budgetHtml() + pitchHtml(false)
   + '<button type="button" class="btn" onclick="openPicker()">'
   + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>"
   + (full && !captain ? '<button type="button" class="btn ghost" onclick="openCaptain()">' + esc(t("capTitle")) + "</button>" : "")
