@@ -148,8 +148,8 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    ============================================================================ */
 :root{
  --fx-turf-a:#0E5E33; --fx-turf-b:#0C5430;    /* the two mow stripes, CR 1.16 apart */
- --st-rake:24deg;
- --cw:clamp(54px, 15.4vw, 68px);               /* card width. 54 floor x .90 GK depth = 48.6px > 48 */
+ --st-rake:17deg;
+ --cw:clamp(48px, 14vw, 62px);               /* card width. 54 floor x .90 GK depth = 48.6px > 48 */
 }
 /* ---- THE SECOND ACT ----
    A stadium that is identical on open #40 and open #1 is a screenshot, not a product.
@@ -160,7 +160,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
      · the TURF wears: the centre circle's trodden ring grows, a goalmouth scuff appears
      · the PERIMETER goes gold while you are alive in the cup                          */
 .st{position:relative;border-radius:var(--r);overflow:hidden;isolation:isolate;
- aspect-ratio:10/14;max-height:70vh;border:1px solid var(--fx-line-2);
+ aspect-ratio:10/16;max-height:78vh;border:1px solid var(--fx-line-2);
  --crowd-a:.34; --wear:.055; --scuff:0;
  background:radial-gradient(120% 80% at 50% -10%, var(--sky-1,#14204A) 0%, var(--sky-2,#0A1130) 46%, #070B1A 100%)}
 .st[data-sky="dusk"]    {--sky-1:#2A2560;--sky-2:#141A44}
@@ -193,7 +193,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  border-bottom:1px solid rgba(255,255,255,.10)}
 /* --- the playing surface --- */
 .st__stage{position:absolute;inset:0;z-index:3;perspective:820px;perspective-origin:50% 118%}
-.st__turf{position:absolute;inset-inline:-3%;top:23%;bottom:0;transform-origin:50% 100%;
+.st__turf{position:absolute;inset-inline:-3%;top:12%;bottom:0;transform-origin:50% 100%;
  transform:rotateX(var(--st-rake));
  background:
   radial-gradient(ellipse 26% 9% at 50% 2%, rgba(255,255,255,calc(var(--scuff) * .07)) 0 60%, transparent 72%),
@@ -212,6 +212,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  border-top:none;pointer-events:none}
 /* --- the card layer: flat, upright, never rotated --- */
 .st__cards{position:absolute;inset:0;z-index:6}
+.slot .plinth{display:none}
 /* translate(-50%) is PHYSICAL: it always moves left. Anchored with inset-inline-start, that
    centres the card correctly in LTR and throws it a full card-width off the pitch in RTL —
    which is Arabic, the default. The shift is a token so the keyframes inherit it too. */
@@ -249,7 +250,13 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 /* one clip-path, mirror-symmetric, so RTL never has to flip it */
 .cc__shirt{width:67%;aspect-ratio:40/44;position:relative;
  clip-path:polygon(31% 0%,40% 5%,60% 5%,69% 0%,100% 13%,100% 36%,84% 41%,84% 100%,16% 100%,16% 41%,0% 36%,0% 13%)}
-.cc__plate{height:26%;min-height:19px;display:flex;align-items:center;justify-content:space-between;
+/* The name sits BELOW the card and is allowed to be WIDER than it. Inside a 45px card it
+   could only render at 6.7px - unreadable - and still truncated. The row gaps now hold it. */
+.slot .nm{margin-top:2px;text-align:center;font-size:clamp(9px,2.5vw,11px);font-weight:800;
+ line-height:1.12;color:#F2F5FF;width:132%;max-width:26vw;
+ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+ text-shadow:0 1px 3px rgba(0,0,0,.95), 0 0 6px rgba(0,0,0,.75)}
+.cc__plate{height:26%;min-height:18px;display:flex;align-items:center;justify-content:space-between;
  padding:0 5px;border-top:1px solid rgba(255,255,255,.09);background:rgba(6,10,26,.72)}
 .cc__code{font-size:11px;font-weight:900;letter-spacing:.4px;color:#F2F5FF}
 .cc__val{font-size:11px;font-weight:900;color:var(--fx-gold)}
@@ -789,7 +796,10 @@ function budgetHtml(){
 /* Rows pulled up so the club NAME under the front row still lands inside the pitch. At 91%
    the name fell past the bottom edge and .st{overflow:hidden} ate it - which is why only
    some names were readable on a real phone. */
-const ROW_GEOM = [{top:49, depth:0.90}, {top:61, depth:0.94}, {top:73, depth:0.97}, {top:85, depth:1.00}];
+/* Spread across the RENDERED grass, measured rather than guessed: four cards at this size
+   need ~332px and the grass gives ~355px, so the rows sit 17 percentage points apart with a
+   little air top and bottom. Any tighter and each name is buried under the row in front. */
+const ROW_GEOM = [{top:34, depth:0.90}, {top:53, depth:0.94}, {top:71, depth:0.97}, {top:90, depth:1.00}];
 /* Horizontal centres by row width. The FOUR-card row is deliberately uneven — 11/35/65/89,
    gaps 24/30/24 — leaving ~46px of open turf down the spine of the team. Distribute those four
    evenly and you get 11px there, and the row instantly reads as a table instead of a back four. */
@@ -873,8 +883,8 @@ function pitchHtml(withPoints, gw){
    }
    h += '<div class="slot' + (swapFrom === i ? " armed" : "") + '" ' + pos + '>'
     + cardHtml(c, withPoints, gw, withPoints ? null : i)
-    + '<span class="plinth"></span><span class="nm">' + esc(clubName(c)) + "</span>"
-    + (swapFrom !== null ? '<span class="swaphint">' + esc(swapLabel(i)) + "</span>" : "") + "</div>";
+    + '<span class="nm">' + esc(clubName(c)) + "</span>"
+    + (!withPoints && swapFrom !== null ? '<span class="swaphint">' + esc(swapLabel(i)) + "</span>" : "") + "</div>";
   }
  });
  h += "</div></div>";
