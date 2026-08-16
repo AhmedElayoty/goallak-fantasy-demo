@@ -617,7 +617,8 @@ function validateSquad(){
    + opponent-strength tier bonus. */
 function hash(str){ let h = 2166136261; for(let i = 0; i < str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return Math.abs(h); }
 function simMatch(clubId, gw){
- const c = CLUBS.find(x => x.id === clubId) || {};
+ /* No CLUBS.find() here. It used to look the club up and discard the result — a 126-item
+    linear scan on every call, which at GW36 is ~340,000 wasted comparisons per leaderboard. */
  const h = hash(clubId + "|" + gw);
  const strength = { elite:.62, strong:.52, mid:.42, value:.34, budget:.28 }[tierOf(clubId)] || .4;
  const roll = (h % 1000) / 1000;
@@ -673,7 +674,14 @@ function gwTotal(gw){ return resolveGw(gw).total; }
 /* DEMO ONLY: a scrubber so the season can be walked in ten seconds instead of nine months.
    The real product reads the gameweek from the fixture calendar. */
 let CURRENT_GW = 6;
-function setGw(g){ CURRENT_GW = Math.max(1, Math.min(38, g)); render(); }
+let _gwRaf = 0;
+function setGw(g){
+ CURRENT_GW = Math.max(1, Math.min(36, g));
+ /* One render per animation frame, not one per input event. Dragging fired render()
+    continuously and blew the whole frame budget on a mid-range phone. */
+ if(_gwRaf) return;
+ _gwRaf = requestAnimationFrame(() => { _gwRaf = 0; render(); });
+}
 function seasonTotal(){ let s = 0; for(let g = 1; g <= CURRENT_GW; g++) s += gwTotal(g); return s; }
 
 /* ---------------- rendering ---------------- */
@@ -1125,6 +1133,10 @@ function openWizard(){
  document.body.classList.add("gk-lock");
 }
 function closeWizard(){
+ /* Re-arm the walk-out. boot() paints the pitch and then covers it with the wizard, so the
+    entry sequence was being spent behind a z-index 120 modal — every run, since the demo
+    resets on load. Nobody had ever seen it. It plays when the pitch is first REVEALED. */
+ _entryPlayed = false;
  $("wiz").classList.add("hide");
  document.body.classList.remove("gk-lock");
  try{ localStorage.setItem("fx_onboarded", "1"); }catch(_){}
@@ -1177,8 +1189,8 @@ function toggleLang(){
 (async function boot(){
  try{
   const [cj, pj] = await Promise.all([
-   fetch("clubs.json", {cache:"no-store"}).then(r => r.json()),
-   fetch("prices.json", {cache:"no-store"}).then(r => r.json())
+   fetch("clubs.json").then(r => r.json()),
+   fetch("prices.json").then(r => r.json())
   ]);
   CLUBS = cj.clubs; LEAGUES = cj.leagues;
   for(const p of pj.clubs) PRICES[p.id] = p;
