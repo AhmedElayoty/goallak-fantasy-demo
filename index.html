@@ -639,7 +639,9 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  /* every element that the sequence fades IN must still be visible with animation off */
  .st__sky,.st__turf,.st__pylon i{opacity:1 !important}
  .st__stand{opacity:.85 !important;transform:none !important}
- .st--enter .slot{opacity:1 !important;transform:translate(var(--tx),-50%) !important}
+ /* the slot is no longer centred by a transform, so nothing has to be restored here */
+ .st--enter .slot{opacity:1 !important;transform:none !important}
+ .cc--empty{animation:none !important;opacity:.85 !important}
 }
 </style>
 <script src="modules.js"></script>
@@ -656,10 +658,10 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 </header>
 
 <main class="wrap">
- <div class="note" id="demoNote"></div>
-
- <div class="seg" id="segbar"></div>
-
+ <!-- #demoNote and #segbar are gone. Measured at 360x640 they cost 34px and 62px above the
+      pitch for nothing: the note was a standing disclaimer that the DEMO tag and the settings
+      sheet already carry, and the segmented bar was a second copy of the bottom nav, which
+      does the same three views plus two more. 96px of stadium recovered. -->
  <section id="viewTeam"></section>
  <section id="viewPoints" class="hide"></section>
  <section id="viewBoard" class="hide"></section>
@@ -1056,11 +1058,6 @@ function paintChrome(){
  $("langBtn").textContent = LANG === "ar" ? "EN" : "ع";
  /* the subtitle is the MANAGER now, not a rules recap the wizard already gave once */
  $("hsub").textContent = squad.length ? teamName() : t("brandSub");
- $("demoNote").textContent = "";
- $("segbar").innerHTML =
-  ['team','points','board'].map(v =>
-   '<button type="button" class="' + (view === v ? "on" : "") + '" onclick="setView(\'' + v + '\')">'
-   + esc(t(v === "team" ? "segTeam" : v === "points" ? "segPts" : "segBoard")) + "</button>").join("");
  $("bnav").innerHTML =
   [["team","👕","navTeam"],["pick","➕","navPick"],["points","📊","navPts"],["board","🏆","navBoard"],["help","❓","navHelp"]]
   .map(n => '<button type="button" class="' + (view === n[0] ? "on" : "") + '" onclick="navTo(\'' + n[0] + '\')">'
