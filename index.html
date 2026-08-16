@@ -261,6 +261,13 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .cc__code{font-size:11px;font-weight:900;letter-spacing:.4px;color:#F2F5FF}
 .cc__val{font-size:11px;font-weight:900;color:var(--fx-gold)}
 .cc__val.pts{color:var(--fx-pos)}
+/* On a 45px card the fixture badge's words do not fit - "مالوش ماتش" rendered as a sliced
+   "مالوش". The pill keeps its shape and colour (both non-colour channels survive) but the
+   label is moved to aria-label, where it is read but never clipped. */
+.st__cards .gwb, .dug .gwb{max-width:calc(100% - 6px);overflow:hidden;font-size:0;
+ padding:1px 4px;gap:0}
+.st__cards .gwb i, .dug .gwb i{font-size:11px}
+.st__cards .gwb *:not(i), .dug .gwb *:not(i){display:none}
 .cc__arm{position:absolute;inset-block-start:5px;inset-inline-start:0;z-index:4;
  background:var(--fx-gold);color:#0B1020;font-size:8.5px;font-weight:900;padding:1px 5px;
  border-start-end-radius:4px;border-end-end-radius:4px;letter-spacing:.4px}
