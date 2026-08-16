@@ -67,6 +67,13 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    every size. `sash` deliberately never mirrors in RTL. */
 .fxkit{position:relative;border-radius:12px;flex:0 0 auto;overflow:hidden;display:flex;
  align-items:center;justify-content:center;background:var(--c1)}
+/* SOLID kits must still use --c2, or 61 clubs discard it and the 12 white ones
+   (Real Madrid, Leeds, Spurs, Sevilla, Fulham, Valencia...) render as identical blank
+   rectangles. A collar and cuffs is what a real plain kit actually has. */
+.fxkit[data-pat="solid"]{background:
+ linear-gradient(180deg, var(--c2) 0 12%, transparent 12%),
+ linear-gradient(90deg, var(--c2) 0 10%, transparent 10% 90%, var(--c2) 90%),
+ var(--c1)}
 .fxkit[data-pat="stripes"]{background:repeating-linear-gradient(90deg,var(--c1) 0 14.285%,var(--c2) 14.285% 28.571%)}
 .fxkit[data-pat="hoops"]{background:repeating-linear-gradient(180deg,var(--c1) 0 20%,var(--c2) 20% 40%)}
 .fxkit[data-pat="halves"]{background:linear-gradient(90deg,var(--c1) 0 50%,var(--c2) 50%)}
@@ -253,7 +260,12 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .dug__lab{font-size:10.5px;color:var(--fx-ink-mute);margin-bottom:8px;text-align:center}
 .dug__row{display:flex;gap:8px;justify-content:space-between}
 .subslot{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px}
-.subslot .cc{width:100%}
+/* a substitute must never out-weigh a starter: the bench rendered at 75x99 against the
+   XI's 49x64, making the reserves the biggest objects on the screen */
+.subslot .cc{width:min(100%, calc(var(--cw) * .78))}
+.slot.armed .cc, .subslot.armed .cc{outline:3px solid var(--fx-gold);outline-offset:2px}
+.swaphint{position:relative;z-index:6;font-size:8.5px;font-weight:900;color:#0B1020;
+ background:var(--fx-gold);padding:1px 5px;border-radius:4px;white-space:nowrap}
 .subslot .ord{position:absolute;inset-block-start:-4px;inset-inline-start:-3px;z-index:5;width:16px;height:16px;
  border-radius:50%;background:var(--fx-surface-3);border:1px solid var(--fx-line-3);color:var(--fx-ink-dim);
  font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center}
@@ -378,7 +390,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 <header class="hdr">
  <div class="hbrand">
   <div class="hname">جولك <b>فانتازي</b></div>
-  <div class="hsub" id="hsub">اختر ٨ أندية · ١٠٠ مليون</div>
+  <div class="hsub" id="hsub">اختر ٨ أندية · ١٢٠ مليون</div>
  </div>
  <span class="demoTag" id="demoTag">DEMO</span>
  <button class="hbtn" id="langBtn" onclick="toggleLang()" aria-label="اللغة">EN</button>
@@ -428,6 +440,21 @@ const FORMATIONS = {
  "4-3-3": [1, 4, 3, 3],
  "3-5-2": [1, 3, 5, 2]
 };
+/* ============================================================================
+   DEMO RESETS ON EVERY OPEN.
+   This is a review build, not a product: the owner opens the link to judge the
+   FIRST-RUN experience, and a half-finished squad from last time hides exactly
+   what he came to look at. So every page load starts clean — new onboarding,
+   empty squad, coach marks re-armed, Arabic.
+   State still persists WITHIN a session, so the app behaves normally while you
+   use it; it is only wiped when the page loads.
+   ============================================================================ */
+(function resetOnOpen(){
+ try{
+  for(const k of ["fx_squad","fx_cap","fx_form","fx_lang","fx_coach","fx_onboarded","fx_gw","fx_chips"]) localStorage.removeItem(k);
+ }catch(_){}
+})();
+
 let formation = "4-4-2";
 try{ formation = localStorage.getItem("fx_form") || "4-4-2"; }catch(_){}
 
@@ -446,7 +473,7 @@ const STR = {
            "Demo build for review only — no account, no server. Everything is stored on your device and the points are simulated to show the design."],
  segTeam:["فريقي","My team"], segPts:["النقاط","Points"], segBoard:["الترتيب","Standings"],
  navTeam:["فريقي","Team"], navPick:["الاختيار","Pick"], navPts:["النقاط","Points"], navBoard:["الترتيب","Table"], navHelp:["الشرح","Help"],
- budLeft:["المتبقي","Remaining"], budOf:["من ١٠٠ مليون","of 100M"],
+ budLeft:["المتبقي","Remaining"], budOf:["من ١٢٠ مليون","of 120M"],
  nextMax:["أقصى سعر للنادي الجاي","Max for your next club"], slotsLeft:["أماكن باقية","Slots left"],
  pickTitle:["اختر أنديتك","Pick your clubs"],
  allLg:["الكل","All"],
@@ -471,6 +498,10 @@ const STR = {
  resetDemo:["ابدأ من جديد","Reset demo"],
  benchLab:["دكة البدلاء · بيدخلوا لوحدهم لو ناديك مالوش ماتش","The bench · they come on automatically when a starter has no match"],
  cameOn:["دخل","Came on"],
+ swapWith:["بدّل","Swap"],
+ swapHere:["حطه هنا","Put here"],
+ swapCancel:["إلغاء","Cancel"],
+ swapTip:["دوس على أي نادي، وبعدين على اللي عايز تبدله بيه","Tap a club, then tap the one you want to swap it with"],
  coveredLab:["تغييرات تلقائية","Automatic substitutions"],
  uncoveredLab:["بدون تغطية","Left uncovered"],
  scrubHint:["حرّك المؤشر لتشوف الاستاد وهو بيتغيّر عبر الموسم","Slide to watch the stadium change across the season"],
@@ -684,7 +715,10 @@ function budgetHtml(){
 /* Row depth: the plane compresses toward the viewer, so cards grow 90% -> 100% back to front.
    10% is the smallest ramp that reads as depth and the largest that keeps the GK card above
    the 48px tap minimum (54 floor x .90 = 48.6). */
-const ROW_GEOM = [{top:28, depth:0.90}, {top:46, depth:0.94}, {top:66, depth:0.97}, {top:87, depth:1.00}];
+/* Measured against the RENDERED turf, not the flat one. rotateX(24deg) about the bottom
+   edge lifts the far edge from 23% to 42.6%, so a row authored at 28% put the goalkeeper
+   entirely above the grass — hit-testing under his feet returned sky. */
+const ROW_GEOM = [{top:52, depth:0.90}, {top:65, depth:0.94}, {top:78, depth:0.97}, {top:91, depth:1.00}];
 /* Horizontal centres by row width. The FOUR-card row is deliberately uneven — 11/35/65/89,
    gaps 24/30/24 — leaving ~46px of open turf down the spine of the team. Distribute those four
    evenly and you get 11px there, and the row instantly reads as a table instead of a back four. */
@@ -694,15 +728,16 @@ function bandOf(id){
  const p = priceOf(id);
  return p >= 15 ? "elite" : p >= 11 ? "strong" : p >= 8 ? "mid" : p >= 6 ? "value" : "budget";
 }
-function cardHtml(c, withPoints, gw){
+function cardHtml(c, withPoints, gw, slotIndex){
  const m = withPoints ? simMatch(c.id, gw) : null;
  const isCap = c.id === captain;
  const val = withPoints
   ? (m.blank ? '<span class="cc__val" style="color:var(--fx-blank)">–</span>'
              : '<span class="cc__val pts" dir="ltr">' + num(m.pts * (isCap ? 2 : 1)) + "</span>")
   : '<span class="cc__val" dir="ltr">' + num(priceOf(c.id).toFixed(1)) + "</span>";
- return '<button type="button" class="cc" data-band="' + bandOf(c.id) + '" onclick="'
-  + (withPoints ? "openBreakdown('" + esc(c.id) + "'," + gw + ")" : "openClub('" + esc(c.id) + "')") + '">'
+ const act = withPoints ? "openBreakdown('" + esc(c.id) + "'," + gw + ")"
+   : (slotIndex == null ? "openClub('" + esc(c.id) + "')" : "swapArm(" + slotIndex + ")");
+ return '<button type="button" class="cc" data-band="' + bandOf(c.id) + '" onclick="' + act + '">'
   + (isCap ? '<span class="cc__arm">C</span>' : "")
   + '<span class="cc__shirtwrap"><span class="cc__shirt fxkit" data-pat="' + esc(c.pat) + '"'
   + (c.iso ? ' data-iso="1"' : "") + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + '"></span></span>'
@@ -721,7 +756,11 @@ function pitchHtml(withPoints, gw){
  const wear = (0.055 + (0.030 * Math.min(1, gwNow / 36))).toFixed(3);   /* trodden ring grows */
  const scuff = gwNow >= 12 ? 1 : 0;                   /* goalmouth scuff from GW12 */
  const inCup = gwNow >= 15 ? 1 : 0;
- let h = '<div class="st st--enter" data-sky="' + sky + '" data-cup="' + inCup + '"'
+ /* The walk-out plays ONCE per session. It used to re-arm on every render, so dragging
+    the season slider strobed eleven staggered card animations per input event. */
+ const enter = _entryPlayed ? "" : " st--enter";
+ _entryPlayed = true;
+ let h = '<div class="st' + enter + '" data-sky="' + sky + '" data-cup="' + inCup + '"'
   + ' style="--crowd-a:' + crowd + ';--wear:' + wear + ';--scuff:' + scuff + '">'
   + '<div class="st__sky"></div>'
   + '<div class="st__pylon a"><i></i><u></u></div><div class="st__pylon b"><i></i><u></u></div>'
@@ -738,14 +777,17 @@ function pitchHtml(withPoints, gw){
    const c = id ? CLUBS.find(x => x.id === id) : null;
    const pos = 'style="inset-inline-start:' + xs[k] + '%;top:' + g.top + '%;--depth:' + g.depth + ';--i:' + i + '"';
    if(!c){
-    h += '<div class="slot" ' + pos + '>'
-     + '<button type="button" class="cc cc--empty" onclick="openPicker()" aria-label="' + esc(t("emptySlot")) + '">'
-     + '<span class="cc__plus">+</span></button>'
-     + '<span class="plinth"></span></div>';
+    h += '<div class="slot' + (swapFrom === i ? " armed" : "") + '" ' + pos + '>'
+     + '<button type="button" class="cc cc--empty" onclick="' + (swapFrom !== null ? "swapArm(" + i + ")" : "openPicker()") + '"'
+     + ' aria-label="' + esc(t("emptySlot")) + '"><span class="cc__plus">+</span></button>'
+     + '<span class="plinth"></span>'
+     + (swapFrom !== null ? '<span class="swaphint">' + esc(swapLabel(i)) + "</span>" : "") + "</div>";
     continue;
    }
-   h += '<div class="slot" ' + pos + '>' + cardHtml(c, withPoints, gw)
-    + '<span class="plinth"></span><span class="nm">' + esc(clubName(c)) + "</span></div>";
+   h += '<div class="slot' + (swapFrom === i ? " armed" : "") + '" ' + pos + '>'
+    + cardHtml(c, withPoints, gw, withPoints ? null : i)
+    + '<span class="plinth"></span><span class="nm">' + esc(clubName(c)) + "</span>"
+    + (swapFrom !== null ? '<span class="swaphint">' + esc(swapLabel(i)) + "</span>" : "") + "</div>";
   }
  });
  h += "</div></div>";
@@ -762,16 +804,21 @@ function dugoutHtml(withPoints, gw){
   const id = bench[i];
   const c = id ? CLUBS.find(x => x.id === id) : null;
   if(!c){
-   h += '<div class="subslot"><button type="button" class="cc cc--empty cc--sub" onclick="openPicker()"'
+   const bi0 = START_SIZE + i;
+   h += '<div class="subslot"><button type="button" class="cc cc--empty cc--sub" onclick="'
+    + (swapFrom !== null ? "swapArm(" + bi0 + ")" : "openPicker()") + '"'
     + ' aria-label="' + esc(t("emptySlot")) + '"><span class="cc__plus">+</span></button>'
     + '<span class="ord" dir="ltr">' + num(i + 1) + "</span></div>";
    continue;
   }
   const cameOn = res && res.used[c.id];
-  h += '<div class="subslot' + (cameOn ? " on" : "") + '">' + cardHtml(c, withPoints, gw)
+  const bi = START_SIZE + i;
+  const armed = swapFrom === bi;
+  h += '<div class="subslot' + (cameOn ? " on" : "") + (armed ? " armed" : "") + '">' + cardHtml(c, withPoints, gw, bi)
    + '<span class="ord" dir="ltr">' + num(i + 1) + "</span>"
    + '<span class="nm">' + esc(clubName(c)) + "</span>"
-   + (cameOn ? '<span class="camein">' + esc(t("cameOn")) + "</span>" : "") + "</div>";
+   + (cameOn ? '<span class="camein">' + esc(t("cameOn")) + "</span>" : "")
+   + (swapFrom !== null ? '<span class="swaphint">' + esc(swapLabel(bi)) + "</span>" : "") + "</div>";
  }
  return h + "</div></div>";
 }
@@ -800,8 +847,9 @@ function renderTeam(){
  const full = squad.length === SQUAD_SIZE;
  $("viewTeam").innerHTML = (squadWasRepaired ? '<div class="note">⚠️ ' + esc(t("repaired")) + "</div>" : "")
   + budgetHtml() + formationBar()
+  + '<div class="note" style="margin-bottom:10px">⇄ ' + esc(t('swapTip')) + '</div>'
   + '<div class="gwscrub"><span>' + esc(t("gwTitle")) + ' <b dir="ltr">' + num(CURRENT_GW) + '</b></span>'
-  + '<input type="range" min="1" max="38" value="' + CURRENT_GW + '" oninput="setGw(+this.value)" aria-label="' + esc(t("gwTitle")) + '">'
+  + '<input type="range" min="1" max="36" value="' + CURRENT_GW + '" oninput="setGw(+this.value)" aria-label="' + esc(t("gwTitle")) + '">'
   + '<div class="muted" style="flex-basis:100%">' + esc(t("scrubHint")) + '</div></div>'
   + pitchHtml(false)
   + '<button type="button" class="btn" onclick="openPicker()">'
@@ -869,6 +917,38 @@ function renderBoard(){
   + rows.map((r, i) => '<div class="lbrow' + (r.me ? " me" : "") + '"><span class="lbrank" dir="ltr">' + num(i + 1) + "</span>"
    + '<span class="lbname">' + esc(r.n) + '</span><span class="lbpts" dir="ltr">' + num(Math.max(0, r.s)) + "</span></div>").join("")
   + "</div>" + '<div class="note">' + esc(t("simNote")) + "</div>";
+}
+
+/* ============================================================================
+   SWAP AND REORDER — the thing that makes this a manager's game.
+   Without it you could own Liverpool and never get it onto the pitch, because
+   the picker files clubs in the order they were tapped. A bench club's only
+   offered action was "make captain". That is not a squad, it is a receipt.
+   ============================================================================ */
+let _entryPlayed = false;
+let swapFrom = null;                        /* index in `squad` currently armed for a swap */
+function isStarter(i){ return i < START_SIZE; }
+function swapArm(i){
+ if(swapFrom === i){ swapFrom = null; render(); return; }      /* tap again to cancel */
+ if(swapFrom === null){ swapFrom = i; render(); return; }
+ swapSlots(swapFrom, i);
+ swapFrom = null;
+ render();
+}
+function swapSlots(a, b){
+ if(a === b || a == null || b == null) return;
+ if(!squad[a] || !squad[b]){                                    /* one side empty: just move */
+  const tmp = squad[a]; squad[a] = squad[b]; squad[b] = tmp; save(); return;
+ }
+ const tmp = squad[a]; squad[a] = squad[b]; squad[b] = tmp;
+ save();
+}
+/* promote a substitute straight into the XI, replacing a chosen starter */
+function promoteSub(subIndex, starterIndex){ swapSlots(subIndex, starterIndex); render(); }
+function swapLabel(i){
+ if(swapFrom === null) return "";
+ if(swapFrom === i) return t("swapCancel");
+ return isStarter(swapFrom) !== isStarter(i) ? t("swapHere") : t("swapWith");
 }
 
 /* ---------------- sheets ---------------- */
@@ -1001,7 +1081,7 @@ function openBreakdown(id, gw){
 const GLOSSARY = [
  ["الجولة","Gameweek","مجموعة المباريات اللي بتتحسب مع بعض. النقط بتتجمع لكل جولة."],
  ["الكابتن","Captain","نادي واحد بس في فريقك بياخد ضعف نقطه كل جولة."],
- ["الميزانية","Budget","الـ ١٠٠ مليون اللي بتشتري بيها أنديتك. مش فلوس حقيقية."],
+ ["الميزانية","Budget","الـ ١٢٠ مليون اللي بتشتري بيها أنديتك. مش فلوس حقيقية."],
  ["الانتقالات","Transfers","تغيير نادي بنادي تاني بعد ما تبدأ."],
  ["شباك نظيفة","Clean sheet","النادي خلّص الماتش من غير ما يستقبل أي هدف."],
  ["مكافأة قوة الخصم","Opponent strength bonus","لو نادي ضعيف كسب نادي كبير، بياخد نقط زيادة."],
