@@ -174,7 +174,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  --cw:calc((100vw - 56px) / 4);
  --ch:calc(var(--cw) * 1.32);
  --cw-sub:calc(var(--cw) * .76);
- --row-gap:8px;
+ --row-gap:6px;
 }
 /* ---- THE SECOND ACT ----
    A stadium that is identical on open #40 and open #1 is a screenshot, not a product.
@@ -279,7 +279,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    2px — the whole stadium gone. The card stack now DEFINES the pitch's height and the sky,
    stands and turf are painted behind it. */
 .st__cards{position:relative;z-index:6;display:flex;flex-direction:column;
- gap:var(--row-gap);padding-block:34px 14px;justify-content:flex-start}
+ gap:var(--row-gap);padding-block:22px 10px;justify-content:flex-start}
 .st__row{display:flex;justify-content:center;gap:12px}
 /* ~18px of open turf down the spine, so a back four reads as a back four and not a table */
 .st__row[data-n="4"] > :nth-child(2){margin-inline-end:18px}
@@ -502,7 +502,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    fortieth open, or the first. Every card is then read against that rival: clubs
    you BOTH own cannot move the gap between you, so they recede.
    ============================================================================ */
-.gapb{display:block;inline-size:100%;text-align:start;margin-block-end:8px;padding:6px 10px;
+.gapb{display:block;inline-size:100%;text-align:start;margin-block-end:6px;padding:4px 10px;
  border-radius:var(--r);background:var(--fx-surface-2);border:1px solid var(--fx-line-2)}
 .gapb__who{display:flex;align-items:center;justify-content:space-between;gap:8px;
  font-size:12.5px;font-weight:800;margin-block-end:2px}
@@ -764,6 +764,8 @@ const STR = {
  /* the ground */
  groundClean:["الملعب النضيف","The Groundsman's Pitch"],
  groundProgress:["أرضك · {n}/{of} جولة","Your ground · {n}/{of} rounds"],
+ covNote:["الجولة دي فيها {pct}% بس من الأندية بتلعب — عشان كده في أندية مالهاش ماتش",
+          "Only {pct}% of clubs play this round — that is why some have no match"],
  tooExpensive:["أغلى من اللي فاضل معاك","Over your remaining budget"],
  leagueFull:["خلاص عندك 3 أندية من الدوري ده","3 clubs from this league already"],
  squadFull:["فريقك كمل — شيل نادي الأول","Your squad is full"],
@@ -919,6 +921,16 @@ function validateSquad(){
    story. Mirrors the real scoring shape: result + clean sheet + goals - conceded
    + opponent-strength tier bonus. */
 function hash(str){ let h = 2166136261; for(let i = 0; i < str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return Math.abs(h); }
+/* THE FROZEN CALENDAR. Each entry is [from, to, days, coverage%] for one of the 36 rounds.
+   The fallback is the old flat 10/11 so the game still runs if the file fails to load. */
+let CAL = null;
+function gwRound(gw){ return CAL && CAL.gws[gw - 1] ? CAL.gws[gw - 1] : null; }
+function gwCoverage(gw){ const r = gwRound(gw); return r ? r[3] / 100 : 10 / 11; }
+function gwDates(gw){
+ const r = gwRound(gw); if(!r) return "";
+ const d = s => { const p = s.split("-"); return p[2] + "/" + p[1]; };
+ return d(r[0]) + " – " + d(r[1]);
+}
 function simMatch(clubId, gw){
  /* No CLUBS.find() here. It used to look the club up and discard the result — a 126-item
     linear scan on every call, which at GW36 is ~340,000 wasted comparisons per leaderboard. */
@@ -937,7 +949,11 @@ function simMatch(clubId, gw){
  const gf = win ? 1 + (h >> 3) % 3 : draw ? (h >> 5) % 2 : (h >> 7) % 2;
  const ga = win ? (h >> 9) % 2 : draw ? gf : 1 + (h >> 11) % 2;
  const oppTier = 1 + (h >> 13) % 5;
- const blank = ((h >> 17) % 11) === 0;      /* no fixture this week */
+ /* BLANKS COME FROM THE CALENDAR NOW, not from a constant 1-in-11. The frozen 36-round
+    calendar carries a real fixture-coverage figure per round, and the hash-derived blank
+    contradicted it flatly: clubs blanked in rounds with 100% coverage and played in the
+    61.9% round. The badge was internally consistent with the score and externally a lie. */
+ const blank = ((h >> 17) % 1000) / 1000 >= gwCoverage(gw);
  if(blank) return {blank:true, pts:0, opp:null, home:false, oppTier:oppTier};
  /* WHO you play, drawn from the same hash as everything else so it can never contradict the
     result. The card needs this: the price was the one field on it frozen for the whole
@@ -1324,7 +1340,8 @@ function renderPoints(){
  /* The round scrubber lives HERE now, on the screen whose whole subject is the round. On the
     team screen it was 96px of chrome above a pitch nobody could see. */
  $("viewPoints").innerHTML = gwBarHtml()
-  + '<div class="card"><div class="muted" style="text-align:center">' + esc(t("gwTitle")) + " " + num(gw) + "</div>"
+  + '<div class="card"><div class="muted" style="text-align:center">' + esc(t("gwTitle")) + " " + num(gw)
+  + (gwDates(gw) ? ' <span dir="ltr">· ' + esc(gwDates(gw)) + "</span>" : "") + "</div>"
   + '<div class="ptsbig" dir="ltr">' + num(gwTotal(gw)) + "</div>"
   + '<div class="muted" style="text-align:center;margin-top:4px">' + esc(t("gwPts")) + "</div></div>"
   + '<div class="card"><h3>' + esc(t("totalPts")) + '</h3><div class="ptsrow"><span class="dim">'
@@ -1334,6 +1351,10 @@ function renderPoints(){
     return '<div class="note">' + (r.covered ? '✅ ' + esc(t('coveredLab')) + ': ' + num(r.covered) : '')
       + (r.covered && r.uncovered ? ' · ' : '')
       + (r.uncovered ? '⚠️ ' + esc(t('uncoveredLab')) + ': ' + num(r.uncovered) : '') + '</div>'; })()
+  /* the round's real fixture coverage, from the frozen calendar — this is WHY clubs blank,
+     and until now the app never told anyone. 100% rounds say nothing; the rest explain. */
+  + (gwCoverage(gw) < 0.999
+     ? '<div class="note">📅 ' + esc(t("covNote", {pct: Math.round(gwCoverage(gw) * 100)})) + "</div>" : "")
   + '<div class="note">' + esc(t('simNote')) + '</div>'
   + pitchHtml(true, gw);
  maybeCoach("pts", "viewPoints", "coachPts");
@@ -1859,12 +1880,16 @@ function toggleLang(){
 /* ---------------- boot ---------------- */
 (async function boot(){
  try{
-  const [cj, pj] = await Promise.all([
+  const [cj, pj, kj] = await Promise.all([
    fetch("clubs.json").then(r => r.json()),
-   fetch("prices.json").then(r => r.json())
+   fetch("prices.json").then(r => r.json()),
+   /* calendar.json shipped from the very first build and was read by NOTHING — not
+      index.html, not modules.js. The blank badge was inventing its own fixture list. */
+   fetch("calendar.json").then(r => r.json()).catch(() => null)
   ]);
   CLUBS = cj.clubs; LEAGUES = cj.leagues;
   for(const p of pj.clubs) PRICES[p.id] = p;
+  if(kj && kj.gws) CAL = kj;
  }catch(e){
   document.querySelector(".wrap").innerHTML = '<div class="card">Could not load club data.</div>';
   return;
