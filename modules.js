@@ -1865,16 +1865,21 @@ function tutHtml(state) {
 
   else if (s.step === "swap") {
     const d = drillPair(s);
-    const a = clubOf(s, s.squad[d.bench]), b = clubOf(s, s.squad[d.starter]);
+    const armed = s.swapFrom;
+    const nextIdx = s.swapDone ? -1
+      : armed === null ? d.bench
+      : (armed === d.bench ? d.starter : d.bench);
+    const a = clubOf(s, s.squad[d.bench]);
+    const nextClub = nextIdx < 0 ? null : clubOf(s, s.squad[nextIdx]);
     const msg = s.swapDone
       ? '<span class="tut-ok">' + T(s, "tutSwOk") + "</span>"
-      : (s.swapFrom === null
+      : (armed === null
           ? T(s, "tutSwDo1", { a: clubName(s, a) })
-          : T(s, "tutSwDo2", { b: clubName(s, b) }));
+          : T(s, "tutSwDo2", { b: nextClub ? clubName(s, nextClub) : "" }));
     body = '<h2 class="tut-h">' + T(s, "tutSwTtl") + "</h2>"
       + '<p class="tut-p">' + T(s, "tutSwBody") + "</p>"
       + live(msg)
-      + pitch(s, s.swapDone ? -1 : d.bench, s.swapDone ? -1 : d.starter)
+      + pitch(s, nextIdx, -1)
       + (s.swapDone
           ? btn(T(s, "tutSwCta"), "NEXT", "tut-cta", null, " data-tut-focus")
           : btn(T(s, "tutSwPass"), "NEXT", "tut-sec"));

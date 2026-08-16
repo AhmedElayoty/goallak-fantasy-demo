@@ -297,13 +297,24 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    stops looking like an object you own. Only the depth axis moves. */
 .st__cards{position:relative;z-index:6;display:flex;flex-direction:column;
  gap:var(--row-gap);padding-block:22px 10px;justify-content:flex-start;
- perspective:900px;perspective-origin:50% 130%;transform-style:preserve-3d}
+ perspective:620px;perspective-origin:50% 130%;transform-style:preserve-3d}
 .st__row{display:flex;justify-content:center;gap:12px;
  transform:translateZ(var(--z,0px)) rotateX(var(--lean,0deg));transform-origin:50% 100%}
-.st__row:nth-child(1){--z:-30px;--lean:5deg}
-.st__row:nth-child(2){--z:-20px;--lean:3.5deg}
-.st__row:nth-child(3){--z:-10px;--lean:2deg}
+/* The first pass was mathematically 3D and perceptually flat: measured, the back row came
+   out 73.5px wide against the front row's 76 — a 3% falloff across the whole pitch. Turned
+   up to give ~12-14%, which is what actually reads as a back four standing further away. */
+.st__row:nth-child(1){--z:-90px;--lean:13deg}
+.st__row:nth-child(2){--z:-60px;--lean:9deg}
+.st__row:nth-child(3){--z:-30px;--lean:5deg}
 .st__row:nth-child(4){--z:0px;  --lean:0deg}
+/* the card gets THICKNESS — a lit top edge and a dark under-edge, so it reads as an object
+   with a side rather than a decal printed on the grass */
+.cc{box-shadow:0 1px 0 rgba(255,255,255,.16) inset, 0 -2px 0 rgba(4,7,18,.85) inset,
+    var(--band-elev,0 4px 10px -4px rgba(0,0,0,.75))}
+/* a specular sweep, as if the floodlights were above and to the side */
+.cc__kit::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+ background:linear-gradient(115deg, transparent 0 34%, rgba(255,255,255,.18) 46%,
+            rgba(255,255,255,.04) 54%, transparent 66%)}
 /* ~18px of open turf down the spine, so a back four reads as a back four and not a table */
 .st__row[data-n="4"] > :nth-child(2){margin-inline-end:18px}
 /* five across does not fit 360 (416px needed): the midfield fans, leaning the same way in
@@ -442,8 +453,14 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .cc--blank .cc__fx{color:var(--fx-ink-dim)}   /* 8.83:1 — the blank hue alone is 3.16 and fails */
 /* THE DIFFERENTIAL RULE — the entire head-to-head idea, in two properties. A club you and
    your rival both own cannot change the gap between you, so it recedes. */
-.st[data-h2h="on"] .slot[data-shared="1"] .cc,
-.st[data-h2h="on"] .subslot[data-shared="1"] .cc{opacity:.52;filter:saturate(.55)}
+/* The bench rule sets its own filter, so a shared BENCH club kept the ordinary bench dim and
+   only the shared pitch clubs faded — one of three "shared" clubs looked deliberate and two
+   looked normal, which is what made the whole thing read as a rendering fault. Both now use
+   the same declaration, and the armed card is exempt: during a swap the card you are
+   actively manipulating must never be the faintest thing on screen. */
+.st[data-h2h="on"] .slot[data-shared="1"]:not(.armed) .cc,
+.dug[data-h2h="on"] .subslot[data-shared="1"]:not(.armed) .cc{
+ opacity:.52;filter:saturate(.55) !important}
 /* the armband as an actual armband, not 8.5px of text. Must NOT mirror: a captain's armband
    is worn on the left arm in every league on earth. */
 .cc__arm{position:absolute;inset-block-start:24%;inset-inline-start:5%;z-index:4;
@@ -556,8 +573,19 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    fortieth open, or the first. Every card is then read against that rival: clubs
    you BOTH own cannot move the gap between you, so they recede.
    ============================================================================ */
+/* The clock and the scoreboard rendered as the same object — same fill, same border, same
+   radius, stacked 7px apart — so a glance could not tell which was which. An accent rail
+   separates them, and the rival's number drops from 28px to 20px: your score and a
+   stranger's were typographically equal and both dwarfed the round number, which is most of
+   why tapping here read as "the ranking changed". */
 .gapb{display:block;inline-size:100%;text-align:start;margin-block-end:6px;padding:4px 10px;
- border-radius:var(--r);background:var(--fx-surface-2);border:1px solid var(--fx-line-2)}
+ border-radius:var(--r);background:linear-gradient(180deg,#1E2A56,#141D3E);
+ border:1px solid var(--fx-line-2);border-inline-start:3px solid var(--fx-gold);
+ box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 6px 18px -8px rgba(0,0,0,.75)}
+.rndb{border-inline-start:3px solid var(--fx-live);
+ background:linear-gradient(180deg,#1E2A56,#141D3E) !important;
+ box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 6px 18px -8px rgba(0,0,0,.75)}
+.gapb__n.them{font-size:20px}
 .gapb__nums{display:flex;inline-size:100%;background:none;border:0;padding:0}
 .gapb__swap{flex:0 0 auto;min-block-size:28px;padding:2px 8px;border-radius:7px;
  background:var(--fx-surface-3);border:1px solid var(--fx-line-3);
@@ -607,6 +635,25 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .bnav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 2px;
  color:var(--fx-ink-mute);font-size:10.5px;font-weight:700}
 .bnav button.on{color:var(--fx-gold)}
+/* THE NAV IS FIXED, SO THE PAGE MUST END ABOVE IT. Measured at 360x800: the bench sat at
+   y=708 under a nav at y=737 — all four substitutes 0% visible — and the primary button at
+   y=887 returned .bnav from elementFromPoint, i.e. it could not be tapped at all without
+   scrolling, with nothing on screen to suggest scrolling. */
+.wrap{padding-block-end:calc(96px + env(safe-area-inset-bottom))}
+/* TOUCH FEEDBACK. -webkit-tap-highlight-color is transparent globally and only the club card
+   had an :active rule, so tapping the big orange button, the tab bar, or any of 126 picker
+   rows produced nothing at all on screen. On a phone that IS the "something is off". */
+.btn:active,.hbtn:active,.gapb__swap:active,.gwchip:active,.clubrow:active,
+.fchip:active,.bnav button:active,.sx:active,.gapb__nums:active{transform:scale(.97)}
+.btn,.hbtn,.gapb__swap,.gwchip,.clubrow,.fchip,.bnav button,.sx,.gapb__nums{
+ transition:transform 90ms var(--e-out)}
+/* the primary action should look like an object you can press */
+.btn{background:linear-gradient(180deg,#FF9563,#FF7A45 46%,#E45E2C);
+ box-shadow:0 1px 0 rgba(255,255,255,.35) inset, 0 6px 14px -6px rgba(255,122,69,.55),
+            0 2px 4px rgba(0,0,0,.45)}
+.btn:active{transform:translateY(1px) scale(.99);
+ box-shadow:0 1px 0 rgba(255,255,255,.2) inset, 0 2px 6px -3px rgba(0,0,0,.6)}
+.btn.ghost{background:var(--fx-surface-3);box-shadow:none}
 .bnav .ic{font-size:19px;line-height:1}
 
 /* ---------- sheets ---------- */
@@ -819,6 +866,7 @@ const STR = {
  capLab:["الكابتن","Captain"],
  h2hLab:["دوس عشان تغيّر منافسك","Tap to change your rival"],
  h2hNext:["غيّر المنافس","Change rival"],
+ benchedNoCap:["على الدكة — الكابتن لازم يكون من الـ11","On the bench — the captain must be one of the XI"],
  gwWord:["جولة","ROUND"],
  gwOf:["الجولة {n} من {of}","Round {n} of {of}"],
  sharedLab:["الباهت = منافسك عنده نفس النادي، فمش هيفرق بينكم",
@@ -1266,7 +1314,8 @@ function pitchHtml(withPoints, gw){
  _entryPlayed = true;
  const full = squad.length >= SQUAD_SIZE;
  const shared = rivalOwned();          /* the head-to-head set; empty when the band is off */
- markRound(gwNow);
+ /* only the round you actually arrived at counts, and only from the team screen */
+ markRound(gwNow, !withPoints);
  const ground = groundOf();
  let h = '<div class="st' + enter + '" data-sky="' + sky + '" data-cup="' + inCup + '"'
   + ' data-full="' + (full ? 1 : 0) + '" data-arm="' + (swapFrom !== null ? 1 : 0) + '"'
@@ -1599,8 +1648,12 @@ const GROUND_AT = 10;
 function ledger(){
  try{ return JSON.parse(localStorage.getItem("fx_ledger") || "[]"); }catch(_){ return []; }
 }
-function markRound(gw){
- if(squad.length < SQUAD_SIZE) return;
+/* The ledger is credited by DELIBERATE arrival at a round, never by scrubbing past one. The
+   scrubber is labelled "swipe to see any round" and one drag across the strip credited all
+   twenty rounds it passed and instantly completed the only long-term reward in the game.
+   A viewing control must not be able to spend a season's progression. */
+function markRound(gw, deliberate){
+ if(!deliberate || squad.length < SQUAD_SIZE) return;
  const L = ledger();
  if(L.indexOf(gw) >= 0) return;
  L.push(gw);
@@ -1608,9 +1661,20 @@ function markRound(gw){
 }
 function groundOf(){ return ledger().length >= GROUND_AT ? "clean" : "base"; }
 let h2hIdx = 0;
+/* THE SEED IS NEVER A DISPLAY NAME.
+   rivalSquad() builds a rival's team from hash(name), and this used to be called with the
+   TRANSLATED name in one place and the English name in another. In English the two strings
+   are identical and everything agreed; in Arabic they diverge, so the standings table and
+   the head-to-head band generated different squads for the same person and reported
+   different scores — مصطفى was 371 and top on one screen and 289 and behind you on the
+   other. The owner is Arabic-first, so he was the only one who could see it, and it is
+   exactly the "why does the ranking change" he reported.
+   r[1] (the English name) is the stable key. Nothing that varies with the UI may seed it. */
+const rivalSeed = r => r[1];
 function boardRows(){
- return RIVALS.map((r, i) => ({i: i, name: rivalName(r), s: rivalTotal(rivalName(r)), me: false}))
-   .concat([{i: -1, name: teamName(), s: seasonTotal(), me: true}])
+ return RIVALS.map((r, i) => ({i: i, seed: rivalSeed(r), name: rivalName(r),
+                               s: rivalTotal(rivalSeed(r)), me: false}))
+   .concat([{i: -1, seed: null, name: teamName(), s: seasonTotal(), me: true}])
    .sort((a, b) => b.s - a.s);
 }
 function nearestRival(){
@@ -1624,8 +1688,8 @@ function nearestRival(){
 }
 function rivalOwned(){
  const r = nearestRival();
- if(!r || !squad.length) return new Set();
- return new Set(rivalSquad(r.name));
+ if(!r || !r.seed || !squad.length) return new Set();
+ return new Set(rivalSquad(r.seed));
 }
 function cycleRival(){ h2hIdx++; render(); }
 /* WHICH ROUND, AND WHEN. The owner's words: "i want it clear which game week are we in and
@@ -1682,12 +1746,13 @@ function openShare(){
   + '<div class="note">' + esc(t("shareHint")) + "</div>");
 }
 function renderBoard(){
- const me = seasonTotal();
- const rivals = RIVALS.map(r => ({n: rivalName(r), s: rivalTotal(r[1])}));
- const rows = rivals.concat([{n:t("you"), s:me, me:true}]).sort((a, b) => b.s - a.s);
+ /* ONE source of truth. The table used to build its own rival list, which is how it came to
+    disagree with the band about who was winning. It reads boardRows() now, so the two
+    cannot drift again — and it uses the manager's chosen team name rather than "You". */
+ const rows = boardRows();
  $("viewBoard").innerHTML = '<div class="card"><h3>' + esc(t("segBoard")) + "</h3>"
   + rows.map((r, i) => '<div class="lbrow' + (r.me ? " me" : "") + '"><span class="lbrank" dir="ltr">' + num(i + 1) + "</span>"
-   + '<span class="lbname">' + esc(r.n) + '</span><span class="lbpts" dir="ltr">' + num(Math.max(0, r.s)) + "</span></div>").join("")
+   + '<span class="lbname">' + esc(r.name) + '</span><span class="lbpts" dir="ltr">' + num(Math.max(0, r.s)) + "</span></div>").join("")
   + "</div>" + '<div class="note">' + esc(t("simNote")) + "</div>";
 }
 
@@ -1823,12 +1888,21 @@ function openClub(id){
 
 function openCaptain(){
  if(squad.length !== SQUAD_SIZE) return;
- const rows = squad.map(id => {
+ /* ONLY THE ELEVEN. The sheet listed all fifteen with nothing marking the substitutes, so
+    appointing one was a single tap — and it paid exactly nothing, because resolveSquad only
+    ever doubles a STARTER. Measured: a bench captain scored 302, identical to having no
+    captain at all, against 348 for the best legal one. A 46-point loss with the armband
+    drawn on the card, telling you it was working. swapSlots already refuses to let the
+    captain be benched and says so; this sheet had no such guard. */
+ const rows = squad.map((id, i) => {
   const c = CLUBS.find(x => x.id === id); if(!c) return "";
-  return '<button type="button" class="clubrow' + (captain === id ? " on" : "") + '" onclick="captain=\'' + esc(id) + '\';save();openCaptain()">'
+  const benched = i >= START_SIZE;
+  return '<button type="button" class="clubrow' + (captain === id ? " on" : "") + '"'
+   + (benched ? " disabled" : "")
+   + (benched ? "" : ' onclick="captain=\'' + esc(id) + '\';save();openCaptain()"') + ">"
    + kitHtml(c, "k34") + '<span class="crname"><span class="crn">' + esc(clubName(c)) + "</span>"
-   + '<span class="crl">' + esc(leagueName(c.lg)) + "</span></span>"
-   + '<span class="crpick">' + (captain === id ? "C" : "+") + "</span></button>";
+   + '<span class="crl">' + esc(benched ? t("benchedNoCap") : leagueName(c.lg)) + "</span></span>"
+   + '<span class="crpick">' + (captain === id ? "C" : benched ? "–" : "+") + "</span></button>";
  }).join("");
  openSheet("<h2>" + esc(t("capTitle")) + "</h2><div class='muted' style='margin-bottom:12px'>" + esc(t("capNote")) + "</div>"
   + rows + (captain ? '<button type="button" class="btn" onclick="closeSheet()">' + esc(t("done")) + "</button>" : ""));
