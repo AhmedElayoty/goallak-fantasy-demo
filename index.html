@@ -118,13 +118,27 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .clubrow.on .crpick{background:var(--fx-pos)}
 
 /* ---------- pitch ---------- */
-.pitch{background:linear-gradient(180deg,#0C1430,#0A1026);border:1px solid var(--fx-line-2);
- border-radius:var(--r);padding:16px 10px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px 6px;
- isolation:isolate;position:relative}
-.pslot{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+/* ---------- the pitch ----------
+   A real playing surface: mow stripes, a centre circle, a halfway line and a penalty box,
+   all pure CSS. No images — the whole app is one file with no external assets. */
+.pitch{position:relative;isolation:isolate;border:1px solid var(--fx-line-2);border-radius:var(--r);
+ padding:14px 8px 18px;display:flex;flex-direction:column;gap:12px;overflow:hidden;
+ background:
+  repeating-linear-gradient(180deg, rgba(255,255,255,.035) 0 26px, rgba(0,0,0,0) 26px 52px),
+  radial-gradient(120% 70% at 50% 0%, #16351F 0%, #0F2517 55%, #0A1A11 100%)}
+.pmark{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.5;
+ background:
+  /* centre circle */
+  radial-gradient(circle at 50% 50%, rgba(255,255,255,0) 0 52px, rgba(255,255,255,.22) 52px 53.5px, rgba(255,255,255,0) 54px),
+  /* halfway line */
+  linear-gradient(180deg, rgba(255,255,255,0) calc(50% - .75px), rgba(255,255,255,.22) calc(50% - .75px) calc(50% + .75px), rgba(255,255,255,0) calc(50% + .75px))}
+.pitch::after{content:"";position:absolute;inset-inline:22%;top:-1px;height:44px;z-index:0;
+ border:1.5px solid rgba(255,255,255,.20);border-top:none;border-start-start-radius:2px;border-start-end-radius:2px;pointer-events:none}
+.prow{position:relative;z-index:1;display:flex;justify-content:space-evenly;gap:4px}
+.pslot{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;flex:1;max-width:88px}
 .pslot .nm{font-size:9.5px;color:var(--fx-ink-dim);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pslot .pt{font-size:11px;font-weight:900;color:var(--fx-gold)}
-.pempty{width:60px;height:60px;border-radius:12px;border:2px dashed var(--fx-line-3);
+.pempty{width:44px;height:44px;border-radius:12px;border:2px dashed rgba(255,255,255,.45);background:rgba(255,255,255,.06);
  display:flex;align-items:center;justify-content:center;color:var(--fx-ink-mute);font-size:20px}
 .capbadge{position:absolute;inset-block-start:-5px;inset-inline-end:-5px;width:20px;height:20px;border-radius:50%;
  background:var(--fx-gold);color:#0B1020;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;z-index:3}
@@ -238,7 +252,20 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    =========================================================================== */
 const $ = id => document.getElementById(id);
 const VERSION = "demo-1.0";
-const SQUAD_SIZE = 8, BUDGET = 100.0, MAX_PER_LEAGUE = 3, MIN_CLUB_PRICE = 4.0;
+/* ELEVEN clubs — a football XI. The squad is a team sheet, not a shopping list.
+   Budget solved, not guessed. With an 11-slot squad and a 4.0M floor, the question is how many
+   18.5M superclubs a manager can fit: 100M buys exactly THREE (87.5M), and a fourth needs 102M.
+   Three is the number that makes 'which three?' the whole conversation. 105M+ buys four and
+   the tension disappears; 120M buys five, which is not a choice at all. */
+const SQUAD_SIZE = 11, BUDGET = 100.0, MAX_PER_LEAGUE = 3, MIN_CLUB_PRICE = 4.0;
+/* rows of the formation, back to front. 1-4-4-2 = 11. */
+const FORMATIONS = {
+ "4-4-2": [1, 4, 4, 2],
+ "4-3-3": [1, 4, 3, 3],
+ "3-5-2": [1, 3, 5, 2]
+};
+let formation = "4-4-2";
+try{ formation = localStorage.getItem("fx_form") || "4-4-2"; }catch(_){}
 
 let LANG = "ar";
 try{ LANG = localStorage.getItem("fx_lang") || "ar"; }catch(_){}
@@ -250,7 +277,7 @@ try{ seenCoach = JSON.parse(localStorage.getItem("fx_coach") || "{}"); }catch(_)
 
 /* ---------------- i18n. Every user-visible string lives here. ---------------- */
 const STR = {
- brandSub:["اختر ٨ أندية · ١٠٠ مليون","Pick 8 clubs · 100M"],
+ brandSub:["١١ ناديًا · ١٠٠ مليون","11 clubs · 100M"],
  demoNote:["هذه نسخة تجريبية للعرض فقط — لا حساب ولا اتصال بالخادم، وكل شيء محفوظ على جهازك. النقاط هنا محاكاة لعرض التصميم.",
            "Demo build for review only — no account, no server. Everything is stored on your device and the points are simulated to show the design."],
  segTeam:["فريقي","My team"], segPts:["النقاط","Points"], segBoard:["الترتيب","Standings"],
@@ -285,9 +312,9 @@ const STR = {
  wiz1h:["أهلاً بيك في جولك فانتازي","Welcome to Goallak Fantasy"],
  wiz1p:["مش هتختار لاعيبة — هتختار <b>أندية</b>. كل أسبوع، الأندية اللي في فريقك بتجيب لك نقط على حسب نتايجها.",
         "You don't pick players — you pick <b>clubs</b>. Each week the clubs in your team earn you points based on their real results."],
- wiz2h:["٨ أندية · ١٠٠ مليون","8 clubs · 100M"],
- wiz2p:["ميزانيتك ١٠٠ مليون وتختار ٨ أندية من ٧ دوريات. أقصى ٣ أندية من نفس الدوري، عشان تفضل تتفرج على كل حاجة.",
-        "You have 100M for 8 clubs across 7 leagues. Maximum 3 from any one league, so you always have something to watch."],
+ wiz2h:["١١ ناديًا · ١٠٠ مليون","11 clubs · 100M"],
+ wiz2p:["ميزانيتك ١٠٠ مليون وتختار ١١ ناديًا من ٧ دوريات — فريق كامل زي أي مدرب. أقصى ٣ أندية من نفس الدوري، عشان تفضل تتفرج على كل حاجة.",
+        "You have 100M for 11 clubs across 7 leagues — a full XI, like any manager. Maximum 3 from any one league, so you always have something to watch."],
  wiz3h:["جهزنا لك فريق",""],
  wiz3hEn:["We built you a team","We built you a team"],
  wiz3p:["دي بداية صحيحة وكاملة. سيبها زي ما هي، أو غيّر اللي مش عاجبك.",
@@ -455,25 +482,48 @@ function budgetHtml(){
   + '<span>' + esc(t("slotsLeft")) + ' <b dir="ltr">' + num(slotsLeft()) + '</b></span></div></div>';
 }
 
+/* The squad rendered as a TEAM SHEET on a pitch: rows back-to-front, the way a manager
+   reads a formation — not an 8-cell grid. */
 function pitchHtml(withPoints, gw){
- let h = '<div class="pitch">';
- for(let i = 0; i < SQUAD_SIZE; i++){
-  const id = squad[i];
-  const c = id ? CLUBS.find(x => x.id === id) : null;
-  if(!c){ h += '<div class="pslot"><div class="pempty">+</div><span class="nm">' + esc(t("emptySlot")) + "</span></div>"; continue; }
-  const m = withPoints ? simMatch(c.id, gw) : null;
-  h += '<div class="pslot">'
-   + '<span class="kitwrap">'
-   + (c.id === captain ? '<span class="capbadge">C</span>' : "")
-   + '<button type="button" onclick="' + (withPoints ? "openBreakdown('" + esc(c.id) + "'," + gw + ")" : "openClub('" + esc(c.id) + "')") + '" style="padding:0;border-radius:12px">'
-   + kitHtml(c, "k60") + "</button></span>"
-   + '<span class="nm">' + esc(clubName(c)) + "</span>"
-   + (withPoints
-      ? '<span class="pt" dir="ltr">' + (m.blank ? "–" : num(m.pts * (c.id === captain ? 2 : 1))) + "</span>"
-      : '<span class="pt" dir="ltr">' + num(priceOf(c.id).toFixed(1)) + "M</span>")
-   + "</div>";
+ const rows = FORMATIONS[formation] || FORMATIONS["4-4-2"];
+ let h = '<div class="pitch"><div class="pmark"></div>';
+ let i = 0;
+ for(const count of rows){
+  h += '<div class="prow">';
+  for(let k = 0; k < count; k++, i++){
+   const id = squad[i];
+   const c = id ? CLUBS.find(x => x.id === id) : null;
+   if(!c){
+    h += '<div class="pslot"><button type="button" class="pempty" onclick="openPicker()">+</button>'
+      + '<span class="nm">' + esc(t("emptySlot")) + "</span></div>";
+    continue;
+   }
+   const m = withPoints ? simMatch(c.id, gw) : null;
+   h += '<div class="pslot">'
+    + '<span class="kitwrap">'
+    + (c.id === captain ? '<span class="capbadge">C</span>' : "")
+    + '<button type="button" onclick="' + (withPoints ? "openBreakdown('" + esc(c.id) + "'," + gw + ")" : "openClub('" + esc(c.id) + "')") + '" style="padding:0;border-radius:12px">'
+    + kitHtml(c, count >= 5 ? "k34" : "k44") + "</button></span>"
+    + '<span class="nm">' + esc(clubName(c)) + "</span>"
+    + (withPoints
+       ? '<span class="pt" dir="ltr">' + (m.blank ? "–" : num(m.pts * (c.id === captain ? 2 : 1))) + "</span>"
+       : '<span class="pt" dir="ltr">' + num(priceOf(c.id).toFixed(1)) + "M</span>")
+    + "</div>";
+  }
+  h += "</div>";
  }
  return h + "</div>";
+}
+function formationBar(){
+ return '<div class="filters">' + Object.keys(FORMATIONS).map(f =>
+  '<button type="button" class="fchip' + (formation === f ? " on" : "") + '" onclick="setFormation(\'' + f + '\')" dir="ltr">'
+  + esc(f) + "</button>").join("") + "</div>";
+}
+function setFormation(f){
+ if(!FORMATIONS[f]) return;
+ formation = f;
+ try{ localStorage.setItem("fx_form", f); }catch(_){}
+ render();
 }
 
 function render(){
@@ -488,7 +538,7 @@ function render(){
 function renderTeam(){
  const full = squad.length === SQUAD_SIZE;
  $("viewTeam").innerHTML = (squadWasRepaired ? '<div class="note">⚠️ ' + esc(t("repaired")) + "</div>" : "")
-  + budgetHtml() + pitchHtml(false)
+  + budgetHtml() + formationBar() + pitchHtml(false)
   + '<button type="button" class="btn" onclick="openPicker()">'
   + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>"
   + (full && !captain ? '<button type="button" class="btn ghost" onclick="openCaptain()">' + esc(t("capTitle")) + "</button>" : "")
