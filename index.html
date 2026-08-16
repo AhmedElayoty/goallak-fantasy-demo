@@ -273,22 +273,24 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    the rim metal already encodes the price band, which is what "is this club expensive"
    actually asks, and the exact number is on the selection row, in the club sheet and in
    the budget line. What is left is the code, centred, at a full 11px.
-   In the points view the plate shows the score beside the code: 3.2em, which fits.
+   Keeping the code and showing the score beside it does not work either, and the numbers
+   say so: measured on the live page, a code plus a score is 3.99em, so the plate needs
+   8.6px on a 47px card and 7.6px on the goalkeeper at the 48px floor. Scanning all 36
+   rounds this way clipped the code on 73 of 540 cards.
 
-   The size is derived from the card's own rendered width for the WORST case the plate can
-   hold - code plus a score, 3.2em - so the same rule is safe in both views and nothing here
-   depends on :has(), which older phones do not have. */
+   So the plate holds exactly ONE thing, always at a full 11px:
+     · before the deadline, the CODE   — which club is this
+     · after it, the SCORE             — the only reason to open the screen at all
+   Neither view loses anything, because the club's full name sits under every card and the
+   rim metal carries the price band. */
 .cc__plate{height:26%;min-height:18px;display:flex;align-items:center;justify-content:center;
- gap:3px;padding:0 3px;overflow:hidden;border-top:1px solid rgba(255,255,255,.09);
- background:rgba(6,10,26,.72);
- font-size:clamp(9px, calc((var(--cw) * var(--depth,1) - 12px) / 3.3), 11px)}
-.cc__code{font-size:1em;font-weight:900;letter-spacing:.3px;color:#F2F5FF;
- flex:0 1 auto;min-width:0;overflow:hidden;white-space:nowrap}
-/* the price is hidden on the card; .pts marks a RESULT, which is always shown */
-.cc__val{font-size:1em;font-weight:900;color:var(--fx-gold);flex:0 0 auto;white-space:nowrap;
- display:none}
-.cc__val.pts{display:inline;color:var(--fx-pos)}
-.subslot{--depth:.78}
+ padding:0 3px;overflow:hidden;border-top:1px solid rgba(255,255,255,.09);
+ background:rgba(6,10,26,.72);font-size:11px}
+.cc__code{font-size:1em;font-weight:900;letter-spacing:.3px;color:#F2F5FF;white-space:nowrap}
+.cc__val{font-size:1em;font-weight:900;color:var(--fx-gold);white-space:nowrap;display:none}
+.cc__plate--pts .cc__code{display:none}
+.cc__plate--pts .cc__val{display:inline;color:var(--fx-pos)}
+.subslot .cc__plate{font-size:10px}
 /* On a 45px card the fixture badge's words do not fit - "مالوش ماتش" rendered as a sliced
    "مالوش". The pill keeps its shape and colour (both non-colour channels survive) but the
    label is moved to aria-label, where it is read but never clipped. */
@@ -495,18 +497,23 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 const $ = id => document.getElementById(id);
 const VERSION = "demo-1.0";
 /* ELEVEN clubs — a football XI. The squad is a team sheet, not a shopping list.
-   Budget solved, not guessed, then CONFIRMED by the pricing model: 100.0M buys exactly THREE
-   elite clubs (91.5M) and a fourth costs 105.5M. Three is what makes 'which three?' the whole
-   conversation.
-   The floor is 4.5M, NOT 4.0M, and that coupling matters: at 4.5 a fourth elite strands all seven
-   remaining slots at the floor, which is what enforces the ceiling. At 4.0 the fourth becomes
-   comfortable and the tension quietly disappears. */
+   The ceiling, RECOMPUTED against the prices that actually ship (18.5, 17.5, 16.5, 15.5, 15.0)
+   with every other slot at the 4.5M floor:
+       3 dearest + 12 floor = 106.5M      fits
+       4 dearest + 11 floor = 117.5M      fits, with 2.5M to spare
+       5 dearest + 10 floor = 128.0M      does not fit
+   So the ceiling is FOUR superclubs, not three. The comment here used to claim a fourth cost
+   123.5M — wrong by 6.0M, and it had been quoted onward as if it were measured. The "three"
+   figure was correct for the ORIGINAL 11-club / 100.0M squad and was never re-derived when the
+   bench took the squad to 15 and the budget to 120.0M.
+   Left at four deliberately: the alternative is to distort a pricing model calibrated at
+   r = 0.968 in order to defend a sentence written for a different squad size. Four out of
+   eleven starters is still a real constraint, and MAX_PER_LEAGUE does the rest of the work.
+   The floor is 4.5M, NOT 4.0M: at 4.0 the fifth superclub comes within reach (123.0M) and the
+   ceiling disappears altogether. */
 const START_SIZE = 11, BENCH_SIZE = 4;
 const SQUAD_SIZE = START_SIZE + BENCH_SIZE;          /* 15 clubs owned, 11 of them on the pitch */
 const BUDGET = 120.0, MAX_PER_LEAGUE = 3, MIN_CLUB_PRICE = 4.5;
-/* Why 120.0M: the bench is priced at +5.0M per slot, which holds the ceiling at exactly THREE
-   elite clubs across all 15 (109.5M) — a fourth needs 123.5M. The same decision the 11-club
-   budget was built around, preserved at the larger squad. */
 /* rows of the formation, back to front. 1-4-4-2 = 11. */
 const FORMATIONS = {
  "4-4-2": [1, 4, 4, 2],
@@ -703,7 +710,15 @@ function simMatch(clubId, gw){
  /* No CLUBS.find() here. It used to look the club up and discard the result — a 126-item
     linear scan on every call, which at GW36 is ~340,000 wasted comparisons per leaderboard. */
  const h = hash(clubId + "|" + gw);
- const strength = { elite:.62, strong:.52, mid:.42, value:.34, budget:.28 }[tierOf(clubId)] || .4;
+ /* Strength comes from the PRICE, via a per-club value calibrated at build time so the
+    36-round total lands on the economist's xptsSeason — the very number the price was
+    derived from. It used to come from a five-value tier STRING, which disagreed with price
+    for 45 of 126 clubs (price carries a league-fame multiplier the tier does not), so
+    Celtic at 13.5M scored less than Basaksehir at 6.5M and price -> points was r = 0.781.
+    Recalibrated it is r = 0.967, and points per million no longer runs backwards.
+    Regenerate with scripts/build-strength.mjs; never hand-edit `str`. */
+ const strength = (PRICES[clubId] && PRICES[clubId].str) ||
+   ({ elite:.62, strong:.52, mid:.42, value:.34, budget:.28 }[tierOf(clubId)] || .4);
  const roll = (h % 1000) / 1000;
  const win = roll < strength, draw = !win && roll < strength + .26;
  const gf = win ? 1 + (h >> 3) % 3 : draw ? (h >> 5) % 2 : (h >> 7) % 2;
@@ -725,9 +740,13 @@ function simMatch(clubId, gw){
    replaced, in bench order, by the first substitute who actually has a match. Each sub can only
    come on once. This returns the whole picture, not just a number, because the points screen has
    to be able to SHOW what happened. */
-function resolveGw(gw){
- const starters = squad.slice(0, START_SIZE);
- const bench = squad.slice(START_SIZE);
+/* Takes the squad and captain as ARGUMENTS so the rivals can be scored by exactly the same
+   engine as the player. They used to be scored over all 15 of their clubs while the player
+   scored 11 plus auto-subs — a permanent 20.7%-25.5% handicap that put an ordinary squad
+   6th of 6 in 98.7% of measured seasons. A leaderboard nobody can climb is worse than none. */
+function resolveSquad(sq, cap, gw){
+ const starters = sq.slice(0, START_SIZE);
+ const bench = sq.slice(START_SIZE);
  const used = {};
  const lineup = [];
  for(const id of starters){
@@ -743,16 +762,24 @@ function resolveGw(gw){
   }
   lineup.push({id: id, m: m, sub: replacement});   /* sub === null: nobody could cover it */
  }
- let total = 0, covered = 0, uncovered = 0;
+ let total = 0, covered = 0, uncovered = 0, armband = null;
  for(const row of lineup){
   const scorer = row.sub || row;
-  const isCap = scorer.id === captain;
+  /* THE ARMBAND FOLLOWS THE SHIRT. It used to be checked against the scorer, so when the
+     captain had no fixture his substitute came on and the double paid nothing — measured
+     at 935 of 10,800 rounds (8.66%), and it wasted a Triple Captain chip outright in 8.70%
+     of plays. The captain's replacement now inherits the armband, which is what a manager
+     would expect and what the vice-captain rule exists to do elsewhere. */
+  const isCap = row.id === cap;
   total += scorer.m.pts * (isCap ? 2 : 1);
+  if(isCap) armband = scorer.id;
   if(row.sub) covered++;
   else if(row.m.blank) uncovered++;
  }
- return {total: total, lineup: lineup, covered: covered, uncovered: uncovered, used: used};
+ return {total: total, lineup: lineup, covered: covered, uncovered: uncovered, used: used,
+         armband: armband};
 }
+function resolveGw(gw){ return resolveSquad(squad, captain, gw); }
 /* The chip has to reach the SCORE, or the confirm sheet is a lie: it promised the captain
    would score x3 and the points screen still showed x2. applyChip needs three facts
    resolveGw does not carry, so they are attached before it runs. */
@@ -876,7 +903,9 @@ function cardHtml(c, withPoints, gw, slotIndex){
   + (isCap ? '<span class="cc__arm">C</span>' : "") + badge
   + '<span class="cc__shirtwrap"><span class="cc__shirt fxkit" data-pat="' + esc(c.pat) + '"'
   + (c.iso ? ' data-iso="1"' : "") + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + '"></span></span>'
-  + '<span class="cc__plate"><span class="cc__code" dir="ltr">' + esc(c.code) + "</span>" + val + "</span>"
+  /* the plate holds ONE datum: the code before the deadline, the score after it */
+  + '<span class="cc__plate' + (withPoints ? " cc__plate--pts" : "") + '">'
+  + '<span class="cc__code" dir="ltr">' + esc(c.code) + "</span>" + val + "</span>"
   + "</button>";
 }
 /* The squad as a TEAM SHEET standing on a raked pitch — not a grid of squares. */
@@ -1073,9 +1102,15 @@ function rivalSquad(name){
  let seed = hash(name);
  const pool = CLUBS.slice().sort((a, b) => priceOf(b.id) - priceOf(a.id));
  let budget = BUDGET;
- for(let guard = 0; guard < 400 && out.length < SQUAD_SIZE; guard++){
+ for(let guard = 0; guard < 800 && out.length < SQUAD_SIZE; guard++){
   seed = (seed * 1103515245 + 12345) >>> 0;
-  const c = pool[seed % pool.length];
+  /* Draw from the QUALITY end of the pool, not uniformly. A uniform draw over 126 clubs
+     fields five weak squads, and once the scoring was calibrated to price that turned the
+     board from unwinnable straight into unlosable — the recommended team won by 73 every
+     time. The exponent was chosen by measurement, not feel: at 1.6 the leading rival lands
+     within 7 points of a well-built squad over a full season, which is the whole point. */
+  const r = (seed % 100000) / 100000;
+  const c = pool[Math.min(pool.length - 1, Math.floor(pool.length * Math.pow(r, 1.6)))];
   if(out.includes(c.id)) continue;
   if((byLg[c.lg] || 0) >= MAX_PER_LEAGUE) continue;
   const need = (SQUAD_SIZE - out.length - 1) * MIN_CLUB_PRICE;
@@ -1086,10 +1121,12 @@ function rivalSquad(name){
 }
 function rivalTotal(name){
  const sq = rivalSquad(name);
- const cap = sq[hash(name + "c") % (sq.length || 1)];
+ /* the captain must be a STARTER, exactly as the player's must be */
+ const cap = sq[hash(name + "c") % Math.max(1, Math.min(START_SIZE, sq.length))];
  let total = 0;
- for(let g = 1; g <= CURRENT_GW; g++)
-  for(const id of sq) total += simMatch(id, g).pts * (id === cap ? 2 : 1);
+ /* Same engine as the player: eleven starters, auto-subs for blanks, armband on one club.
+    Summing all 15 here is what made the board unwinnable. */
+ for(let g = 1; g <= CURRENT_GW; g++) total += resolveSquad(sq, cap, g).total;
  return total;
 }
 /* الشريط - the share artifact. The captain is the shared referent: one decision, same pool,

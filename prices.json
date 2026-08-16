@@ -7,632 +7,758 @@
   {
    "id": "359",
    "price": 18.5,
-   "tier": "elite"
+   "tier": "elite",
+   "str": 0.68
   },
   {
    "id": "382",
    "price": 15,
-   "tier": "elite"
+   "tier": "elite",
+   "str": 0.579
   },
   {
    "id": "364",
    "price": 14,
-   "tier": "elite"
+   "tier": "strong",
+   "str": 0.519
   },
   {
    "id": "363",
    "price": 12,
-   "tier": "elite"
+   "tier": "strong",
+   "str": 0.516
   },
   {
    "id": "360",
    "price": 12,
-   "tier": "strong"
+   "tier": "strong",
+   "str": 0.383
   },
   {
    "id": "362",
    "price": 11,
-   "tier": "elite"
+   "tier": "strong",
+   "str": 0.511
   },
   {
    "id": "361",
    "price": 10,
-   "tier": "strong"
+   "tier": "mid",
+   "str": 0.44
   },
   {
    "id": "367",
    "price": 9.5,
-   "tier": "strong"
+   "tier": "mid",
+   "str": 0.347
   },
   {
    "id": "331",
    "price": 9,
-   "tier": "strong"
+   "tier": "mid",
+   "str": 0.433
   },
   {
    "id": "393",
    "price": 9,
-   "tier": "strong"
+   "tier": "mid",
+   "str": 0.397
   },
   {
    "id": "349",
    "price": 8.5,
-   "tier": "strong"
+   "tier": "mid",
+   "str": 0.397
   },
   {
    "id": "337",
    "price": 8.5,
-   "tier": "strong"
+   "tier": "mid",
+   "str": 0.419
   },
   {
    "id": "384",
    "price": 8,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.396
   },
   {
    "id": "368",
    "price": 8,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.436
   },
   {
    "id": "370",
    "price": 7.5,
-   "tier": "mid"
+   "tier": "value",
+   "str": 0.291
   },
   {
    "id": "366",
    "price": 7.5,
-   "tier": "mid"
+   "tier": "value",
+   "str": 0.361
   },
   {
    "id": "357",
    "price": 7,
-   "tier": "mid"
+   "tier": "value",
+   "str": 0.225
   },
   {
    "id": "373",
    "price": 5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.149
   },
   {
    "id": "388",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.082
   },
   {
    "id": "306",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.082
   },
   {
    "id": "83",
    "price": 16.5,
-   "tier": "elite"
+   "tier": "elite",
+   "str": 0.681
   },
   {
    "id": "86",
    "price": 15.5,
-   "tier": "elite"
+   "tier": "elite",
+   "str": 0.555
   },
   {
    "id": "1068",
    "price": 13,
-   "tier": "strong"
+   "tier": "strong",
+   "str": 0.458
   },
   {
    "id": "244",
    "price": 9,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.504
   },
   {
    "id": "102",
    "price": 9,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.384
   },
   {
    "id": "93",
    "price": 7.5,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.314
   },
   {
    "id": "85",
    "price": 7.5,
-   "tier": "mid"
+   "tier": "value",
+   "str": 0.257
   },
   {
    "id": "89",
    "price": 7,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.288
   },
   {
    "id": "101",
    "price": 7,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.409
   },
   {
    "id": "97",
    "price": 6.5,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.301
   },
   {
    "id": "94",
    "price": 6.5,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.272
   },
   {
    "id": "2922",
    "price": 6.5,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.292
   },
   {
    "id": "243",
    "price": 6,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.236
   },
   {
    "id": "3751",
    "price": 6,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.235
   },
   {
    "id": "88",
    "price": 6,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.17
   },
   {
    "id": "96",
    "price": 5.5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.197
   },
   {
    "id": "1538",
    "price": 5.5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.255
   },
   {
    "id": "90",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.166
   },
   {
    "id": "99",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.147
   },
   {
    "id": "87",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.207
   },
   {
    "id": "160",
    "price": 15,
-   "tier": "elite"
+   "tier": "elite",
+   "str": 0.541
   },
   {
    "id": "166",
    "price": 9,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.383
   },
   {
    "id": "167",
    "price": 9,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.3
   },
   {
    "id": "176",
    "price": 9,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.342
   },
   {
    "id": "175",
    "price": 8.5,
-   "tier": "strong"
+   "tier": "mid",
+   "str": 0.351
   },
   {
    "id": "174",
    "price": 7.5,
-   "tier": "mid"
+   "tier": "value",
+   "str": 0.358
   },
   {
    "id": "169",
    "price": 7,
-   "tier": "mid"
+   "tier": "value",
+   "str": 0.206
   },
   {
    "id": "180",
    "price": 7,
-   "tier": "mid"
+   "tier": "value",
+   "str": 0.349
   },
   {
    "id": "179",
    "price": 6,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.236
   },
   {
    "id": "273",
    "price": 5.5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.234
   },
   {
    "id": "2502",
    "price": 5.5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.192
   },
   {
    "id": "6851",
    "price": 5.5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.193
   },
   {
    "id": "172",
    "price": 5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.195
   },
   {
    "id": "6997",
    "price": 5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.155
   },
   {
    "id": "7868",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.177
   },
   {
    "id": "3236",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.153
   },
   {
    "id": "2697",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.125
   },
   {
    "id": "170",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.132
   },
   {
    "id": "132",
    "price": 17.5,
-   "tier": "elite"
+   "tier": "elite",
+   "str": 0.802
   },
   {
    "id": "124",
    "price": 11.5,
-   "tier": "strong"
+   "tier": "strong",
+   "str": 0.422
   },
   {
    "id": "131",
    "price": 9.5,
-   "tier": "strong"
+   "tier": "mid",
+   "str": 0.448
   },
   {
    "id": "11420",
    "price": 8.5,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.273
   },
   {
    "id": "134",
    "price": 8,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.307
   },
   {
    "id": "125",
    "price": 7,
-   "tier": "mid"
+   "tier": "value",
+   "str": 0.228
   },
   {
    "id": "126",
    "price": 6.5,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.222
   },
   {
    "id": "7911",
    "price": 6.5,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.214
   },
   {
    "id": "2950",
    "price": 6.5,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.19
   },
   {
    "id": "268",
    "price": 6,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.171
   },
   {
    "id": "3841",
    "price": 5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.192
   },
   {
    "id": "122",
    "price": 5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.228
   },
   {
    "id": "127",
    "price": 5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.221
   },
   {
    "id": "133",
    "price": 5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.144
   },
   {
    "id": "598",
    "price": 5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.195
   },
   {
    "id": "137",
    "price": 5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.081
   },
   {
    "id": "10388",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.099
   },
   {
    "id": "3307",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.106
   },
   {
    "id": "110",
    "price": 14.5,
-   "tier": "elite"
+   "tier": "strong",
+   "str": 0.651
   },
   {
    "id": "111",
    "price": 11.5,
-   "tier": "strong"
+   "tier": "strong",
+   "str": 0.446
   },
   {
    "id": "104",
    "price": 11.5,
-   "tier": "strong"
+   "tier": "strong",
+   "str": 0.451
   },
   {
    "id": "114",
    "price": 11,
-   "tier": "mid"
+   "tier": "strong",
+   "str": 0.481
   },
   {
    "id": "103",
    "price": 10.5,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.381
   },
   {
    "id": "105",
    "price": 10,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.412
   },
   {
    "id": "2572",
    "price": 9,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.39
   },
   {
    "id": "112",
    "price": 8,
-   "tier": "value"
+   "tier": "mid",
+   "str": 0.327
   },
   {
    "id": "107",
    "price": 7.5,
-   "tier": "mid"
+   "tier": "value",
+   "str": 0.394
   },
   {
    "id": "109",
    "price": 7,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.24
   },
   {
    "id": "3997",
    "price": 6,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.323
   },
   {
    "id": "3263",
    "price": 5.5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.228
   },
   {
    "id": "118",
    "price": 5.5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.351
   },
   {
    "id": "2925",
    "price": 5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.172
   },
   {
    "id": "115",
    "price": 5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.272
   },
   {
    "id": "239",
    "price": 5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.191
   },
   {
    "id": "17530",
    "price": 5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.209
   },
   {
    "id": "4057",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.152
   },
   {
    "id": "113",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.152
   },
   {
    "id": "4007",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.151
   },
   {
    "id": "256",
    "price": 13.5,
-   "tier": "mid"
+   "tier": "strong",
+   "str": 0.517
   },
   {
    "id": "257",
    "price": 11,
-   "tier": "mid"
+   "tier": "strong",
+   "str": 0.421
   },
   {
    "id": "262",
    "price": 8.5,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.394
   },
   {
    "id": "258",
    "price": 7,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.429
   },
   {
    "id": "266",
    "price": 6.5,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.309
   },
   {
    "id": "254",
    "price": 5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.282
   },
   {
    "id": "264",
    "price": 5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.211
   },
   {
    "id": "250",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.063
   },
   {
    "id": "261",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.182
   },
   {
    "id": "267",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.071
   },
   {
    "id": "263",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.171
   },
   {
    "id": "260",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.144
   },
   {
    "id": "432",
    "price": 11.5,
-   "tier": "strong"
+   "tier": "strong",
+   "str": 0.495
   },
   {
    "id": "436",
    "price": 10.5,
-   "tier": "strong"
+   "tier": "mid",
+   "str": 0.448
   },
   {
    "id": "1895",
    "price": 8,
-   "tier": "mid"
+   "tier": "mid",
+   "str": 0.29
   },
   {
    "id": "997",
    "price": 7.5,
-   "tier": "mid"
+   "tier": "value",
+   "str": 0.286
   },
   {
    "id": "7914",
    "price": 6.5,
-   "tier": "mid"
+   "tier": "value",
+   "str": 0.251
   },
   {
    "id": "789",
    "price": 6,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.288
   },
   {
    "id": "11429",
    "price": 6,
-   "tier": "value"
+   "tier": "value",
+   "str": 0.268
   },
   {
    "id": "7656",
    "price": 5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.229
   },
   {
    "id": "9078",
    "price": 5,
-   "tier": "value"
+   "tier": "budget",
+   "str": 0.173
   },
   {
    "id": "7648",
    "price": 5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.213
   },
   {
    "id": "996",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.103
   },
   {
    "id": "132334",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.178
   },
   {
    "id": "20070",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.146
   },
   {
    "id": "6870",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.189
   },
   {
    "id": "132335",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.161
   },
   {
    "id": "19267",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.19
   },
   {
    "id": "20729",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.133
   },
   {
    "id": "995",
    "price": 4.5,
-   "tier": "budget"
+   "tier": "budget",
+   "str": 0.133
   }
  ]
 }
