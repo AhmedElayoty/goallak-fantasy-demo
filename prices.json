@@ -1,1142 +1,1142 @@
 {
- "provisional": true,
  "budget": 100,
- "squad": 8,
- "note": "Provisional. Superseded by design/fantasy-prices.json when the pricing model lands.",
+ "squad": 11,
+ "minPrice": 4.5,
+ "source": "design/fantasy-prices.json (validated model, out-of-sample r=0.761)",
  "clubs": [
   {
-   "id": "349",
-   "price": 8.5,
-   "xpts": 2.386,
-   "tier": "mid",
-   "fameLeague": 1.18,
-   "fameClub": 0.951,
-   "priceSporting": 7.5
-  },
-  {
    "id": "359",
-   "price": 17.5,
-   "xpts": 3.251,
+   "price": 18.5,
+   "xpts": 8.84,
    "tier": "elite",
-   "fameLeague": 1.18,
-   "fameClub": 1.182,
-   "priceSporting": 12.5
-  },
-  {
-   "id": "362",
-   "price": 10.5,
-   "xpts": 2.602,
-   "tier": "mid",
-   "fameLeague": 1.18,
-   "fameClub": 1.041,
-   "priceSporting": 8.5
-  },
-  {
-   "id": "337",
-   "price": 8.5,
-   "xpts": 2.318,
-   "tier": "mid",
-   "fameLeague": 1.18,
-   "fameClub": 0.958,
-   "priceSporting": 7.5
-  },
-  {
-   "id": "331",
-   "price": 9,
-   "xpts": 2.385,
-   "tier": "mid",
-   "fameLeague": 1.18,
-   "fameClub": 0.977,
-   "priceSporting": 7.5
-  },
-  {
-   "id": "363",
-   "price": 11.5,
-   "xpts": 2.537,
-   "tier": "strong",
-   "fameLeague": 1.18,
-   "fameClub": 1.175,
-   "priceSporting": 8.5
-  },
-  {
-   "id": "388",
-   "price": 4.5,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 1.18,
-   "fameClub": 0.938,
-   "priceSporting": 4
-  },
-  {
-   "id": "384",
-   "price": 7.5,
-   "xpts": 2.079,
-   "tier": "value",
-   "fameLeague": 1.18,
-   "fameClub": 0.983,
-   "priceSporting": 6.5
-  },
-  {
-   "id": "368",
-   "price": 8,
-   "xpts": 2.089,
-   "tier": "mid",
-   "fameLeague": 1.18,
-   "fameClub": 1.034,
-   "priceSporting": 6.5
-  },
-  {
-   "id": "370",
-   "price": 8,
-   "xpts": 2.207,
-   "tier": "mid",
-   "fameLeague": 1.18,
-   "fameClub": 0.97,
-   "priceSporting": 7
-  },
-  {
-   "id": "306",
-   "price": 4.5,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 1.18,
-   "fameClub": 0.938,
-   "priceSporting": 4
-  },
-  {
-   "id": "373",
-   "price": 4.5,
-   "xpts": 1.026,
-   "tier": "budget",
-   "fameLeague": 1.18,
-   "fameClub": 0.945,
-   "priceSporting": 4
-  },
-  {
-   "id": "357",
-   "price": 7.5,
-   "xpts": 2.011,
-   "tier": "value",
-   "fameLeague": 1.18,
-   "fameClub": 1.015,
-   "priceSporting": 6
-  },
-  {
-   "id": "364",
-   "price": 15,
-   "xpts": 2.953,
-   "tier": "elite",
-   "fameLeague": 1.18,
-   "fameClub": 1.204,
-   "priceSporting": 10.5
+   "fameLeague": 1,
+   "fameClub": 1,
+   "fameNote": "attendance 60234, 7 European seasons/10, 1 domestic titles since 2008 | MENA: long-standing MENA following"
   },
   {
    "id": "382",
-   "price": 15.5,
-   "xpts": 3.085,
+   "price": 15,
+   "xpts": 7.32,
    "tier": "elite",
-   "fameLeague": 1.18,
-   "fameClub": 1.169,
-   "priceSporting": 11.5
+   "fameLeague": 1.009,
+   "fameClub": 1.1,
+   "fameNote": "attendance 52650, 10 European seasons/10, 8 domestic titles since 2008 | MENA: Abu Dhabi ownership — explicitly cited for UAE popularity"
+  },
+  {
+   "id": "364",
+   "price": 14,
+   "xpts": 7.05,
+   "tier": "elite",
+   "fameLeague": 1.011,
+   "fameClub": 1.076,
+   "fameNote": "attendance 60360, 9 European seasons/10, 2 domestic titles since 2008 | MENA: Mohamed Salah — the single largest driver of MENA club affiliation"
+  },
+  {
+   "id": "363",
+   "price": 12,
+   "xpts": 6.24,
+   "tier": "elite",
+   "fameLeague": 1.018,
+   "fameClub": 1.09,
+   "fameNote": "attendance 39611, 7 European seasons/10, 3 domestic titles since 2008 | MENA: long-standing MENA following"
   },
   {
    "id": "360",
-   "price": 10.5,
-   "xpts": 2.354,
-   "tier": "mid",
-   "fameLeague": 1.18,
-   "fameClub": 1.204,
-   "priceSporting": 7.5
+   "price": 12,
+   "xpts": 5.98,
+   "tier": "strong",
+   "fameLeague": 1.02,
+   "fameClub": 1.167,
+   "fameNote": "attendance 73861, 8 European seasons/10, 3 domestic titles since 2008 | MENA: largest legacy global fanbase; strong MENA carry-over"
+  },
+  {
+   "id": "362",
+   "price": 11,
+   "xpts": 6.32,
+   "tier": "elite",
+   "fameLeague": 1.017,
+   "fameClub": 0.991,
+   "fameNote": "attendance 41916, 2 European seasons/10, 0 domestic titles since 2008"
   },
   {
    "id": "361",
    "price": 10,
-   "xpts": 2.425,
-   "tier": "mid",
-   "fameLeague": 1.18,
-   "fameClub": 1.079,
-   "priceSporting": 8
-  },
-  {
-   "id": "393",
-   "price": 8.5,
-   "xpts": 2.304,
-   "tier": "mid",
-   "fameLeague": 1.18,
-   "fameClub": 0.99,
-   "priceSporting": 7.5
-  },
-  {
-   "id": "366",
-   "price": 8,
-   "xpts": 2.195,
-   "tier": "mid",
-   "fameLeague": 1.18,
-   "fameClub": 0.977,
-   "priceSporting": 7
+   "xpts": 5.86,
+   "tier": "strong",
+   "fameLeague": 1.021,
+   "fameClub": 1.013,
+   "fameNote": "attendance 52174, 2 European seasons/10, 0 domestic titles since 2008"
   },
   {
    "id": "367",
-   "price": 7.5,
-   "xpts": 1.841,
-   "tier": "value",
-   "fameLeague": 1.18,
-   "fameClub": 1.137,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "96",
-   "price": 6,
-   "xpts": 1.861,
-   "tier": "value",
-   "fameLeague": 1.12,
-   "fameClub": 0.945,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "93",
-   "price": 9,
-   "xpts": 2.384,
-   "tier": "mid",
-   "fameLeague": 1.12,
-   "fameClub": 1.066,
-   "priceSporting": 7.5
-  },
-  {
-   "id": "1068",
-   "price": 14,
-   "xpts": 2.97,
+   "price": 9.5,
+   "xpts": 5.17,
    "tier": "strong",
-   "fameLeague": 1.12,
-   "fameClub": 1.162,
-   "priceSporting": 10.5
+   "fameLeague": 1.027,
+   "fameClub": 1.132,
+   "fameNote": "attendance 61044, 8 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "331",
+   "price": 9,
+   "xpts": 5.55,
+   "tier": "strong",
+   "fameLeague": 1.024,
+   "fameClub": 0.98,
+   "fameNote": "attendance 31689, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "393",
+   "price": 9,
+   "xpts": 5.58,
+   "tier": "strong",
+   "fameLeague": 1.023,
+   "fameClub": 0.978,
+   "fameNote": "attendance 30242, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "349",
+   "price": 8.5,
+   "xpts": 5.59,
+   "tier": "strong",
+   "fameLeague": 1.023,
+   "fameClub": 0.942,
+   "fameNote": "attendance 11194, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "337",
+   "price": 8.5,
+   "xpts": 5.43,
+   "tier": "strong",
+   "fameLeague": 1.025,
+   "fameClub": 0.942,
+   "fameNote": "attendance 17113, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "384",
+   "price": 8,
+   "xpts": 5.12,
+   "tier": "mid",
+   "fameLeague": 1.027,
+   "fameClub": 0.975,
+   "fameNote": "attendance 25038, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "368",
+   "price": 8,
+   "xpts": 4.98,
+   "tier": "mid",
+   "fameLeague": 1.029,
+   "fameClub": 1.008,
+   "fameNote": "attendance 45660, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "370",
+   "price": 7.5,
+   "xpts": 4.95,
+   "tier": "mid",
+   "fameLeague": 1.029,
+   "fameClub": 0.97,
+   "fameNote": "attendance 27027, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "366",
+   "price": 7.5,
+   "xpts": 4.74,
+   "tier": "mid",
+   "fameLeague": 1.031,
+   "fameClub": 0.993,
+   "fameNote": "attendance 46510, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "357",
+   "price": 7,
+   "xpts": 4.66,
+   "tier": "mid",
+   "fameLeague": 1.031,
+   "fameClub": 0.988,
+   "fameNote": "attendance 36695, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "373",
+   "price": 5,
+   "xpts": 3.09,
+   "tier": "value",
+   "fameLeague": 1.032,
+   "fameClub": 1.003,
+   "fameNote": "attendance 29742, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "388",
+   "price": 4.5,
+   "xpts": 2.4,
+   "tier": "budget",
+   "fameLeague": 1.01,
+   "fameClub": 1,
+   "fameNote": "attendance ~22419, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "306",
+   "price": 4.5,
+   "xpts": 2.4,
+   "tier": "budget",
+   "fameLeague": 1.01,
+   "fameClub": 1,
+   "fameNote": "attendance ~22419, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
    "id": "83",
-   "price": 18.5,
-   "xpts": 3.737,
+   "price": 16.5,
+   "xpts": 8.04,
    "tier": "elite",
-   "fameLeague": 1.12,
-   "fameClub": 1.22,
-   "priceSporting": 16
-  },
-  {
-   "id": "85",
-   "price": 8,
-   "xpts": 2.295,
-   "tier": "mid",
-   "fameLeague": 1.12,
-   "fameClub": 0.977,
-   "priceSporting": 7.5
-  },
-  {
-   "id": "90",
-   "price": 4.5,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 1.12,
-   "fameClub": 0.97,
-   "priceSporting": 4
-  },
-  {
-   "id": "3751",
-   "price": 6,
-   "xpts": 1.901,
-   "tier": "value",
-   "fameLeague": 1.12,
-   "fameClub": 0.932,
-   "priceSporting": 6
-  },
-  {
-   "id": "88",
-   "price": 6.5,
-   "xpts": 1.894,
-   "tier": "value",
-   "fameLeague": 1.12,
-   "fameClub": 0.977,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "2922",
-   "price": 6.5,
-   "xpts": 2.012,
-   "tier": "value",
-   "fameLeague": 1.12,
-   "fameClub": 0.951,
-   "priceSporting": 6
-  },
-  {
-   "id": "1538",
-   "price": 6,
-   "xpts": 1.821,
-   "tier": "value",
-   "fameLeague": 1.12,
-   "fameClub": 0.945,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "99",
-   "price": 4.5,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 1.12,
-   "fameClub": 0.951,
-   "priceSporting": 4
-  },
-  {
-   "id": "97",
-   "price": 6.5,
-   "xpts": 2.029,
-   "tier": "value",
-   "fameLeague": 1.12,
-   "fameClub": 0.964,
-   "priceSporting": 6
-  },
-  {
-   "id": "87",
-   "price": 4.5,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 1.12,
-   "fameClub": 0.932,
-   "priceSporting": 4
-  },
-  {
-   "id": "101",
-   "price": 7,
-   "xpts": 2.143,
-   "tier": "value",
-   "fameLeague": 1.12,
-   "fameClub": 0.964,
-   "priceSporting": 6.5
-  },
-  {
-   "id": "244",
-   "price": 9.5,
-   "xpts": 2.483,
-   "tier": "mid",
-   "fameLeague": 1.12,
-   "fameClub": 1.041,
-   "priceSporting": 8
+   "fameLeague": 0.972,
+   "fameClub": 1.072,
+   "fameNote": "attendance 45526, 10 European seasons/10, 11 domestic titles since 2008 | MENA: second most popular club across MENA surveys"
   },
   {
    "id": "86",
-   "price": 18.5,
-   "xpts": 3.403,
+   "price": 15.5,
+   "xpts": 7.44,
    "tier": "elite",
-   "fameLeague": 1.12,
-   "fameClub": 1.22,
-   "priceSporting": 13.5
+   "fameLeague": 0.977,
+   "fameClub": 1.136,
+   "fameNote": "attendance 72125, 10 European seasons/10, 5 domestic titles since 2008 | MENA: most popular club in MENA fan surveys (35% of UAE football fans)"
+  },
+  {
+   "id": "1068",
+   "price": 13,
+   "xpts": 6.6,
+   "tier": "strong",
+   "fameLeague": 0.984,
+   "fameClub": 1.152,
+   "fameNote": "attendance 60869, 10 European seasons/10, 2 domestic titles since 2008"
+  },
+  {
+   "id": "244",
+   "price": 9,
+   "xpts": 5.43,
+   "tier": "mid",
+   "fameLeague": 0.997,
+   "fameClub": 1.052,
+   "fameNote": "attendance 54484, 4 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "102",
+   "price": 9,
+   "xpts": 5.48,
+   "tier": "mid",
+   "fameLeague": 0.996,
+   "fameClub": 1.027,
+   "fameNote": "attendance 18127, 6 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "93",
+   "price": 7.5,
+   "xpts": 4.69,
+   "tier": "value",
+   "fameLeague": 1.006,
+   "fameClub": 1.067,
+   "fameNote": "attendance 48021, 3 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "85",
+   "price": 7.5,
+   "xpts": 4.84,
+   "tier": "mid",
+   "fameLeague": 1.004,
+   "fameClub": 1.004,
+   "fameNote": "attendance 20755, 1 European seasons/10, 0 domestic titles since 2008"
   },
   {
    "id": "89",
    "price": 7,
-   "xpts": 1.99,
+   "xpts": 4.31,
    "tier": "value",
-   "fameLeague": 1.12,
-   "fameClub": 1.054,
-   "priceSporting": 6
+   "fameLeague": 1.011,
+   "fameClub": 1.067,
+   "fameNote": "attendance 30287, 4 European seasons/10, 0 domestic titles since 2008"
   },
   {
-   "id": "243",
+   "id": "101",
    "price": 7,
-   "xpts": 1.826,
+   "xpts": 4.73,
    "tier": "value",
-   "fameLeague": 1.12,
-   "fameClub": 1.098,
-   "priceSporting": 5.5
+   "fameLeague": 1.006,
+   "fameClub": 0.972,
+   "fameNote": "attendance 12463, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "97",
+   "price": 6.5,
+   "xpts": 4.21,
+   "tier": "value",
+   "fameLeague": 1.012,
+   "fameClub": 0.987,
+   "fameNote": "attendance 20518, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
    "id": "94",
-   "price": 7,
-   "xpts": 2,
+   "price": 6.5,
+   "xpts": 3.92,
    "tier": "value",
-   "fameLeague": 1.12,
-   "fameClub": 1.06,
-   "priceSporting": 6
-  },
-  {
-   "id": "102",
-   "price": 12,
-   "xpts": 2.887,
-   "tier": "strong",
-   "fameLeague": 1.12,
-   "fameClub": 1.041,
-   "priceSporting": 10
-  },
-  {
-   "id": "103",
-   "price": 11.5,
-   "xpts": 2.728,
-   "tier": "strong",
-   "fameLeague": 1.04,
-   "fameClub": 1.182,
-   "priceSporting": 9.5
-  },
-  {
-   "id": "104",
-   "price": 12,
-   "xpts": 2.901,
-   "tier": "strong",
-   "fameLeague": 1.04,
-   "fameClub": 1.124,
-   "priceSporting": 10.5
-  },
-  {
-   "id": "105",
-   "price": 10.5,
-   "xpts": 2.82,
-   "tier": "mid",
-   "fameLeague": 1.04,
-   "fameClub": 1.047,
-   "priceSporting": 10
-  },
-  {
-   "id": "107",
-   "price": 8,
-   "xpts": 2.435,
-   "tier": "mid",
-   "fameLeague": 1.04,
-   "fameClub": 0.983,
-   "priceSporting": 8
-  },
-  {
-   "id": "2925",
-   "price": 5,
-   "xpts": 1.754,
-   "tier": "budget",
-   "fameLeague": 1.04,
-   "fameClub": 0.945,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "2572",
-   "price": 8.5,
-   "xpts": 2.552,
-   "tier": "mid",
-   "fameLeague": 1.04,
-   "fameClub": 0.945,
-   "priceSporting": 8.5
-  },
-  {
-   "id": "109",
-   "price": 8,
-   "xpts": 2.284,
-   "tier": "mid",
-   "fameLeague": 1.04,
-   "fameClub": 1.054,
-   "priceSporting": 7
-  },
-  {
-   "id": "4057",
-   "price": 4,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 1.04,
-   "fameClub": 0.926,
-   "priceSporting": 4
-  },
-  {
-   "id": "3263",
-   "price": 5.5,
-   "xpts": 1.849,
-   "tier": "budget",
-   "fameLeague": 1.04,
-   "fameClub": 0.958,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "110",
-   "price": 17,
-   "xpts": 3.451,
-   "tier": "elite",
-   "fameLeague": 1.04,
-   "fameClub": 1.169,
-   "priceSporting": 14
-  },
-  {
-   "id": "111",
-   "price": 12.5,
-   "xpts": 2.868,
-   "tier": "strong",
-   "fameLeague": 1.04,
-   "fameClub": 1.188,
-   "priceSporting": 10
-  },
-  {
-   "id": "112",
-   "price": 9,
-   "xpts": 2.447,
-   "tier": "mid",
-   "fameLeague": 1.04,
-   "fameClub": 1.086,
-   "priceSporting": 8
-  },
-  {
-   "id": "113",
-   "price": 4.5,
-   "xpts": 1.556,
-   "tier": "budget",
-   "fameLeague": 1.04,
-   "fameClub": 0.932,
-   "priceSporting": 5
-  },
-  {
-   "id": "4007",
-   "price": 4,
-   "xpts": 0.972,
-   "tier": "budget",
-   "fameLeague": 1.04,
-   "fameClub": 0.932,
-   "priceSporting": 4
-  },
-  {
-   "id": "114",
-   "price": 13.5,
-   "xpts": 3.124,
-   "tier": "strong",
-   "fameLeague": 1.04,
-   "fameClub": 1.111,
-   "priceSporting": 11.5
-  },
-  {
-   "id": "115",
-   "price": 5.5,
-   "xpts": 1.765,
-   "tier": "budget",
-   "fameLeague": 1.04,
-   "fameClub": 0.964,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "3997",
-   "price": 6,
-   "xpts": 2.088,
-   "tier": "value",
-   "fameLeague": 1.04,
-   "fameClub": 0.932,
-   "priceSporting": 6.5
-  },
-  {
-   "id": "239",
-   "price": 6,
-   "xpts": 1.897,
-   "tier": "value",
-   "fameLeague": 1.04,
-   "fameClub": 0.977,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "118",
-   "price": 6,
-   "xpts": 1.992,
-   "tier": "value",
-   "fameLeague": 1.04,
-   "fameClub": 0.958,
-   "priceSporting": 6
-  },
-  {
-   "id": "17530",
-   "price": 4.5,
-   "xpts": 1.404,
-   "tier": "budget",
-   "fameLeague": 1.04,
-   "fameClub": 0.932,
-   "priceSporting": 4.5
-  },
-  {
-   "id": "598",
-   "price": 5.5,
-   "xpts": 1.849,
-   "tier": "budget",
-   "fameLeague": 1.02,
-   "fameClub": 0.951,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "131",
-   "price": 12,
-   "xpts": 2.946,
-   "tier": "strong",
-   "fameLeague": 1.02,
+   "fameLeague": 1.015,
    "fameClub": 1.092,
-   "priceSporting": 10.5
+   "fameNote": "attendance 43870, 2 European seasons/10, 0 domestic titles since 2008"
   },
   {
-   "id": "132",
-   "price": 18.5,
-   "xpts": 4.076,
-   "tier": "elite",
-   "fameLeague": 1.02,
-   "fameClub": 1.204,
-   "priceSporting": 18.5
-  },
-  {
-   "id": "124",
-   "price": 13,
-   "xpts": 3.004,
-   "tier": "strong",
-   "fameLeague": 1.02,
-   "fameClub": 1.15,
-   "priceSporting": 11
-  },
-  {
-   "id": "268",
+   "id": "2922",
    "price": 6.5,
-   "xpts": 1.993,
+   "xpts": 4.25,
    "tier": "value",
-   "fameLeague": 1.02,
-   "fameClub": 1.015,
-   "priceSporting": 6
-  },
-  {
-   "id": "125",
-   "price": 8,
-   "xpts": 2.446,
-   "tier": "mid",
-   "fameLeague": 1.02,
-   "fameClub": 1.015,
-   "priceSporting": 8
-  },
-  {
-   "id": "3841",
-   "price": 5.5,
-   "xpts": 1.937,
-   "tier": "budget",
-   "fameLeague": 1.02,
-   "fameClub": 0.938,
-   "priceSporting": 6
-  },
-  {
-   "id": "122",
-   "price": 5,
-   "xpts": 1.65,
-   "tier": "budget",
-   "fameLeague": 1.02,
-   "fameClub": 0.964,
-   "priceSporting": 5
-  },
-  {
-   "id": "127",
-   "price": 5.5,
-   "xpts": 1.818,
-   "tier": "budget",
-   "fameLeague": 1.02,
-   "fameClub": 0.996,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "2950",
-   "price": 6.5,
-   "xpts": 2.201,
-   "tier": "value",
-   "fameLeague": 1.02,
-   "fameClub": 0.945,
-   "priceSporting": 7
-  },
-  {
-   "id": "11420",
-   "price": 9.5,
-   "xpts": 2.644,
-   "tier": "mid",
-   "fameLeague": 1.02,
-   "fameClub": 1.066,
-   "priceSporting": 9
-  },
-  {
-   "id": "126",
-   "price": 7,
-   "xpts": 2.274,
-   "tier": "value",
-   "fameLeague": 1.02,
-   "fameClub": 0.958,
-   "priceSporting": 7
-  },
-  {
-   "id": "3307",
-   "price": 4,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 1.02,
-   "fameClub": 0.97,
-   "priceSporting": 4
-  },
-  {
-   "id": "10388",
-   "price": 4,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 1.02,
-   "fameClub": 0.97,
-   "priceSporting": 4
-  },
-  {
-   "id": "133",
-   "price": 4.5,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 1.02,
-   "fameClub": 1.009,
-   "priceSporting": 4
-  },
-  {
-   "id": "7911",
-   "price": 6.5,
-   "xpts": 2.153,
-   "tier": "value",
-   "fameLeague": 1.02,
-   "fameClub": 0.951,
-   "priceSporting": 6.5
-  },
-  {
-   "id": "134",
-   "price": 9,
-   "xpts": 2.635,
-   "tier": "mid",
-   "fameLeague": 1.02,
-   "fameClub": 0.996,
-   "priceSporting": 9
-  },
-  {
-   "id": "137",
-   "price": 6,
-   "xpts": 1.926,
-   "tier": "value",
-   "fameLeague": 1.02,
-   "fameClub": 0.99,
-   "priceSporting": 6
-  },
-  {
-   "id": "172",
-   "price": 5.5,
-   "xpts": 1.895,
-   "tier": "budget",
-   "fameLeague": 0.96,
-   "fameClub": 0.97,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "174",
-   "price": 9,
-   "xpts": 2.651,
-   "tier": "mid",
-   "fameLeague": 0.96,
-   "fameClub": 1.06,
-   "priceSporting": 9
-  },
-  {
-   "id": "7868",
-   "price": 4.5,
-   "xpts": 1.7,
-   "tier": "budget",
-   "fameLeague": 0.96,
-   "fameClub": 0.926,
-   "priceSporting": 5
-  },
-  {
-   "id": "6997",
-   "price": 5.5,
-   "xpts": 2.046,
-   "tier": "budget",
-   "fameLeague": 0.96,
-   "fameClub": 0.938,
-   "priceSporting": 6.5
-  },
-  {
-   "id": "3236",
-   "price": 4.5,
-   "xpts": 1.643,
-   "tier": "budget",
-   "fameLeague": 0.96,
-   "fameClub": 0.932,
-   "priceSporting": 5
-  },
-  {
-   "id": "2697",
-   "price": 4,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 0.96,
-   "fameClub": 0.97,
-   "priceSporting": 4
-  },
-  {
-   "id": "175",
-   "price": 9,
-   "xpts": 2.779,
-   "tier": "mid",
-   "fameLeague": 0.96,
-   "fameClub": 0.977,
-   "priceSporting": 9.5
-  },
-  {
-   "id": "166",
-   "price": 9.5,
-   "xpts": 2.75,
-   "tier": "mid",
-   "fameLeague": 0.96,
-   "fameClub": 1.041,
-   "priceSporting": 9.5
-  },
-  {
-   "id": "273",
-   "price": 6,
-   "xpts": 2.126,
-   "tier": "value",
-   "fameLeague": 0.96,
-   "fameClub": 0.932,
-   "priceSporting": 6.5
-  },
-  {
-   "id": "167",
-   "price": 9.5,
-   "xpts": 2.699,
-   "tier": "mid",
-   "fameLeague": 0.96,
-   "fameClub": 1.086,
-   "priceSporting": 9
-  },
-  {
-   "id": "176",
-   "price": 10.5,
-   "xpts": 2.864,
-   "tier": "mid",
-   "fameLeague": 0.96,
-   "fameClub": 1.098,
-   "priceSporting": 10
-  },
-  {
-   "id": "2502",
-   "price": 6.5,
-   "xpts": 2.196,
-   "tier": "value",
-   "fameLeague": 0.96,
+   "fameLeague": 1.012,
    "fameClub": 0.983,
-   "priceSporting": 7
+   "fameNote": "attendance 9832, 1 European seasons/10, 0 domestic titles since 2008"
   },
   {
-   "id": "6851",
+   "id": "243",
    "price": 6,
-   "xpts": 2.099,
+   "xpts": 3.62,
    "tier": "value",
-   "fameLeague": 0.96,
-   "fameClub": 0.932,
-   "priceSporting": 6.5
+   "fameLeague": 1.018,
+   "fameClub": 1.117,
+   "fameNote": "attendance 35653, 7 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "3751",
+   "price": 6,
+   "xpts": 4.05,
+   "tier": "value",
+   "fameLeague": 1.014,
+   "fameClub": 0.997,
+   "fameNote": "attendance 26434, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "88",
+   "price": 6,
+   "xpts": 3.76,
+   "tier": "value",
+   "fameLeague": 1.017,
+   "fameClub": 1.016,
+   "fameNote": "attendance 27143, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "96",
+   "price": 5.5,
+   "xpts": 3.78,
+   "tier": "value",
+   "fameLeague": 1.017,
+   "fameClub": 0.99,
+   "fameNote": "attendance 17059, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "1538",
+   "price": 5.5,
+   "xpts": 3.67,
+   "tier": "value",
+   "fameLeague": 1.018,
+   "fameClub": 0.996,
+   "fameNote": "attendance 20317, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "90",
+   "price": 4.5,
+   "xpts": 2.51,
+   "tier": "budget",
+   "fameLeague": 1.011,
+   "fameClub": 0.998,
+   "fameNote": "attendance ~14928, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "99",
+   "price": 4.5,
+   "xpts": 2.51,
+   "tier": "budget",
+   "fameLeague": 1.011,
+   "fameClub": 0.998,
+   "fameNote": "attendance ~14928, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "87",
+   "price": 4.5,
+   "xpts": 2.51,
+   "tier": "budget",
+   "fameLeague": 1.011,
+   "fameClub": 0.998,
+   "fameNote": "attendance ~14928, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
    "id": "160",
-   "price": 17.5,
-   "xpts": 3.66,
+   "price": 15,
+   "xpts": 7.44,
    "tier": "elite",
-   "fameLeague": 0.96,
-   "fameClub": 1.182,
-   "priceSporting": 15.5
+   "fameLeague": 0.957,
+   "fameClub": 1.129,
+   "fameNote": "attendance 47590, 10 European seasons/10, 12 domestic titles since 2008 | MENA: Qatari ownership; beIN is Qatari-owned and MENA-headquartered"
+  },
+  {
+   "id": "166",
+   "price": 9,
+   "xpts": 5.01,
+   "tier": "mid",
+   "fameLeague": 0.986,
+   "fameClub": 1.146,
+   "fameNote": "attendance 42754, 5 European seasons/10, 2 domestic titles since 2008"
+  },
+  {
+   "id": "167",
+   "price": 9,
+   "xpts": 5.14,
+   "tier": "mid",
+   "fameLeague": 0.984,
+   "fameClub": 1.157,
+   "fameNote": "attendance 50421, 6 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "176",
+   "price": 9,
+   "xpts": 4.97,
+   "tier": "mid",
+   "fameLeague": 0.986,
+   "fameClub": 1.188,
+   "fameNote": "attendance 63082, 6 European seasons/10, 1 domestic titles since 2008"
+  },
+  {
+   "id": "175",
+   "price": 8.5,
+   "xpts": 5.2,
+   "tier": "strong",
+   "fameLeague": 0.983,
+   "fameClub": 1.027,
+   "fameNote": "attendance 37750, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "174",
+   "price": 7.5,
+   "xpts": 4.54,
+   "tier": "mid",
+   "fameLeague": 0.993,
+   "fameClub": 1.072,
+   "fameNote": "attendance 8754, 6 European seasons/10, 1 domestic titles since 2008"
   },
   {
    "id": "169",
    "price": 7,
-   "xpts": 2.349,
-   "tier": "value",
-   "fameLeague": 0.96,
-   "fameClub": 0.97,
-   "priceSporting": 7.5
+   "xpts": 4.18,
+   "tier": "mid",
+   "fameLeague": 0.999,
+   "fameClub": 1.08,
+   "fameNote": "attendance 27570, 4 European seasons/10, 0 domestic titles since 2008"
   },
   {
    "id": "180",
-   "price": 7.5,
-   "xpts": 2.555,
-   "tier": "value",
-   "fameLeague": 0.96,
-   "fameClub": 0.951,
-   "priceSporting": 8.5
+   "price": 7,
+   "xpts": 4.64,
+   "tier": "mid",
+   "fameLeague": 0.991,
+   "fameClub": 0.997,
+   "fameNote": "attendance 23481, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
    "id": "179",
    "price": 6,
-   "xpts": 2.131,
+   "xpts": 3.97,
    "tier": "value",
-   "fameLeague": 0.96,
-   "fameClub": 0.945,
-   "priceSporting": 6.5
+   "fameLeague": 1.002,
+   "fameClub": 1.015,
+   "fameNote": "attendance 25254, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "273",
+   "price": 5.5,
+   "xpts": 3.66,
+   "tier": "value",
+   "fameLeague": 1.006,
+   "fameClub": 0.992,
+   "fameNote": "attendance 15382, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "2502",
+   "price": 5.5,
+   "xpts": 3.09,
+   "tier": "value",
+   "fameLeague": 1.012,
+   "fameClub": 1.064,
+   "fameNote": "attendance 23189, 4 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "6851",
+   "price": 5.5,
+   "xpts": 3.66,
+   "tier": "value",
+   "fameLeague": 1.006,
+   "fameClub": 0.994,
+   "fameNote": "attendance 16899, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "172",
+   "price": 5,
+   "xpts": 3.35,
+   "tier": "value",
+   "fameLeague": 1.01,
+   "fameClub": 1.001,
+   "fameNote": "attendance 16465, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "6997",
+   "price": 5,
+   "xpts": 3.09,
+   "tier": "value",
+   "fameLeague": 1.012,
+   "fameClub": 1.019,
+   "fameNote": "attendance 14533, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "7868",
+   "price": 4.5,
+   "xpts": 2.56,
+   "tier": "budget",
+   "fameLeague": 1.009,
+   "fameClub": 0.998,
+   "fameNote": "attendance 12813, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "3236",
+   "price": 4.5,
+   "xpts": 2.72,
+   "tier": "budget",
+   "fameLeague": 1.011,
+   "fameClub": 1.002,
+   "fameNote": "attendance 19735, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "2697",
+   "price": 4.5,
+   "xpts": 2.52,
+   "tier": "budget",
+   "fameLeague": 1.008,
+   "fameClub": 0.998,
+   "fameNote": "attendance ~12834, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
    "id": "170",
-   "price": 4,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 0.96,
-   "fameClub": 0.97,
-   "priceSporting": 4
-  },
-  {
-   "id": "9078",
    "price": 4.5,
-   "xpts": 1.977,
+   "xpts": 2.52,
    "tier": "budget",
-   "fameLeague": 0.78,
-   "fameClub": 0.926,
-   "priceSporting": 6
+   "fameLeague": 1.008,
+   "fameClub": 0.998,
+   "fameNote": "attendance ~12834, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
-   "id": "132335",
-   "price": 4,
-   "xpts": 1.25,
+   "id": "132",
+   "price": 17.5,
+   "xpts": 8.2,
+   "tier": "elite",
+   "fameLeague": 0.994,
+   "fameClub": 1.065,
+   "fameNote": "attendance 75000, 10 European seasons/10, 14 domestic titles since 2008"
+  },
+  {
+   "id": "124",
+   "price": 11.5,
+   "xpts": 5.83,
+   "tier": "strong",
+   "fameLeague": 1.013,
+   "fameClub": 1.171,
+   "fameNote": "attendance 81365, 10 European seasons/10, 2 domestic titles since 2008"
+  },
+  {
+   "id": "131",
+   "price": 9.5,
+   "xpts": 5.37,
+   "tier": "strong",
+   "fameLeague": 1.017,
+   "fameClub": 1.072,
+   "fameNote": "attendance 29988, 8 European seasons/10, 1 domestic titles since 2008"
+  },
+  {
+   "id": "11420",
+   "price": 8.5,
+   "xpts": 4.73,
+   "tier": "mid",
+   "fameLeague": 1.023,
+   "fameClub": 1.119,
+   "fameNote": "attendance 44484, 8 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "134",
+   "price": 8,
+   "xpts": 4.86,
+   "tier": "mid",
+   "fameLeague": 1.022,
+   "fameClub": 1.035,
+   "fameNote": "attendance 59353, 2 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "125",
+   "price": 7,
+   "xpts": 4.12,
+   "tier": "mid",
+   "fameLeague": 1.028,
+   "fameClub": 1.095,
+   "fameNote": "attendance 58350, 5 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "126",
+   "price": 6.5,
+   "xpts": 4.02,
+   "tier": "value",
+   "fameLeague": 1.029,
+   "fameClub": 1.021,
+   "fameNote": "attendance 34153, 2 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "7911",
+   "price": 6.5,
+   "xpts": 3.94,
+   "tier": "value",
+   "fameLeague": 1.029,
+   "fameClub": 1.03,
+   "fameNote": "attendance 26003, 3 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "2950",
+   "price": 6.5,
+   "xpts": 4.05,
+   "tier": "value",
+   "fameLeague": 1.029,
+   "fameClub": 1.008,
+   "fameNote": "attendance 32105, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "268",
+   "price": 6,
+   "xpts": 3.43,
+   "tier": "value",
+   "fameLeague": 1.03,
+   "fameClub": 1.068,
+   "fameNote": "attendance 52139, 3 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "3841",
+   "price": 5,
+   "xpts": 2.9,
+   "tier": "value",
+   "fameLeague": 1.026,
+   "fameClub": 0.998,
+   "fameNote": "attendance 29803, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "122",
+   "price": 5,
+   "xpts": 3.14,
+   "tier": "value",
+   "fameLeague": 1.029,
+   "fameClub": 1.031,
+   "fameNote": "attendance 49918, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "127",
+   "price": 5,
+   "xpts": 3.1,
+   "tier": "value",
+   "fameLeague": 1.029,
+   "fameClub": 1.008,
+   "fameNote": "attendance 57000, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "133",
+   "price": 5,
+   "xpts": 2.6,
    "tier": "budget",
-   "fameLeague": 0.78,
-   "fameClub": 0.916,
-   "priceSporting": 4
+   "fameLeague": 1.019,
+   "fameClub": 1.027,
+   "fameNote": "attendance ~24466, 2 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "598",
+   "price": 5,
+   "xpts": 2.98,
+   "tier": "value",
+   "fameLeague": 1.027,
+   "fameClub": 1.017,
+   "fameNote": "attendance 21974, 2 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "137",
+   "price": 5,
+   "xpts": 2.89,
+   "tier": "value",
+   "fameLeague": 1.026,
+   "fameClub": 1.006,
+   "fameNote": "attendance 41334, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "10388",
+   "price": 4.5,
+   "xpts": 2.6,
+   "tier": "budget",
+   "fameLeague": 1.019,
+   "fameClub": 0.997,
+   "fameNote": "attendance ~24466, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "3307",
+   "price": 4.5,
+   "xpts": 2.6,
+   "tier": "budget",
+   "fameLeague": 1.019,
+   "fameClub": 0.997,
+   "fameNote": "attendance ~24466, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "110",
+   "price": 14.5,
+   "xpts": 7.32,
+   "tier": "elite",
+   "fameLeague": 0.965,
+   "fameClub": 1.122,
+   "fameNote": "attendance 71810, 9 European seasons/10, 5 domestic titles since 2008"
+  },
+  {
+   "id": "111",
+   "price": 11.5,
+   "xpts": 6.06,
+   "tier": "strong",
+   "fameLeague": 0.978,
+   "fameClub": 1.174,
+   "fameNote": "attendance 40443, 9 European seasons/10, 9 domestic titles since 2008"
+  },
+  {
+   "id": "104",
+   "price": 11.5,
+   "xpts": 6.2,
+   "tier": "strong",
+   "fameLeague": 0.976,
+   "fameClub": 1.123,
+   "fameNote": "attendance 62115, 7 European seasons/10, 0 domestic titles since 2008 | MENA: AS Roma — sustained history of Arab and North African players"
+  },
+  {
+   "id": "114",
+   "price": 11,
+   "xpts": 5.88,
+   "tier": "mid",
+   "fameLeague": 0.98,
+   "fameClub": 1.166,
+   "fameNote": "attendance 49752, 8 European seasons/10, 2 domestic titles since 2008"
+  },
+  {
+   "id": "103",
+   "price": 10.5,
+   "xpts": 5.56,
+   "tier": "mid",
+   "fameLeague": 0.984,
+   "fameClub": 1.181,
+   "fameNote": "attendance 72443, 6 European seasons/10, 2 domestic titles since 2008"
+  },
+  {
+   "id": "105",
+   "price": 10,
+   "xpts": 5.82,
+   "tier": "mid",
+   "fameLeague": 0.981,
+   "fameClub": 1.046,
+   "fameNote": "attendance 22459, 6 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "2572",
+   "price": 9,
+   "xpts": 5.92,
+   "tier": "mid",
+   "fameLeague": 0.98,
+   "fameClub": 0.942,
+   "fameNote": "attendance 11099, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "112",
+   "price": 8,
+   "xpts": 4.78,
+   "tier": "value",
+   "fameLeague": 0.995,
+   "fameClub": 1.108,
+   "fameNote": "attendance 36918, 6 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "107",
+   "price": 7.5,
+   "xpts": 4.73,
+   "tier": "mid",
+   "fameLeague": 0.996,
+   "fameClub": 1.022,
+   "fameNote": "attendance 27977, 2 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "109",
+   "price": 7,
+   "xpts": 4.6,
+   "tier": "value",
+   "fameLeague": 0.998,
+   "fameClub": 1.017,
+   "fameNote": "attendance 20405, 2 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "3997",
+   "price": 6,
+   "xpts": 3.99,
+   "tier": "value",
+   "fameLeague": 1.006,
+   "fameClub": 0.999,
+   "fameNote": "attendance 14213, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "3263",
+   "price": 5.5,
+   "xpts": 3.49,
+   "tier": "value",
+   "fameLeague": 1.012,
+   "fameClub": 1.007,
+   "fameNote": "attendance 31040, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "118",
+   "price": 5.5,
+   "xpts": 3.74,
+   "tier": "value",
+   "fameLeague": 1.01,
+   "fameClub": 1.002,
+   "fameNote": "attendance 22252, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "2925",
+   "price": 5,
+   "xpts": 3.3,
+   "tier": "budget",
+   "fameLeague": 1.014,
+   "fameClub": 0.995,
+   "fameNote": "attendance 15876, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "115",
+   "price": 5,
+   "xpts": 3.09,
+   "tier": "budget",
+   "fameLeague": 1.015,
+   "fameClub": 1,
+   "fameNote": "attendance 18959, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "239",
+   "price": 5,
+   "xpts": 3.32,
+   "tier": "budget",
+   "fameLeague": 1.013,
+   "fameClub": 1,
+   "fameNote": "attendance 20752, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "17530",
+   "price": 5,
+   "xpts": 3.02,
+   "tier": "budget",
+   "fameLeague": 1.015,
+   "fameClub": 0.991,
+   "fameNote": "attendance 10379, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "4057",
+   "price": 4.5,
+   "xpts": 2.63,
+   "tier": "budget",
+   "fameLeague": 1.012,
+   "fameClub": 0.997,
+   "fameNote": "attendance ~12352, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "113",
+   "price": 4.5,
+   "xpts": 2.46,
+   "tier": "budget",
+   "fameLeague": 1.008,
+   "fameClub": 1.005,
+   "fameNote": "attendance 25936, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "4007",
+   "price": 4.5,
+   "xpts": 2.76,
+   "tier": "budget",
+   "fameLeague": 1.013,
+   "fameClub": 0.995,
+   "fameNote": "attendance 11274, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "256",
+   "price": 13.5,
+   "xpts": 6.7,
+   "tier": "mid",
+   "fameLeague": 0.896,
+   "fameClub": 1.262,
+   "fameNote": "attendance 58681, 8 European seasons/10, 14 domestic titles since 2008"
+  },
+  {
+   "id": "257",
+   "price": 11,
+   "xpts": 5.86,
+   "tier": "mid",
+   "fameLeague": 0.91,
+   "fameClub": 1.228,
+   "fameNote": "attendance 49285, 6 European seasons/10, 4 domestic titles since 2008"
+  },
+  {
+   "id": "262",
+   "price": 8.5,
+   "xpts": 5.45,
+   "tier": "mid",
+   "fameLeague": 0.918,
+   "fameClub": 1.032,
+   "fameNote": "attendance 18641, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "258",
+   "price": 7,
+   "xpts": 4.96,
+   "tier": "value",
+   "fameLeague": 0.929,
+   "fameClub": 1.007,
+   "fameNote": "attendance 17841, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "266",
+   "price": 6.5,
+   "xpts": 4.67,
+   "tier": "value",
+   "fameLeague": 0.937,
+   "fameClub": 0.991,
+   "fameNote": "attendance 7120, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "254",
+   "price": 5,
+   "xpts": 3.28,
+   "tier": "budget",
+   "fameLeague": 0.979,
+   "fameClub": 0.998,
+   "fameNote": "attendance 7546, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "264",
+   "price": 5,
+   "xpts": 3.16,
+   "tier": "budget",
+   "fameLeague": 0.983,
+   "fameClub": 1.008,
+   "fameNote": "attendance 10693, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "250",
+   "price": 4.5,
+   "xpts": 2.52,
+   "tier": "budget",
+   "fameLeague": 0.999,
+   "fameClub": 1,
+   "fameNote": "attendance 6890, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "261",
+   "price": 4.5,
+   "xpts": 2.44,
+   "tier": "budget",
+   "fameLeague": 1,
+   "fameClub": 1,
+   "fameNote": "attendance 7113, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "267",
+   "price": 4.5,
+   "xpts": 2.41,
+   "tier": "budget",
+   "fameLeague": 1,
+   "fameClub": 1,
+   "fameNote": "attendance 5680, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "263",
+   "price": 4.5,
+   "xpts": 2.65,
+   "tier": "budget",
+   "fameLeague": 0.997,
+   "fameClub": 1.037,
+   "fameNote": "attendance 17591, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "260",
+   "price": 4.5,
+   "xpts": 2.51,
+   "tier": "budget",
+   "fameLeague": 0.999,
+   "fameClub": 1,
+   "fameNote": "attendance 6275, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "432",
+   "price": 11.5,
+   "xpts": 6.04,
+   "tier": "strong",
+   "fameLeague": 0.904,
+   "fameClub": 1.247,
+   "fameNote": "attendance 42467, 5 European seasons/10, 9 domestic titles since 2008 | MENA: Galatasaray — largest Turkish following in the Arab world"
+  },
+  {
+   "id": "436",
+   "price": 10.5,
+   "xpts": 5.77,
+   "tier": "strong",
+   "fameLeague": 0.909,
+   "fameClub": 1.199,
+   "fameNote": "attendance 34334, 4 European seasons/10, 1 domestic titles since 2008 | MENA: Fenerbahce — major Turkish following in the Arab world"
   },
   {
    "id": "1895",
    "price": 8,
-   "xpts": 2.766,
+   "xpts": 4.66,
    "tier": "mid",
-   "fameLeague": 0.78,
-   "fameClub": 1.079,
-   "priceSporting": 9.5
-  },
-  {
-   "id": "7656",
-   "price": 4.5,
-   "xpts": 2.059,
-   "tier": "budget",
-   "fameLeague": 0.78,
-   "fameClub": 0.938,
-   "priceSporting": 6.5
-  },
-  {
-   "id": "19267",
-   "price": 4,
-   "xpts": 1.25,
-   "tier": "budget",
-   "fameLeague": 0.78,
-   "fameClub": 0.916,
-   "priceSporting": 4
-  },
-  {
-   "id": "20729",
-   "price": 4.5,
-   "xpts": 2.007,
-   "tier": "budget",
-   "fameLeague": 0.78,
-   "fameClub": 0.916,
-   "priceSporting": 6
-  },
-  {
-   "id": "436",
-   "price": 12,
-   "xpts": 3.496,
-   "tier": "strong",
-   "fameLeague": 0.78,
-   "fameClub": 1.098,
-   "priceSporting": 14
-  },
-  {
-   "id": "432",
-   "price": 14,
-   "xpts": 3.763,
-   "tier": "strong",
-   "fameLeague": 0.78,
-   "fameClub": 1.111,
-   "priceSporting": 16
-  },
-  {
-   "id": "20070",
-   "price": 4,
-   "xpts": 1.909,
-   "tier": "budget",
-   "fameLeague": 0.78,
-   "fameClub": 0.926,
-   "priceSporting": 6
-  },
-  {
-   "id": "996",
-   "price": 4,
-   "xpts": 1.737,
-   "tier": "budget",
-   "fameLeague": 0.78,
-   "fameClub": 0.919,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "789",
-   "price": 6,
-   "xpts": 2.423,
-   "tier": "value",
-   "fameLeague": 0.78,
-   "fameClub": 0.945,
-   "priceSporting": 8
-  },
-  {
-   "id": "7914",
-   "price": 6.5,
-   "xpts": 2.547,
-   "tier": "value",
-   "fameLeague": 0.78,
-   "fameClub": 0.97,
-   "priceSporting": 8.5
-  },
-  {
-   "id": "6870",
-   "price": 4,
-   "xpts": 1.922,
-   "tier": "budget",
-   "fameLeague": 0.78,
-   "fameClub": 0.932,
-   "priceSporting": 6
-  },
-  {
-   "id": "995",
-   "price": 4,
-   "xpts": 1.81,
-   "tier": "budget",
-   "fameLeague": 0.78,
-   "fameClub": 0.919,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "7648",
-   "price": 4.5,
-   "xpts": 2.005,
-   "tier": "budget",
-   "fameLeague": 0.78,
-   "fameClub": 0.938,
-   "priceSporting": 6
-  },
-  {
-   "id": "11429",
-   "price": 6,
-   "xpts": 2.53,
-   "tier": "value",
-   "fameLeague": 0.78,
-   "fameClub": 0.932,
-   "priceSporting": 8.5
+   "fameLeague": 0.935,
+   "fameClub": 1.224,
+   "fameNote": "attendance 28728, 5 European seasons/10, 4 domestic titles since 2008 | MENA: Besiktas — major Turkish following in the Arab world"
   },
   {
    "id": "997",
    "price": 7.5,
-   "xpts": 2.713,
+   "xpts": 4.65,
+   "tier": "mid",
+   "fameLeague": 0.935,
+   "fameClub": 1.116,
+   "fameNote": "attendance 21011, 1 European seasons/10, 1 domestic titles since 2008"
+  },
+  {
+   "id": "7914",
+   "price": 6.5,
+   "xpts": 4.5,
+   "tier": "mid",
+   "fameLeague": 0.94,
+   "fameClub": 1.027,
+   "fameNote": "attendance 3013, 3 European seasons/10, 1 domestic titles since 2008"
+  },
+  {
+   "id": "789",
+   "price": 6,
+   "xpts": 4.24,
    "tier": "value",
-   "fameLeague": 0.78,
-   "fameClub": 1.028,
-   "priceSporting": 9.5
+   "fameLeague": 0.947,
+   "fameClub": 1.016,
+   "fameNote": "attendance 17161, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "11429",
+   "price": 6,
+   "xpts": 4.11,
+   "tier": "value",
+   "fameLeague": 0.951,
+   "fameClub": 1.031,
+   "fameNote": "attendance 14037, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "7656",
+   "price": 5,
+   "xpts": 3.03,
+   "tier": "value",
+   "fameLeague": 0.986,
+   "fameClub": 1,
+   "fameNote": "attendance 6022, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "9078",
+   "price": 5,
+   "xpts": 3.34,
+   "tier": "value",
+   "fameLeague": 0.976,
+   "fameClub": 0.993,
+   "fameNote": "attendance 4004, 0 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "7648",
+   "price": 5,
+   "xpts": 3.09,
+   "tier": "budget",
+   "fameLeague": 0.984,
+   "fameClub": 1.059,
+   "fameNote": "attendance 13142, 1 European seasons/10, 0 domestic titles since 2008"
+  },
+  {
+   "id": "996",
+   "price": 4.5,
+   "xpts": 2.77,
+   "tier": "budget",
+   "fameLeague": 0.993,
+   "fameClub": 1.01,
+   "fameNote": "attendance 9669, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
    "id": "132334",
-   "price": 4,
-   "xpts": 1.25,
+   "price": 4.5,
+   "xpts": 2.67,
    "tier": "budget",
-   "fameLeague": 0.78,
-   "fameClub": 0.916,
-   "priceSporting": 4
+   "fameLeague": 0.996,
+   "fameClub": 1.004,
+   "fameNote": "attendance ~7228, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
-   "id": "263",
-   "price": 4,
-   "xpts": 1.934,
+   "id": "20070",
+   "price": 4.5,
+   "xpts": 2.75,
    "tier": "budget",
-   "fameLeague": 0.72,
-   "fameClub": 0.964,
-   "priceSporting": 6
+   "fameLeague": 0.994,
+   "fameClub": 1.005,
+   "fameNote": "attendance 7614, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
-   "id": "256",
-   "price": 12,
-   "xpts": 3.618,
-   "tier": "strong",
-   "fameLeague": 0.72,
-   "fameClub": 1.098,
-   "priceSporting": 15
-  },
-  {
-   "id": "261",
-   "price": 4,
-   "xpts": 1.758,
+   "id": "6870",
+   "price": 4.5,
+   "xpts": 2.69,
    "tier": "budget",
-   "fameLeague": 0.72,
-   "fameClub": 0.926,
-   "priceSporting": 5.5
+   "fameLeague": 0.995,
+   "fameClub": 0.994,
+   "fameNote": "attendance 2227, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
-   "id": "264",
-   "price": 4,
-   "xpts": 2.033,
+   "id": "132335",
+   "price": 4.5,
+   "xpts": 2.67,
    "tier": "budget",
-   "fameLeague": 0.72,
-   "fameClub": 0.926,
-   "priceSporting": 6
+   "fameLeague": 0.996,
+   "fameClub": 1.004,
+   "fameNote": "attendance ~7228, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
-   "id": "254",
-   "price": 4,
-   "xpts": 2.014,
+   "id": "19267",
+   "price": 4.5,
+   "xpts": 2.67,
    "tier": "budget",
-   "fameLeague": 0.72,
-   "fameClub": 0.916,
-   "priceSporting": 6
+   "fameLeague": 0.996,
+   "fameClub": 1.004,
+   "fameNote": "attendance ~7228, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
-   "id": "262",
-   "price": 6.5,
-   "xpts": 2.725,
-   "tier": "value",
-   "fameLeague": 0.72,
-   "fameClub": 0.977,
-   "priceSporting": 9.5
-  },
-  {
-   "id": "258",
-   "price": 5.5,
-   "xpts": 2.457,
+   "id": "20729",
+   "price": 4.5,
+   "xpts": 2.95,
    "tier": "budget",
-   "fameLeague": 0.72,
-   "fameClub": 0.977,
-   "priceSporting": 8
+   "fameLeague": 0.989,
+   "fameClub": 0.993,
+   "fameNote": "attendance 3081, 0 European seasons/10, 0 domestic titles since 2008"
   },
   {
-   "id": "260",
-   "price": 4,
-   "xpts": 1.78,
+   "id": "995",
+   "price": 4.5,
+   "xpts": 2.72,
    "tier": "budget",
-   "fameLeague": 0.72,
-   "fameClub": 0.932,
-   "priceSporting": 5.5
-  },
-  {
-   "id": "266",
-   "price": 5,
-   "xpts": 2.303,
-   "tier": "budget",
-   "fameLeague": 0.72,
-   "fameClub": 0.938,
-   "priceSporting": 7.5
-  },
-  {
-   "id": "257",
-   "price": 9,
-   "xpts": 3.069,
-   "tier": "mid",
-   "fameLeague": 0.72,
-   "fameClub": 1.079,
-   "priceSporting": 11.5
-  },
-  {
-   "id": "267",
-   "price": 4,
-   "xpts": 1.424,
-   "tier": "budget",
-   "fameLeague": 0.72,
-   "fameClub": 0.919,
-   "priceSporting": 4.5
-  },
-  {
-   "id": "250",
-   "price": 4,
-   "xpts": 1.807,
-   "tier": "budget",
-   "fameLeague": 0.72,
-   "fameClub": 0.919,
-   "priceSporting": 5.5
+   "fameLeague": 0.995,
+   "fameClub": 1.022,
+   "fameNote": "attendance 19641, 0 European seasons/10, 0 domestic titles since 2008"
   }
  ]
 }

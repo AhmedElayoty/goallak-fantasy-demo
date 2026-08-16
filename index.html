@@ -358,11 +358,13 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 const $ = id => document.getElementById(id);
 const VERSION = "demo-1.0";
 /* ELEVEN clubs — a football XI. The squad is a team sheet, not a shopping list.
-   Budget solved, not guessed. With an 11-slot squad and a 4.0M floor, the question is how many
-   18.5M superclubs a manager can fit: 100M buys exactly THREE (87.5M), and a fourth needs 102M.
-   Three is the number that makes 'which three?' the whole conversation. 105M+ buys four and
-   the tension disappears; 120M buys five, which is not a choice at all. */
-const SQUAD_SIZE = 11, BUDGET = 100.0, MAX_PER_LEAGUE = 3, MIN_CLUB_PRICE = 4.0;
+   Budget solved, not guessed, then CONFIRMED by the pricing model: 100.0M buys exactly THREE
+   elite clubs (91.5M) and a fourth costs 105.5M. Three is what makes 'which three?' the whole
+   conversation.
+   The floor is 4.5M, NOT 4.0M, and that coupling matters: at 4.5 a fourth elite strands all seven
+   remaining slots at the floor, which is what enforces the ceiling. At 4.0 the fourth becomes
+   comfortable and the tension quietly disappears. */
+const SQUAD_SIZE = 11, BUDGET = 100.0, MAX_PER_LEAGUE = 3, MIN_CLUB_PRICE = 4.5;
 /* rows of the formation, back to front. 1-4-4-2 = 11. */
 const FORMATIONS = {
  "4-4-2": [1, 4, 4, 2],
