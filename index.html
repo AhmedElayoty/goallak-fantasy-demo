@@ -124,10 +124,10 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    which dragged its explanation down to 1.92:1 - the usability study timed a tester quitting
    at that exact moment, unable to see why Liverpool would not respond to a tap. */
 .clubrow[disabled]{cursor:not-allowed}
-.clubrow[disabled] .fxkit,
-.clubrow[disabled] .crn,
-.clubrow[disabled] .crprice,
-.clubrow[disabled] .crpick{opacity:.42}
+.clubrow[disabled] .fxkit{opacity:.42}          /* only the kit dims - it carries no words */
+.clubrow[disabled] .crn{color:var(--fx-ink-dim)}    /* 7.80:1 */
+.clubrow[disabled] .crprice{color:var(--fx-ink-mute)} /* 4.56:1 */
+.clubrow[disabled] .crpick{color:var(--fx-ink-dim);background:transparent}
 .clubrow[disabled] .crwhy{opacity:1}
 .crname{flex:1;min-width:0}
 .crn{font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -160,7 +160,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
      · the TURF wears: the centre circle's trodden ring grows, a goalmouth scuff appears
      · the PERIMETER goes gold while you are alive in the cup                          */
 .st{position:relative;border-radius:var(--r);overflow:hidden;isolation:isolate;
- aspect-ratio:10/13;max-height:66vh;border:1px solid var(--fx-line-2);
+ aspect-ratio:10/14;max-height:70vh;border:1px solid var(--fx-line-2);
  --crowd-a:.34; --wear:.055; --scuff:0;
  background:radial-gradient(120% 80% at 50% -10%, var(--sky-1,#14204A) 0%, var(--sky-2,#0A1130) 46%, #070B1A 100%)}
 .st[data-sky="dusk"]    {--sky-1:#2A2560;--sky-2:#141A44}
@@ -257,8 +257,13 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .cc__arm{position:absolute;inset-block-start:5px;inset-inline-start:0;z-index:4;
  background:var(--fx-gold);color:#0B1020;font-size:8.5px;font-weight:900;padding:1px 5px;
  border-start-end-radius:4px;border-end-end-radius:4px;letter-spacing:.4px}
-.slot .nm{font-size:10px;font-weight:800;color:#F2F5FF;max-width:100%;white-space:nowrap;
- overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+ /* The name scales with the viewport and may take TWO lines. Fixed 10px with nowrap+ellipsis
+    turned a long Arabic club name into an ellipsis on a small phone, which is the same as no
+    name at all. */
+.slot .nm{font-size:clamp(8.5px, 2.6vw, 11px);font-weight:800;color:#F2F5FF;
+ width:calc(var(--cw) * 1.5);max-width:23vw;line-height:1.15;text-align:center;
+ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+ text-shadow:0 1px 3px rgba(0,0,0,.95), 0 0 6px rgba(0,0,0,.7)}
 .slot .plinth{width:62%;height:6px;border-radius:50%;margin-top:-2px;
  background:radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.55), transparent 70%)}
 /* an empty slot should look like a shirt waiting on a peg, not a failed image */
@@ -352,11 +357,22 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 
 .note{background:rgba(255,197,61,.08);border:1px solid rgba(255,197,61,.32);border-radius:11px;
  padding:10px 12px;font-size:12px;color:var(--fx-ink-dim);margin-bottom:12px;line-height:1.6}
-.gwscrub{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:11.5px;
- color:var(--fx-ink-dim);flex-wrap:wrap;background:var(--fx-surface-2);border:1px solid var(--fx-line);
- border-radius:11px;padding:9px 11px}
-.gwscrub b{color:var(--fx-gold);font-size:15px}
-.gwscrub input{flex:1;min-width:130px;accent-color:var(--fx-acc)}
+/* A thin range input is the wrong control on a phone: hard to hit, hard to read, and it
+   gives no sense of where the season is. This is a scroll-snapping strip of rounds - flick
+   it like any list, the current one is obvious, every target is 44px. */
+.gwbar{background:var(--fx-surface-2);border:1px solid var(--fx-line);border-radius:12px;
+ padding:9px 0 7px;margin-bottom:10px}
+.gwbar__top{display:flex;justify-content:space-between;align-items:baseline;
+ padding:0 12px 7px;font-size:11.5px;color:var(--fx-ink-dim);gap:8px}
+.gwbar__top b{color:var(--fx-gold);font-size:15px}
+.gwbar__strip{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x mandatory;
+ padding:0 12px 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.gwbar__strip::-webkit-scrollbar{display:none}
+.gwchip{flex:0 0 auto;min-width:44px;height:44px;border-radius:11px;scroll-snap-align:center;
+ background:var(--fx-surface-3);border:1px solid var(--fx-line);color:var(--fx-ink-dim);
+ font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.gwchip.on{background:var(--fx-acc);border-color:var(--fx-acc);color:#12060B;font-weight:900}
+.gwchip.done{color:var(--fx-ink-mute)}
 .filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:8px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
 .fchip{flex:0 0 auto;padding:7px 12px;border-radius:99px;background:var(--fx-surface-2);border:1px solid var(--fx-line);
@@ -518,7 +534,7 @@ const STR = {
  swapTip:["دوس على أي نادي، وبعدين على اللي عايز تبدله بيه","Tap a club, then tap the one you want to swap it with"],
  coveredLab:["بدلاء دخلوا لوحدهم","Automatic substitutions"],
  uncoveredLab:["مالقاش بديل يدخل مكانه","Left uncovered"],
- scrubHint:["اسحب عشان تشوف نقط أي جولة","Slide to watch the stadium change across the season"],
+ scrubHint:["اسحب عشان تشوف نقط أي جولة","Swipe to see any round"],
  repaired:["الأسعار اتغيرت، فشيلنا الأندية اللي مابقتش تدخل في ميزانيتك. اختار بدلها.",
            "Prices changed, so clubs that no longer fit your budget were removed. Pick replacements."],
  done:["تمام","Done"], next:["التالي","Next"], back:["رجوع","Back"], skip:["بعدين","Skip"],
@@ -528,9 +544,8 @@ const STR = {
         "You don't pick players — you pick <b>clubs</b>. Each week the clubs in your team earn you points based on their real results."],
  wiz2h:["11 + 4 بدلاء · 120 مليون","11 + 4 subs · 120M"],
  wiz2p:["ميزانيتك 120 مليون: 11 نادي في الملعب و4 على الدكة. البدلاء بيدخلوا لوحدهم لو ناديك مالوش ماتش. و3 أندية بالكتير من الدوري الواحد، عشان تفضل تتفرج على كل حاجة.",
-        "You have 120M: 11 clubs on the pitch and 4 on the bench. Subs come on automatically when a starter has no match.. Maximum 3 from any one league, so you always have something to watch."],
- wiz3h:["جهزنالك فريق",""],
- wiz3hEn:["We built you a team","We built you a team"],
+        "You have 120M: 11 clubs on the pitch and 4 on the bench. Subs come on automatically when a starter has no match. Maximum 3 from any one league, so you always have something to watch."],
+ wiz3h:["جهزنالك فريق","We built you a team"],
  wiz3p:["دي بداية كاملة ومظبوطة. سيبها زي ما هي، أو غيّر اللي مش عاجبك.",
         "This is a complete, legal starting squad. Keep it, or change whatever you like."],
  wiz4h:["اختار الكابتن","Choose your captain"],
@@ -698,6 +713,9 @@ let CURRENT_GW = 6;
 let _gwRaf = 0;
 function setGw(g){
  CURRENT_GW = Math.max(1, Math.min(36, g));
+ /* on the team screen nothing but the stadium and the label depend on the gameweek, so
+    patch in place and never touch the input the user is dragging */
+ if(view === "team" && patchTeamGw()) return;
  /* One render per animation frame, not one per input event. Dragging fired render()
     continuously and blew the whole frame budget on a mid-range phone. */
  if(_gwRaf) return;
@@ -747,7 +765,10 @@ function budgetHtml(){
 /* Measured against the RENDERED turf, not the flat one. rotateX(24deg) about the bottom
    edge lifts the far edge from 23% to 42.6%, so a row authored at 28% put the goalkeeper
    entirely above the grass — hit-testing under his feet returned sky. */
-const ROW_GEOM = [{top:52, depth:0.90}, {top:65, depth:0.94}, {top:78, depth:0.97}, {top:91, depth:1.00}];
+/* Rows pulled up so the club NAME under the front row still lands inside the pitch. At 91%
+   the name fell past the bottom edge and .st{overflow:hidden} ate it - which is why only
+   some names were readable on a real phone. */
+const ROW_GEOM = [{top:49, depth:0.90}, {top:61, depth:0.94}, {top:73, depth:0.97}, {top:85, depth:1.00}];
 /* Horizontal centres by row width. The FOUR-card row is deliberately uneven — 11/35/65/89,
    gaps 24/30/24 — leaving ~46px of open turf down the spine of the team. Distribute those four
    evenly and you get 11px there, and the row instantly reads as a table instead of a back four. */
@@ -872,20 +893,57 @@ function render(){
  else renderBoard();
 }
 
+/* The slider is inside the markup render() replaces, so redrawing during a drag destroyed
+   the element under the finger. When only the gameweek changed, patch the two nodes that
+   actually differ and leave the input alone. */
+let _lastTeamGw = null;
+function patchTeamGw(){
+ const num_ = $("gwNum"), strip = $("gwStrip");
+ if(!num_ || !strip) return false;
+ num_.textContent = num(CURRENT_GW);
+ for(let g = 1; g <= 36; g++){
+  const c = $("gwc" + g); if(!c) continue;
+  c.className = "gwchip" + (g === CURRENT_GW ? " on" : g < CURRENT_GW ? " done" : "");
+ }
+ const st = document.querySelector("#viewTeam .st");
+ if(st){ const gw = CURRENT_GW;
+  st.dataset.sky = gw <= 4 ? "dusk" : gw >= 33 ? "golden" : (gw >= 15 && gw <= 24) ? "december" : "night";
+  st.dataset.cup = gw >= 15 ? "1" : "0";
+  st.style.setProperty("--wear", (0.055 + 0.030 * Math.min(1, gw / 36)).toFixed(3));
+  st.style.setProperty("--scuff", gw >= 12 ? 1 : 0);
+ }
+ return true;
+}
+/* 36 rounds as a snapping strip: every chip a 44px target, the active one scrolled into view. */
+function gwBarHtml(){
+ let chips = "";
+ for(let g = 1; g <= 36; g++){
+  chips += '<button type="button" class="gwchip' + (g === CURRENT_GW ? " on" : g < CURRENT_GW ? " done" : "")
+   + '" id="gwc' + g + '" onclick="setGw(' + g + ')" aria-label="' + esc(t("gwTitle")) + ' ' + g + '"'
+   + (g === CURRENT_GW ? ' aria-current="true"' : "") + ' dir="ltr">' + num(g) + "</button>";
+ }
+ return '<div class="gwbar"><div class="gwbar__top">'
+  + '<span>' + esc(t("gwTitle")) + ' <b dir="ltr" id="gwNum">' + num(CURRENT_GW) + "</b></span>"
+  + '<span class="muted">' + esc(t("scrubHint")) + "</span></div>"
+  + '<div class="gwbar__strip" id="gwStrip">' + chips + "</div></div>";
+}
+function centreGwChip(){
+ const el = $("gwc" + CURRENT_GW), strip = $("gwStrip");
+ if(!el || !strip) return;
+ strip.scrollLeft = el.offsetLeft - (strip.clientWidth / 2) + (el.clientWidth / 2);
+}
 function renderTeam(){
  const full = squad.length === SQUAD_SIZE;
  $("viewTeam").innerHTML = (squadWasRepaired ? '<div class="note">⚠️ ' + esc(t("repaired")) + "</div>" : "")
   + budgetHtml() + formationBar()
   + '<div class="note" style="margin-bottom:10px">⇄ ' + esc(t('swapTip')) + '</div>'
-  + '<div class="gwscrub"><span>' + esc(t("gwTitle")) + ' <b dir="ltr">' + num(CURRENT_GW) + '</b></span>'
-  + '<input type="range" min="1" max="36" value="' + CURRENT_GW + '" oninput="setGw(+this.value)" aria-label="' + esc(t("gwTitle")) + '">'
-  + '<div class="muted" style="flex-basis:100%">' + esc(t("scrubHint")) + '</div></div>'
+  + gwBarHtml()
   + pitchHtml(false)
   + '<button type="button" class="btn" onclick="openPicker()">'
   + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>"
   + (full ? '<button type="button" class="btn ghost" onclick="openCaptain()">' + esc(t("capTitle")) + "</button>" : "")
   + '<button type="button" class="btn ghost" onclick="resetDemo()">' + esc(t("resetDemo")) + "</button>";
- if(squad.length) maybeCoach("budget", "budBox", t("coachBudget"));
+ if(squad.length) maybeCoach("budget", "budBox", "coachBudget");
 }
 
 function renderPoints(){
@@ -904,7 +962,7 @@ function renderPoints(){
       + (r.uncovered ? '⚠️ ' + esc(t('uncoveredLab')) + ': ' + num(r.uncovered) : '') + '</div>'; })()
   + '<div class="note">' + esc(t('simNote')) + '</div>'
   + pitchHtml(true, gw);
- maybeCoach("pts", "viewPoints", t("coachPts"));
+ maybeCoach("pts", "viewPoints", "coachPts");
 }
 
 /* Rivals own REAL squads and are scored by the same engine as the user.
@@ -912,7 +970,10 @@ function renderPoints(){
    rival to the user's own score: three offsets came out positive and two negative, so every
    player sat at exactly 4th of 6 forever, whatever they picked. A leaderboard that cannot move
    is not a leaderboard — and it was the first screen telling the owner the game was over. */
-const RIVALS = ["Yahia", "Hegazy", "Omar", "Kareem", "Mostafa"];
+/* names, not transliterations - the leaderboard is the one screen where a user looks for
+   someone they know, and Latin names in an Arabic-first product read as placeholder data */
+const RIVALS = [["يحيى","Yahia"], ["حجازي","Hegazy"], ["عمر","Omar"], ["كريم","Kareem"], ["مصطفى","Mostafa"]];
+const rivalName = r => r[LANG === "ar" ? 0 : 1];
 function rivalSquad(name){
  const out = [], byLg = {};
  /* deterministic per rival, but a genuinely different team each — sample the pool by a seeded walk */
@@ -940,7 +1001,7 @@ function rivalTotal(name){
 }
 function renderBoard(){
  const me = seasonTotal();
- const rivals = RIVALS.map(n => ({n: n, s: rivalTotal(n)}));
+ const rivals = RIVALS.map(r => ({n: rivalName(r), s: rivalTotal(r[1])}));
  const rows = rivals.concat([{n:t("you"), s:me, me:true}]).sort((a, b) => b.s - a.s);
  $("viewBoard").innerHTML = '<div class="card"><h3>' + esc(t("segBoard")) + "</h3>"
   + rows.map((r, i) => '<div class="lbrow' + (r.me ? " me" : "") + '"><span class="lbrank" dir="ltr">' + num(i + 1) + "</span>"
@@ -1117,31 +1178,47 @@ function openBreakdown(id, gw){
 /* ---------------- help + glossary ----------------
    Arabic fantasy vocabulary does not exist in most fans' heads, so every term is
    given in Arabic with a plain one-line explanation, English underneath. */
+/* The definition is a [ar, en] PAIR. It used to be a single Arabic string shown in both
+   languages, so the entire English glossary rendered in Arabic. */
 const GLOSSARY = [
- ["الجولة","Gameweek","فترة بين إقفالين. كل ماتش تلعبه أنديتك جوّاها بيتحسب لك."],
- ["الكابتن","Captain","نادي واحد بس في فريقك بياخد ضعف نقطه كل جولة."],
- ["الميزانية","Budget","الـ 120 مليون اللي بتشتري بيها أنديتك. مش فلوس حقيقية."],
- ["الانتقالات","Transfers","تغيير نادي بنادي تاني بعد ما تبدأ."],
- ["شباك نظيفة","Clean sheet","النادي خلّص الماتش من غير ما يدخل عليه أي هدف."],
- ["مكافأة قوة الخصم","Opponent strength bonus","لو نادي ضعيف كسب نادي كبير، بياخد نقط زيادة."],
- ["الجوكرات","Chips","مزايا بتستخدمها مرتين في الموسم — واحدة في كل نص."],
- ["تغيير شامل","Wildcard","تغيّر فريقك كله مرة واحدة من غير خصم نقط."],
- ["فريق مؤقت","Free Hit","فريق لجولة واحدة بس، وبعدها يرجع فريقك الأصلي."],
- ["مالوش ماتش","No fixture","النادي مالوش ماتش في الجولة دي، فمش هياخد نقط."]
+ ["الجولة","Gameweek",["فترة بين إقفالين. كل ماتش تلعبه أنديتك جوّاها بيتحسب لك.",
+   "The period between two deadlines. Every match your clubs play inside it counts for you."]],
+ ["الكابتن","Captain",["نادي واحد بس في فريقك بياخد ضعف نقطه كل جولة.",
+   "One club in your team scores double every round."]],
+ ["الميزانية","Budget",["الـ 120 مليون اللي بتشتري بيها أنديتك. مش فلوس حقيقية.",
+   "The 120M you buy your clubs with. Not real money."]],
+ ["الانتقالات","Transfers",["تغيير نادي بنادي تاني بعد ما تبدأ.",
+   "Swapping one club for another once the season is under way."]],
+ ["شباك نظيفة","Clean sheet",["النادي خلّص الماتش من غير ما يدخل عليه أي هدف.",
+   "The club finished the match without conceding a goal."]],
+ ["مكافأة قوة الخصم","Opponent strength bonus",["لو نادي ضعيف كسب نادي كبير، بياخد نقط زيادة.",
+   "A weaker club that beats a stronger one earns extra points."]],
+ ["الجوكرات","Chips",["مزايا بتستخدمها مرتين في الموسم — واحدة في كل نص.",
+   "Special advantages you can use twice a season — one in each half."]],
+ ["تغيير شامل","Wildcard",["تغيّر فريقك كله مرة واحدة من غير خصم نقط.",
+   "Rebuild your whole team once, with no points penalty."]],
+ ["فريق مؤقت","Free Hit",["فريق لجولة واحدة بس، وبعدها يرجع فريقك الأصلي.",
+   "A team for one round only; your original squad returns afterwards."]],
+ ["مالوش ماتش","No fixture",["النادي مالوش ماتش في الجولة دي، فمش هياخد نقط.",
+   "The club has no match this round, so it scores nothing."]]
 ];
 function openHelp(){
  openSheet("<h2>" + esc(t("rulesTitle")) + "</h2>"
   + '<div class="card"><h3>' + esc(t("wiz1h")) + '</h3><div class="dim" style="font-size:13px;line-height:1.7">' + t("wiz1p") + "</div></div>"
   + '<div class="card"><h3>' + esc(t("wiz2h")) + '</h3><div class="dim" style="font-size:13px;line-height:1.7">' + t("wiz2p") + "</div></div>"
   + '<div class="card"><h3>' + esc(t("glossTitle")) + "</h3>"
-  + GLOSSARY.map(g => '<div class="gloss"><div class="gterm">' + esc(g[0]) + '</div><div class="gen" dir="ltr">' + esc(g[1]) + "</div>"
-    + '<div class="gdef">' + esc(g[2]) + "</div></div>").join("") + "</div>"
+  + GLOSSARY.map(g => '<div class="gloss"><div class="gterm">' + esc(LANG === "ar" ? g[0] : g[1]) + '</div>'
+    + '<div class="gen"' + (LANG === "ar" ? ' dir="ltr"' : "") + '>' + esc(LANG === "ar" ? g[1] : g[0]) + "</div>"
+    + '<div class="gdef">' + esc(g[2][LANG === "ar" ? 0 : 1]) + "</div></div>").join("") + "</div>"
   + '<button type="button" class="btn" onclick="closeSheet()">' + esc(t("done")) + "</button>");
 }
 
 /* ---------------- coach marks: at most one per session, never repeated ---------------- */
 let coachShownThisSession = false;
-function maybeCoach(key, anchorId, text){
+/* takes a STR KEY, not rendered text: passing the text froze the coach mark in whichever
+   language happened to be active when it was first built */
+function maybeCoach(key, anchorId, strKey){
+ const text = t(strKey);
  if(coachShownThisSession || seenCoach[key]) return;
  const el = $(anchorId); if(!el) return;
  coachShownThisSession = true;
@@ -1171,9 +1248,15 @@ function openWizard(){
      the module's stub (() => 8), which made 15 clubs cost exactly 120.0M — the budget, to
      the decimal — so the squad looked perfectly legal and actually cost 201M. A default
      that happens to equal the right answer is the worst kind of default. */
+  /* the tutorial said "Round 1" while the app ran at gameweek 6, and its closing step had no
+     time on it, because neither was ever passed in */
+  const gwFrom = ["الجمعة 21 أغسطس", "Fri 21 Aug"], gwTo = ["الأحد 23 أغسطس", "Sun 23 Aug"];
   TS = tutInit({clubs: CLUBS, price: priceOf, leagueName: leagueName, lang: LANG,
                 size: SQUAD_SIZE, startSize: START_SIZE, budget: BUDGET,
-                maxPerLeague: MAX_PER_LEAGUE, minPrice: MIN_CLUB_PRICE, seed: 20260816});
+                maxPerLeague: MAX_PER_LEAGUE, minPrice: MIN_CLUB_PRICE, seed: 20260816,
+                gw: {no: CURRENT_GW, from: gwFrom, to: gwTo,
+                     lock: ["الجمعة 8:30 مساءً", "Fri 8:30pm"],
+                     fixture: ["أول ماتش", "first match"]}});
   tutMount();
  }
  $("wiz").classList.remove("hide");
