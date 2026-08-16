@@ -369,7 +369,12 @@ function validateSquad(){
   const lg = c.lg;
   if((seenLg[lg] || 0) >= MAX_PER_LEAGUE) continue;             /* league cap tightened */
   const cost = kept.reduce((a, k) => a + priceOf(k), 0) + priceOf(id);
-  if(cost > BUDGET) continue;                                    /* prices rose past the budget */
+  /* Keeping a club must not strand the user. The FIRST version of this only checked the
+     budget, and produced a squad of 5 with 9.5M left for 3 slots that needed 12M — legal
+     but impossible to finish. Apply the same reserve floor the picker enforces, so a
+     repaired squad is always completable. */
+  const needForRest = (SQUAD_SIZE - (kept.length + 1)) * MIN_CLUB_PRICE;
+  if(cost + needForRest > BUDGET) continue;                      /* prices rose past the budget */
   seenLg[lg] = (seenLg[lg] || 0) + 1;
   kept.push(id);
  }
