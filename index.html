@@ -6,6 +6,11 @@
 <meta name="theme-color" content="#070B1A">
 <title>جولك فانتازي · Goallak Fantasy — DEMO</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⚽</text></svg>">
+<!-- The five design modules, built from modules/*.js by scripts/build-bundle.mjs.
+     Sibling files rather than inlined: the sources are 325KB and inlining would take the
+     page from 72KB to ~400KB, destroying the load-time advantage that is this product's
+     one measured edge. These change rarely and cache independently of index.html. -->
+<link rel="stylesheet" href="modules.css">
 <style>
 /* ============================================================================
    GOALLAK FANTASY — ONE MODE ONLY.
@@ -384,6 +389,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  .st--enter .slot{opacity:1 !important;transform:translate(var(--tx),-50%) !important}
 }
 </style>
+<script src="modules.js"></script>
 </head>
 <body>
 
@@ -532,6 +538,12 @@ const STR = {
  you:["أنت","You"],
  simNote:["النتائج هنا محاكاة لعرض الشكل — مش نتائج حقيقية.","Results here are simulated to show the design — not real fixtures."]
 };
+/* Every module ships bilingual [ar,en] pairs in STR's own shape. Merged once, here, so
+   t() reaches all of them and nothing has to know which module a string came from.
+   The modules' own tests verify there are zero key collisions between them. */
+for(const bag of ["GW_STR", "CHIP_STR", "TUT_STR", "SHARE_STR", "LND_STR"]){
+ try{ if(typeof window[bag] === "object" && window[bag]) Object.assign(STR, window[bag]); }catch(_){}
+}
 function t(k){ const e = STR[k]; return e ? e[LANG === "ar" ? 0 : 1] : k; }
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 /* Western digits everywhere, per the app's own rule */
@@ -1127,11 +1139,40 @@ function maybeCoach(key, anchorId, text){
 /* ---------------- first-run wizard ----------------
    Target: a complete team in under 3 minutes, and the fast path is 8 taps because
    step 3 hands the user a finished squad instead of an empty board. */
+/* ---------------- the tutorial ----------------
+   The demo resets on every open, so this is the most-seen screen in the product. The
+   module owns the content and the state machine; the host owns commit, focus and scroll.
+   Every control carries data-tut-act — no inline handlers, because the module is pure. */
+let TS = null;
+function tutMount(){ $("wizBox").innerHTML = tutHtml(TS); }
 function openWizard(){
- wizStep = 0; paintWizard();
+ if(typeof tutInit !== "function"){ wizStep = 0; paintWizard(); }   /* bundle absent: fall back */
+ else{
+  /* `price` is a FUNCTION of club id, not a map. Passing the map silently fell through to
+     the module's stub (() => 8), which made 15 clubs cost exactly 120.0M — the budget, to
+     the decimal — so the squad looked perfectly legal and actually cost 201M. A default
+     that happens to equal the right answer is the worst kind of default. */
+  TS = tutInit({clubs: CLUBS, price: priceOf, leagueName: leagueName, lang: LANG,
+                size: SQUAD_SIZE, startSize: START_SIZE, budget: BUDGET,
+                maxPerLeague: MAX_PER_LEAGUE, minPrice: MIN_CLUB_PRICE, seed: 20260816});
+  tutMount();
+ }
  $("wiz").classList.remove("hide");
  document.body.classList.add("gk-lock");
 }
+$("wizBox").addEventListener("click", function(e){
+ const el = e.target.closest("[data-tut-act]");
+ if(!el || !TS) return;
+ TS = tutReduce(TS, {type: el.dataset.tutAct, arg: el.dataset.tutArg});
+ if(TS.done){
+  squad = TS.squad.slice(); captain = TS.captain; save();
+  closeWizard(); return;
+ }
+ tutMount();
+ const f = $("wizBox").querySelector("[data-tut-focus]");
+ if(f) f.focus({preventScroll:true});
+ $("wizBox").scrollTop = 0;
+});
 function closeWizard(){
  /* Re-arm the walk-out. boot() paints the pitch and then covers it with the wizard, so the
     entry sequence was being spent behind a z-index 120 modal — every run, since the demo
@@ -1182,6 +1223,7 @@ function toggleLang(){
  LANG = LANG === "ar" ? "en" : "ar";
  try{ localStorage.setItem("fx_lang", LANG); }catch(_){}
  paintChrome(); render();
+ if(TS && !$("wiz").classList.contains("hide")){ TS = tutReduce(TS, {type:"LANG", arg: LANG}); tutMount(); }
  if(!$("sheet").classList.contains("hide")) closeSheet();
 }
 
