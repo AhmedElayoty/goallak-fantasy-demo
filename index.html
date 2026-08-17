@@ -593,48 +593,14 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  overflow:hidden}
 .rndb__fill{block-size:100%;background:linear-gradient(90deg,var(--fx-acc),var(--fx-gold))}
 
-/* ============================================================================
-   THE GAP BAND — «إنت بتلعب ضد حد» / you are playing somebody.
-   The one thing this screen was missing: an opponent. Without it the screen shows
-   a number with nothing to compare it to, which is why it produced nothing on the
-   fortieth open, or the first. Every card is then read against that rival: clubs
-   you BOTH own cannot move the gap between you, so they recede.
-   ============================================================================ */
-/* The clock and the scoreboard rendered as the same object — same fill, same border, same
-   radius, stacked 7px apart — so a glance could not tell which was which. An accent rail
-   separates them, and the rival's number drops from 28px to 20px: your score and a
-   stranger's were typographically equal and both dwarfed the round number, which is most of
-   why tapping here read as "the ranking changed". */
-.gapb{display:block;inline-size:100%;text-align:start;margin-block-end:6px;padding:4px 10px;
- border-radius:var(--r);background:linear-gradient(180deg,#1E2A56,#141D3E);
- border:1px solid var(--fx-line-2);border-inline-start:3px solid var(--fx-gold);
- box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 6px 18px -8px rgba(0,0,0,.75)}
+/* The head-to-head band that used to sit here is gone at the owner's request: on the screen
+   where you look at YOUR team, a second manager's score in 28px type beside your own is an
+   interruption, and it was what made a tap here appear to rewrite the standings. The
+   comparison lives on the standings tab. Its CSS, its renderer and the shared-club dimming
+   are all deleted rather than left behind as dead weight. */
 .rndb{border-inline-start:3px solid var(--fx-live);
  background:linear-gradient(180deg,#1E2A56,#141D3E) !important;
  box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 6px 18px -8px rgba(0,0,0,.75)}
-.gapb__n.them{font-size:20px}
-.gapb__nums{display:flex;inline-size:100%;background:none;border:0;padding:0}
-.gapb__swap{flex:0 0 auto;min-block-size:28px;padding:2px 8px;border-radius:7px;
- background:var(--fx-surface-3);border:1px solid var(--fx-line-3);
- color:var(--fx-ink-dim);font-size:10px;font-weight:800;white-space:nowrap}
-.gapb__who{display:flex;align-items:center;justify-content:space-between;gap:8px;
- font-size:12.5px;font-weight:800;margin-block-end:2px}
-.gapb__me{color:var(--fx-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gapb__vs{color:var(--fx-ink-mute);font-size:11px;flex:0 0 auto}
-.gapb__them{color:var(--fx-ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
- text-align:end}
-.gapb__nums{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.gapb__n{font:900 28px/1 system-ui;font-variant-numeric:tabular-nums;direction:ltr}
-.gapb__n.me{color:var(--fx-ink)}
-.gapb__n.them{color:var(--fx-ink-dim)}
-/* The gap always carries a GLYPH and a SIGN as well as a hue: deuteranopia collapses
-   --fx-pos and --fx-neg to 1.32:1, so colour alone is unreadable for ~8% of men. */
-.gapb__d{font:900 15px/1 system-ui;font-variant-numeric:tabular-nums;direction:ltr;flex:0 0 auto}
-.gapb__d[data-s="pos"]{color:var(--fx-pos)}
-.gapb__d[data-s="neg"]{color:var(--fx-neg)}
-.gapb__d[data-s="nil"]{color:var(--fx-ink-mute)}
-.gapb__part{font-size:11px;font-weight:800;color:var(--fx-ink-mute)}
-
 /* ---------- tier dots ---------- */
 .tier{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--fx-ink-dim)}
 .tdot{width:8px;height:8px;border-radius:50%;display:inline-block}
@@ -677,9 +643,9 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 /* TOUCH FEEDBACK. -webkit-tap-highlight-color is transparent globally and only the club card
    had an :active rule, so tapping the big orange button, the tab bar, or any of 126 picker
    rows produced nothing at all on screen. On a phone that IS the "something is off". */
-.btn:active,.hbtn:active,.gapb__swap:active,.gwchip:active,.clubrow:active,
-.fchip:active,.bnav button:active,.sx:active,.gapb__nums:active{transform:scale(.97)}
-.btn,.hbtn,.gapb__swap,.gwchip,.clubrow,.fchip,.bnav button,.sx,.gapb__nums{
+.btn:active,.hbtn:active,.gwchip:active,.clubrow:active,
+.fchip:active,.bnav button:active,.sx:active{transform:scale(.97)}
+.btn,.hbtn,.gwchip,.clubrow,.fchip,.bnav button,.sx{
  transition:transform 90ms var(--e-out)}
 /* the primary action should look like an object you can press */
 .btn{background:linear-gradient(180deg,#FF9563,#FF7A45 46%,#E45E2C);
@@ -903,14 +869,9 @@ const STR = {
  /* full words, for the screen reader and the breakdown sheet — the card shows H/A */
  venH:["على أرضه","Home"], venA:["بره","Away"],
  capLab:["الكابتن","Captain"],
- h2hLab:["دوس عشان تغيّر منافسك","Tap to change your rival"],
- h2hNext:["غيّر المنافس","Change rival"],
  benchedNoCap:["على الدكة — الكابتن لازم يكون من الـ11","On the bench — the captain must be one of the XI"],
  gwWord:["جولة","ROUND"],
  gwOf:["الجولة {n} من {of}","Round {n} of {of}"],
- sharedLab:["الباهت = منافسك عنده نفس النادي، فمش هيفرق بينكم",
-            "Faded = your rival owns them too, so they cannot change the gap"],
- partialTeam:["(فريق ناقص)","(incomplete)"],
  swapWith:["تبدّل {club} بمين؟","Swap {club} with who?"],
  swapPick:["اختار اللي هيتبدّل","Pick a club to swap"],
  cancel:["إلغاء","Cancel"],
@@ -1352,7 +1313,8 @@ function pitchHtml(withPoints, gw){
  const enter = _entryPlayed ? "" : " st--enter";
  _entryPlayed = true;
  const full = squad.length >= SQUAD_SIZE;
- const shared = rivalOwned();          /* the head-to-head set; empty when the band is off */
+ /* the differential set went with the head-to-head band; nothing on this screen dims now */
+ const shared = new Set();
  /* only the round you actually arrived at counts, and only from the team screen */
  markRound(gwNow, !withPoints);
  const ground = groundOf();
@@ -1504,13 +1466,14 @@ function renderTeam(){
     once and then never again — they move behind «عدّل فريقك». What is left above the pitch is
     the one thing worth 52px: who you are playing and by how much. */
  $("viewTeam").innerHTML = capNote + (squadWasRepaired ? '<div class="note">⚠️ ' + esc(t("repaired")) + "</div>" : "")
+  /* NO RIVAL COMPARISON ON THIS SCREEN. The head-to-head band lived here and the owner asked
+     for it gone: on the screen where you look at YOUR team, a second manager's score sitting
+     in 28px type next to your own is not context, it is an interruption — and it was the
+     thing that made a tap here appear to rewrite the standings. The comparison belongs on
+     the standings tab, which is where somebody goes to ask that question. Removing it also
+     retires the shared-club dimming, whose only purpose was to explain that band. */
   + roundBarHtml()
-  + (squad.length ? gapBandHtml() : "")
   + pitchHtml(false)
-  /* Dimmed cards read as a rendering fault until someone tells you what they mean. They are
-     the whole head-to-head idea, so the one line that explains them earns its space. */
-  + (squad.length && rivalOwned().size
-     ? '<div class="note">' + esc(t("sharedLab")) + "</div>" : "")
   + '<button type="button" class="btn" onclick="openPicker()">'
   + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>";
  /* the budget coach mark pointed at #budBox, which now lives in the settings sheet */
@@ -1699,7 +1662,6 @@ function markRound(gw, deliberate){
  try{ localStorage.setItem("fx_ledger", JSON.stringify(L)); }catch(_){}
 }
 function groundOf(){ return ledger().length >= GROUND_AT ? "clean" : "base"; }
-let h2hIdx = 0;
 /* THE SEED IS NEVER A DISPLAY NAME.
    rivalSquad() builds a rival's team from hash(name), and this used to be called with the
    TRANSLATED name in one place and the English name in another. In English the two strings
@@ -1716,21 +1678,6 @@ function boardRows(){
    .concat([{i: -1, seed: null, name: teamName(), s: seasonTotal(), me: true}])
    .sort((a, b) => b.s - a.s);
 }
-function nearestRival(){
- const rows = boardRows();
- const at = rows.findIndex(r => r.me);
- if(at < 0 || rows.length < 2) return null;
- /* the one above you; if you lead, the one breathing down your neck */
- const order = [];
- for(let d = 1; d < rows.length; d++){ if(rows[at - d]) order.push(rows[at - d]); if(rows[at + d]) order.push(rows[at + d]); }
- return order.length ? order[h2hIdx % order.length] : null;
-}
-function rivalOwned(){
- const r = nearestRival();
- if(!r || !r.seed || !squad.length) return new Set();
- return new Set(rivalSquad(r.seed));
-}
-function cycleRival(){ h2hIdx++; render(); }
 /* WHICH ROUND, AND WHEN. The owner's words: "i want it clear which game week are we in and
    when it will start and when it will finish." */
 function roundBarHtml(){
@@ -1743,28 +1690,6 @@ function roundBarHtml(){
   +  '<div class="rndb__s">' + esc(t("gwOf", {n: gw, of: 36})) + "</div>"
   +  '<div class="rndb__bar"><div class="rndb__fill" style="inline-size:' + pct + '%"></div></div>'
   + "</span></div>";
-}
-function gapBandHtml(){
- const r = nearestRival();
- if(!r) return "";
- const mine = seasonTotal(), d = mine - r.s;
- const glyph = d > 0 ? "▲ " : d < 0 ? "▼ " : "= ";
- const partial = squad.length && squad.length < SQUAD_SIZE
-   ? ' <span class="gapb__part">' + esc(t("partialTeam")) + "</span>" : "";
- /* The BAND opens the table — the predictable thing a score comparison should do. Cycling
-    the rival is its own small labelled control. It used to be the whole band's tap target,
-    and the owner tapped it and thought the standings had changed under him. A control that
-    silently rewrites the number you are reading is not a control, it is a surprise. */
- return '<div class="gapb">'
-  + '<span class="gapb__who"><span class="gapb__me">' + esc(teamName()) + partial + "</span>"
-  + '<button type="button" class="gapb__swap" onclick="cycleRival()" aria-label="'
-  +   esc(t("h2hLab")) + '">⇄ ' + esc(t("h2hNext")) + "</button>"
-  + '<span class="gapb__them">' + esc(r.name) + "</span></span>"
-  + '<button type="button" class="gapb__nums" onclick="navTo(\'board\')" aria-label="'
-  +   esc(t("segBoard")) + '">'
-  + '<span class="gapb__n me" dir="ltr">' + num(mine) + "</span>"
-  + '<span class="gapb__d" data-s="' + signOf(d) + '" dir="ltr">' + glyph + signed(d) + "</span>"
-  + '<span class="gapb__n them" dir="ltr">' + num(r.s) + "</span></button></div>";
 }
 /* الشريط - the share artifact. The captain is the shared referent: one decision, same pool,
    same deadline, settled in 48 hours. That is what makes two managers' rounds comparable. */
