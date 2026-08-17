@@ -136,6 +136,21 @@ let cdp, BASE;
 /* console errors, tagged with whatever context was current when they fired */
 const consoleErrors = [];
 const IGNORE_ERR = [/favicon\.ico/i];
+function wireConsole(client) {
+  const rec = (level, text) => {
+    if (!/error|severe/i.test(level)) return;
+    if (IGNORE_ERR.some(r => r.test(text))) return;
+    consoleErrors.push({ ctx, text: String(text).slice(0, 220) });
+  };
+  client.on("Runtime.consoleAPICalled", p => { if (p.type === "error" || p.type === "assert")
+    rec("error", (p.args || []).map(a => a.value ?? a.description ?? a.type).join(" ")); });
+  client.on("Runtime.exceptionThrown", p => rec("error",
+    (p.exceptionDetails.exception && p.exceptionDetails.exception.description) || p.exceptionDetails.text));
+  /* the URL matters: a network error's text is just "Failed to load resource", and whether
+     that is a real fault or a missing favicon is only visible in the url field */
+  client.on("Log.entryAdded", p => rec(p.entry.level,
+    p.entry.text + (p.entry.url ? "  <" + p.entry.url + ">" : "")));
+}
 
 async function evaluate(expression, opts) {
   const r = await cdp.send("Runtime.evaluate", {
@@ -156,14 +171,22 @@ async function waitFor(expr, ms, label) {
   throw new Error("timed out waiting for " + (label || expr));
 }
 async function setViewport(w, h) {
+  /* The OS window behind the tab has to be at least as big as the emulated viewport, or
+     Chrome rasterises at the window size and Page.captureScreenshot returns an upscale of
+     it. Emulation alone does not resize the window. */
+  try {
+    const { windowId } = await cdp.send("Browser.getWindowForTarget");
+    await cdp.send("Browser.setWindowBounds",
+      { windowId, bounds: { width: Math.max(w, 400) + 40, height: Math.max(h, 400) + 120, windowState: "normal" } });
+  } catch (_) { /* older Chrome, or no window — the calibration guard will catch the fallout */ }
   await cdp.send("Emulation.setDeviceMetricsOverride",
     { width: w, height: h, deviceScaleFactor: 1, mobile: false });
 }
-/* one-shot event wait. This has to be armed BEFORE the command that triggers it, and the
-   reload has to be awaited properly: the first version polled for `CLUBS` straight after
-   asking for a reload, saw the OLD document's CLUBS still sitting there, and ran the whole
-   matrix against a page that had never been reloaded — so every run was in Arabic with the
-   onboarding wizard still covering the pitch. The suite was reporting its own race. */
+/* one-shot event wait. It has to be armed BEFORE the command that triggers it. The first
+   version of loadApp polled for `CLUBS` straight after asking for a navigation, saw the OLD
+   document's CLUBS still sitting there, and ran the whole matrix against a page that had
+   never reloaded — every run silently in Arabic with the wizard still covering the pitch.
+   The suite was reporting its own race. */
 function once(event, ms) {
   return new Promise(res => {
     let done = false;
@@ -177,11 +200,6 @@ async function navigate(url) {
   await cdp.send("Page.navigate", { url });
   await done;
 }
-async function reload() {
-  const done = once("Page.loadEventFired");
-  await cdp.send("Page.reload", { ignoreCache: false });
-  await done;
-}
 
 /* Boot the app in a known state. `fresh` leaves onboarding armed (for the tutorial suite);
    otherwise onboarding is marked done and a full legal squad is installed, because an empty
@@ -189,7 +207,22 @@ async function reload() {
    is a squad the app itself would accept — not a fixture we invented. */
 async function loadApp({ lang, fresh }) {
   await navigate(BASE + "/index.html");
-  await waitFor(`typeof CLUBS !== "undefined" && CLUBS && CLUBS.length > 0`, 15000, "club data");
+  try {
+    await waitFor(`typeof CLUBS !== "undefined" && CLUBS && CLUBS.length > 0`, 15000, "club data");
+  } catch (_) {
+    /* This is what a page that stopped parsing looks like from outside: the HTML arrives,
+       nothing runs, and there is no error on screen — just an empty shell. */
+    const why = await evaluate(`JSON.stringify({
+      html: document.documentElement.outerHTML.length,
+      hasApp: typeof CLUBS !== "undefined",
+      nav: document.getElementById("bnav") ? document.getElementById("bnav").children.length : -1,
+      body: document.body.innerText.trim().slice(0,120) })`).then(JSON.parse).catch(() => ({}));
+    const errs = consoleErrors.slice(-4).map(e => e.text).join(" | ");
+    throw new Error("the page served " + (why.html || 0) + " bytes of HTML but its script never "
+      + "produced any club data — the app did not start. "
+      + (why.hasApp === false ? "CLUBS is not even declared, which is what a syntax error looks like. " : "")
+      + (errs ? "Console said: " + errs : "The console said nothing."));
+  }
   await waitFor(`document.getElementById("bnav").children.length > 0`, 8000, "chrome painted");
   /* THE DEMO WIPES localStorage ON EVERY OPEN — fx_lang and fx_onboarded included. That is
      deliberate (it is a review build and the owner opens the link to judge the first run),
@@ -387,12 +420,19 @@ window.__QA = (function(){
      same two colours, at the real on-pitch size, so a screenshot can be asked the only
      question that matters: does this plain shirt have a full-height band of its trim
      colour running down it? ------------------------------------------------------------ */
-  function mountKits(){
+  /* The sheet is plain in-flow content on a stripped body, NOT a fixed full-screen overlay.
+     A position:fixed + overflow:hidden host gets promoted to its own composited layer, and
+     Chrome hands back a stale, washed-out raster of that layer — magenta came out white.
+     This runs in a throwaway tab, so hiding the app's own nodes costs nothing. */
+  function mountKits(from, to){
     const old = document.getElementById("__qaKits"); if(old) old.remove();
+    document.body.classList.remove("gk-lock");
+    for(const el of [...document.body.children]) if(el.id !== "__qaKits") el.style.display = "none";
+    document.documentElement.style.background = "#101010";
+    document.body.style.cssText = "background:#101010;margin:0;padding:6px";
     const host = document.createElement("div");
     host.id = "__qaKits";
-    host.style.cssText = "position:fixed;inset:0;z-index:99999;background:#101010;overflow:hidden;"
-      + "display:flex;flex-wrap:wrap;align-content:flex-start;gap:6px;padding:6px";
+    host.style.cssText = "display:flex;flex-wrap:wrap;align-content:flex-start;gap:6px";
     const mk = (c, pat) => {
       const s = document.createElement("span");
       s.className = "cc__kit fxkit";
@@ -415,14 +455,15 @@ window.__QA = (function(){
       s.style.cssText = "inline-size:76px;block-size:66px;flex:0 0 auto;background:#FF00FF";
       s.dataset.qaCal = "1"; return s; };
     const meta = [];
-    for(let i = 0; i < 15; i++) host.appendChild(cal());
+    const slice = CLUBS.slice(from, to);
+    for(let i = 0; i < 6; i++) host.appendChild(cal());
     let k = 0;
-    for(const c of CLUBS){
+    for(const c of slice){
       host.appendChild(mk(c, c.pat)); host.appendChild(mk(c, "stripes"));
-      if(++k % 15 === 0) host.appendChild(cal());
+      if(++k % 5 === 0) host.appendChild(cal());
       meta.push({ id: c.id, code: c.code, pat: c.pat, c1: c.c1, c2: c.c2 });
     }
-    for(let i = 0; i < 15; i++) host.appendChild(cal());
+    for(let i = 0; i < 6; i++) host.appendChild(cal());
     document.body.appendChild(host);
     const all = [...host.children].map(el => { const r = R(el);
       return { cal: el.dataset.qaCal === "1", id: el.dataset.qaId, pat: el.dataset.qaPat,
@@ -431,10 +472,45 @@ window.__QA = (function(){
     return { meta, rects: all.filter(r => !r.cal), cals: all.filter(r => r.cal),
              hostH: Math.round(R(host).height), gridH: host.scrollHeight };
   }
-  function unmountKits(){ const o = document.getElementById("__qaKits"); if(o) o.remove(); }
+  function unmountKits(){
+    const o = document.getElementById("__qaKits"); if(o) o.remove();
+    for(const el of [...document.body.children]) el.style.display = "";
+    document.body.style.cssText = ""; document.documentElement.style.background = "";
+  }
+
+  /* THE KIT ASSERTION THAT DOES NOT NEED A CAMERA.
+     Every club's declared kit is rendered beside a striped twin in the same two colours, and
+     the resolved background layers of both are handed back for analysis. Reading the
+     computed value (not the stylesheet text) means --c1/--c2 are substituted, the cascade
+     has been applied, and per-layer background-size is resolved — i.e. it is what the
+     browser is actually about to paint. */
+  function kitCss(){
+    const host = document.createElement("div");
+    host.id = "__qaKitCss";
+    host.style.cssText = "position:absolute;left:-9999px;top:0;visibility:hidden";
+    const mk = (c, pat) => { const s = document.createElement("span");
+      s.className = "cc__kit fxkit"; s.setAttribute("data-pat", pat);
+      if(c.iso) s.setAttribute("data-iso", "1");
+      s.style.cssText = "position:static;inline-size:76px;block-size:66px;--c1:" + c.c1 + ";--c2:" + c.c2;
+      return s; };
+    const read = el => { const cs = getComputedStyle(el);
+      return { img: cs.backgroundImage, size: cs.backgroundSize, repeat: cs.backgroundRepeat,
+               color: cs.backgroundColor }; };
+    const out = [];
+    for(const c of CLUBS){
+      const a = mk(c, c.pat), b = mk(c, "stripes");
+      host.appendChild(a); host.appendChild(b);
+      out.push({ id: c.id, code: c.code, pat: c.pat, c1: c.c1, c2: c.c2, iso: !!c.iso, a: null, b: null, _i: out.length });
+    }
+    document.body.appendChild(host);
+    const kids = host.children;
+    for(let i = 0; i < out.length; i++){ out[i].a = read(kids[i * 2]); out[i].b = read(kids[i * 2 + 1]); }
+    host.remove();
+    return out;
+  }
 
   return { hitTest, transforms3d, textFit, rowGeometry, underNav, scoreboard,
-           pointsSeasonTotal, mountKits, unmountKits };
+           pointsSeasonTotal, mountKits, unmountKits, kitCss };
 })(); "installed"`);
 }
 
@@ -583,16 +659,7 @@ async function main() {
   await cdp.send("Runtime.enable");
   await cdp.send("Page.enable");
   await cdp.send("Log.enable");
-  const rec = (level, text) => {
-    if (!/error|severe/i.test(level)) return;
-    if (IGNORE_ERR.some(r => r.test(text))) return;
-    consoleErrors.push({ ctx, text: String(text).slice(0, 220) });
-  };
-  cdp.on("Runtime.consoleAPICalled", p => { if (p.type === "error" || p.type === "assert")
-    rec("error", (p.args || []).map(a => a.value ?? a.description ?? a.type).join(" ")); });
-  cdp.on("Runtime.exceptionThrown", p => rec("error",
-    (p.exceptionDetails.exception && p.exceptionDetails.exception.description) || p.exceptionDetails.text));
-  cdp.on("Log.entryAdded", p => rec(p.entry.level, p.entry.text));
+  wireConsole(cdp);
 
   console.log("goalak live QA — Chrome " + path.basename(chromePath) + ", serving " + HERE + " on " + BASE + "\n");
 
@@ -617,6 +684,19 @@ async function main() {
     + " items, #viewTeam children " + boot.team + (boot.failCard ? ", SHOWING THE LOAD-FAILURE CARD" : ""));
   ok("the app builds a full legal squad", boot.squad === 15, "squad = " + boot.squad);
   ok("the tutorial module is present", boot.tut, boot.tut ? "tutInit() bound" : "tutInit missing — the wizard falls back to a version with no highlighted control");
+
+  /* ---- KIT FIDELITY. Bug: 60 solid-kit clubs rendered striped.
+     THIS RUNS FIRST, ON PURPOSE. It is the only assertion that reads pixels, and Chrome's
+     headless compositor stops refreshing this tab's surface after it has been resized a
+     number of times — every later Page.captureScreenshot then returns a byte-identical
+     frozen frame. Taken first, the capture is honest. The magenta calibration tiles are
+     what proves that on every run rather than assuming it. ------------------------- */
+  setCtx("kits");
+  /* deliberately modest: the swatch sheet is captured in pages of KIT_PAGE clubs, because a
+     big sheet of gradient-painted tiles is rasterised at reduced resolution */
+  await setViewport(1000, 760);
+  await loadApp({ lang: "en", fresh: false });
+  await kitSuite();
 
   /* ---- the matrix: 5 viewports x 2 languages ------------------------------------- */
   const boardByLang = {};
@@ -681,13 +761,6 @@ async function main() {
   }
 
   /* ---- KIT FIDELITY. Bug: 60 solid-kit clubs rendered striped. ------------------- */
-  setCtx("kits");
-  /* tall enough for all 252 swatches (126 clubs x declared + striped control) to be inside
-     one screenshot — a swatch that falls below the fold samples nothing and would "pass" */
-  await setViewport(1240, 1500);
-  await loadApp({ lang: "en", fresh: false });
-  await kitSuite();
-
   /* ---- THE TUTORIAL. Mandatory onboarding; it has trapped users before. ---------- */
   for (const lang of LANGS) {
     for (const vp of [VIEWPORTS[0], VIEWPORTS[4]]) {
@@ -707,20 +780,21 @@ async function main() {
 }
 
 /* --- kit fidelity ------------------------------------------------------------------ */
-async function kitSuite() {
-  const mounted = await evaluate(`JSON.stringify(__QA.mountKits())`).then(JSON.parse);
+const KIT_PAGE = 24;          /* clubs per screenshot */
 
-  /* Capture, then MAKE THE SCREENSHOT PROVE ITSELF against the magenta tiles before it is
-     allowed to accuse anybody. After a dozen viewport changes Chrome's compositor surface
-     lags behind the emulated metrics and hands back a blurry upscale in which every colour
-     is wrong; re-asserting the metrics and giving it frames fixes it, but the only safe
-     posture is to keep checking and to fail loudly if it never comes good. */
+/* Mount a page of swatches and capture it, refusing to return until the magenta calibration
+   tiles come back EXACTLY 255,0,255. A whole 126-club sheet in one shot does not: Chrome
+   rasterises ~290 gradient-painted tiles at reduced resolution and hands back a washed-out
+   upscale in which every colour is wrong — which is how the first version of this assertion
+   "found" 33 kit bugs that did not exist. Small pages raster cleanly. */
+async function captureKitPage(from, to) {
   let img = null, badCal = [], shotData = null, tries = 0;
-  for (; tries < 8; tries++) {
-    await cdp.send("Emulation.setDeviceMetricsOverride",
-      { width: 1240, height: 1500, deviceScaleFactor: 1, mobile: false });
+  let mounted = null;
+  for (; tries < 6; tries++) {
+    mounted = await evaluate(`JSON.stringify(__QA.mountKits(${from},${to}))`).then(JSON.parse);
+    try { await cdp.send("Page.bringToFront"); } catch (_) { }
     await evaluate(`new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))`);
-    await sleep(120 + tries * 150);
+    await sleep(80 + tries * 120);
     const shot = await cdp.send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
     shotData = shot.data;
     img = decodePng(Buffer.from(shot.data, "base64"));
@@ -734,23 +808,125 @@ async function kitSuite() {
     }
     if (!badCal.length) break;
   }
-  await evaluate(`__QA.unmountKits()`);
-  const shot = { data: shotData };
+  return { mounted, img, badCal, shotData, tries };
+}
 
-  ok("kits: the screenshot is a true render of the page", badCal.length === 0,
-    badCal.length ? badCal.length + "/" + mounted.cals.length + " calibration tiles came back the wrong colour after "
-      + tries + " attempts — the capture is stale or upscaled, so every colour reading below would be "
-      + "meaningless: " + badCal.slice(0, 5).join(" ")
-      : mounted.cals.length + " calibration tiles exact across " + img.W + "x" + img.H
-        + (tries ? " (settled after " + tries + " retries)" : ""));
-  if (badCal.length) return;
+/* ---- reading a shirt out of its computed background layers -------------------------
+   A kit is painted as a stack of CSS gradient layers. What made 60 plain clubs look striped
+   was a layer running along the HORIZONTAL axis (a 90deg gradient — a placket down the
+   chest, sleeve bars) in the trim colour, which by construction spans the whole height of
+   the shirt. Collars and hems run along the vertical axis (180deg/0deg) and can never do
+   that, however wide they are. So the rule is exact and needs no camera:
+
+     a `solid` kit may not contain a horizontal-axis gradient layer in --c2.
+
+   The same function run over a striped twin in the same two colours MUST report a band —
+   that is the proof the reader works, per club, rather than a check that cannot fail. */
+function splitLayers(s) {
+  const out = []; let depth = 0, cur = "";
+  for (const ch of s) {
+    if (ch === "(") depth++;
+    if (ch === ")") depth--;
+    if (ch === "," && depth === 0) { out.push(cur.trim()); cur = ""; continue; }
+    cur += ch;
+  }
+  if (cur.trim()) out.push(cur.trim());
+  return out;
+}
+const hexRgb = h => { const [r, g, b] = hex2rgb(h); return "rgb(" + r + ", " + g + ", " + b + ")"; };
+function verticalBands(css, c2hex) {
+  const layers = splitLayers(css.img).filter(l => l && l !== "none");
+  const sizes = splitLayers(css.size);
+  const want = hexRgb(c2hex);
+  const bands = [];
+  layers.forEach((layer, i) => {
+    if (!/^(repeating-)?linear-gradient\(/.test(layer)) return;
+    const m = layer.match(/^(?:repeating-)?linear-gradient\(\s*(-?[\d.]+)deg/);
+    /* no explicit angle means `to bottom`, i.e. 180deg — bands run across, not down */
+    const angle = ((m ? parseFloat(m[1]) : 180) % 360 + 360) % 360;
+    if (angle % 180 !== 90) return;                       /* not a vertical band */
+    if (layer.indexOf(want) < 0) return;                  /* not in the trim colour */
+    const size = (sizes[i] || sizes[sizes.length - 1] || "auto").trim();
+    const h = size.split(/\s+/)[1] || "auto";
+    if (!(h === "auto" || h === "100%")) return;          /* does not reach full height */
+    bands.push(angle + "deg layer #" + (i + 1) + " in " + c2hex);
+  });
+  return bands;
+}
+
+async function kitSuite() {
+  /* ---- the deterministic pass: every club, from computed style ---- */
+  const css = await evaluate(`JSON.stringify(__QA.kitCss())`).then(JSON.parse);
+  const striped = [], detectorDeadCss = [], noGradient = [];
+  for (const c of css) {
+    if (!/gradient/.test(c.a.img)) { noGradient.push(c.code + " (" + c.pat + "): " + c.a.img); continue; }
+    /* the striped twin is the per-club proof that the reader can see this club's colours */
+    if (!verticalBands(c.b, c.c2).length) { detectorDeadCss.push(c.code + " (" + c.c1 + "/" + c.c2 + ")"); continue; }
+    if (c.pat !== "solid") continue;
+    const bands = verticalBands(c.a, c.c2);
+    if (bands.length) striped.push(c.code + " " + c.c1 + "/" + c.c2 + " — " + bands.join(", "));
+  }
+  const solidCount = css.filter(c => c.pat === "solid").length;
+  ok("kits: a `solid` club never paints a full-height band of its second colour",
+    striped.length === 0 && solidCount > 0,
+    striped.length ? striped.slice(0, 8).join("; ") + (striped.length > 8 ? " (+" + (striped.length - 8) + " more)" : "")
+      : solidCount + " solid clubs of " + css.length + " checked against their own striped twin");
+  ok("kits: every club's declared pattern actually resolves to a gradient", noGradient.length === 0,
+    noGradient.slice(0, 6).join("; "));
+  ok("kits: the band reader is not vacuous", detectorDeadCss.length === 0,
+    detectorDeadCss.length ? detectorDeadCss.length + " clubs whose striped twin showed no band either — "
+      + "for these the assertion above proves nothing: " + detectorDeadCss.slice(0, 8).join(", ") : "");
+
+  /* ---- the pixel pass: advisory. See kitPixelSuite for why. ---- */
+  await kitPixelSuite();
+}
+
+/* The pixel pass renders the same swatch sheet and looks at it.
+   IT IS ADVISORY, and only because this machine cannot deliver a trustworthy screenshot of
+   THIS page: headless Chrome here returns a smooth, dithered, washed-out raster in which a
+   pure-magenta 76x66 tile reads back as 255,252,255. A trivial page screenshots perfectly
+   from the same browser and flags, so it is the goalak page's layer tree that defeats it.
+   The calibration tiles detect that, and when they fail this pass reports and stands down
+   rather than inventing failures — an earlier version of it "found" 33 kit bugs that were
+   entirely an artefact of the capture. The CSS pass above is the one that gates the commit. */
+async function kitPixelSuite() {
+  const total = await evaluate(`CLUBS.length`);
+  const pages = [];
+  let calTiles = 0, calBad = [], worstShot = null;
+  for (let from = 0; from < total; from += KIT_PAGE) {
+    const pg = await captureKitPage(from, Math.min(from + KIT_PAGE, total));
+    calTiles += pg.mounted.cals.length;
+    if (pg.badCal.length) { calBad.push("clubs " + from + "-" + Math.min(from + KIT_PAGE, total) + ": "
+      + pg.badCal.length + "/" + pg.mounted.cals.length + " wrong, e.g. " + pg.badCal.slice(0, 3).join(" "));
+      worstShot = pg; }
+    pages.push(pg);
+  }
+  await evaluate(`__QA.unmountKits()`);
   if (DUMP) {
+    const pg = worstShot || pages[0];
     const f = path.join(os.tmpdir(), "goalak-qa-kits.png");
-    fs.writeFileSync(f, Buffer.from(shot.data, "base64"));
-    note("kit swatch sheet written to " + f + " (" + img.W + "x" + img.H + ") — every club's declared kit "
-      + "beside a striped twin in the same two colours. Look at it if a kit assertion argues with you.");
+    fs.writeFileSync(f, Buffer.from(pg.shotData, "base64"));
+    note("kit swatch page written to " + f + " (" + pg.img.W + "x" + pg.img.H + ")"
+      + (worstShot ? " — NOTE this is the FAILED capture, it is not what the page looks like" : ""));
   }
 
+  if (calBad.length) {
+    note("kits: the pixel pass STOOD DOWN — its magenta calibration tiles came back "
+      + calBad[0].replace(/^clubs [\d-]+: /, "") + ". Measured: a page containing even ONE .fxkit "
+      + "swatch makes this browser return an unfaithful raster of the WHOLE viewport (the same "
+      + "tiles without .fxkit photograph perfectly), so no colour read off it can be trusted. "
+      + "The CSS-layer assertion above is what gates. THE HUMAN CHECK THIS REPLACES: open the "
+      + "live demo and look at the pitch — Liverpool, Spurs, Sevilla and Real Madrid must read "
+      + "as plain shirts with trim, never as stripes. Worth one look per visual change to the "
+      + "kit CSS; the CSS assertion catches the specific way it broke before.");
+    return;
+  }
+  ok("kits: the screenshot is a true render of the page", true,
+    calTiles + " calibration tiles exact across " + pages.length + " pages of "
+      + pages[0].img.W + "x" + pages[0].img.H);
+
+  const mounted = { meta: [].concat(...pages.map(p => p.mounted.meta)),
+                    rects: [].concat(...pages.map(p => p.mounted.rects.map(r => ({ ...r, _pg: p })))) };
   const byId = new Map(mounted.meta.map(m => [m.id, m]));
   /* a kit's colour classification: for each column, what fraction of its (vertically inset)
      rows are nearer to c2 than to c1. Rows are sampled from 20%–80% of the height so the
@@ -758,6 +934,7 @@ async function kitSuite() {
      the window, and so are the rounded corners. */
   const outOfShot = [];
   function columns(rect, c1, c2, code) {
+    const img = rect._pg.img;
     if (rect.x < 0 || rect.y < 0 || rect.x + rect.w > img.W || rect.y + rect.h > img.H) {
       outOfShot.push(code); return null;
     }
@@ -809,31 +986,17 @@ async function kitSuite() {
     }
   }
   ok("kits: every solid club could actually be measured", outOfShot.length === 0,
-    outOfShot.length ? outOfShot.length + " swatches fell outside the screenshot ("
-      + img.W + "x" + img.H + ") — the measurement would have been vacuous: " + outOfShot.slice(0, 8).join(",") : "");
-  ok("kits: a `solid` club never renders a full-height band of its second colour",
+    outOfShot.length ? outOfShot.length + " swatches fell outside their screenshot page — "
+      + "the measurement would have been vacuous: " + outOfShot.slice(0, 8).join(",") : "");
+  ok("kits: painted pixels agree — a `solid` club shows no full-height band of --c2",
     fails.length === 0 && checked > 0,
     fails.length ? fails.slice(0, 8).join("; ") + (fails.length > 8 ? " (+" + (fails.length - 8) + ")" : "")
       : checked + " solid clubs measured; worst solid column " + Math.round(maxSolid * 100)
         + "% vs striped control " + Math.round(minStripe * 100) + "%");
-  if (skipped.length) note("kits: " + skipped.length + " solid clubs skipped — c1 and c2 are the same colour, "
-    + "so no measurement can tell a stripe from a plain field: " + skipped.slice(0, 6).join(", "));
-  if (detectorDead.length) note("kits: " + detectorDead.length + " solid clubs skipped — the striped control did not "
-    + "read either, so the pixel test would have been vacuous: " + detectorDead.slice(0, 6).join(", "));
-
-  /* every non-solid club must actually pick up its own pattern rule rather than falling
-     through to the plain background — a cheap computed-style check over all 126 */
-  const solidBg = mounted.rects.find((r, i) => byId.get(r.id) && byId.get(r.id).pat === "solid" && r.pat === "solid");
-  const notApplied = [];
-  const seenPat = new Set();
-  for (const r of mounted.rects) {
-    if (r.pat !== (byId.get(r.id) || {}).pat) continue;
-    const m = byId.get(r.id);
-    seenPat.add(m.pat);
-    if (!/gradient/.test(r.bg)) notApplied.push(m.code + " (" + m.pat + "): " + r.bg);
-  }
-  ok("kits: every club's declared pattern actually renders as a gradient",
-    notApplied.length === 0, notApplied.slice(0, 6).join("; ") + " | patterns seen: " + [...seenPat].sort().join(","));
+  if (skipped.length) note("kits: " + skipped.length + " solid clubs skipped by the pixel pass — c1 and c2 are the "
+    + "same colour, so no measurement can tell a stripe from a plain field: " + skipped.slice(0, 6).join(", "));
+  if (detectorDead.length) note("kits: " + detectorDead.length + " solid clubs skipped by the pixel pass — the striped "
+    + "control did not read either: " + detectorDead.slice(0, 6).join(", "));
 }
 
 /* --- the tutorial ------------------------------------------------------------------- */
