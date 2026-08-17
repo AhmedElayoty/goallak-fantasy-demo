@@ -877,8 +877,15 @@ const FORMATIONS = {
 let formation = "4-4-2";
 try{ formation = localStorage.getItem("fx_form") || "4-4-2"; }catch(_){}
 
+/* Fantasy is a separate page inside the same app, so it must not open in a different
+   language from the one you were just reading. It keeps its own fx_lang once you choose one
+   here, but the FIRST time it opens it inherits the app's gk_lang - same origin, the very
+   record the app wrote. Opening the English app and landing in Arabic was this being missed. */
 let LANG = "ar";
-try{ LANG = localStorage.getItem("fx_lang") || "ar"; }catch(_){}
+try{
+ LANG = localStorage.getItem("fx_lang")
+     || (String(localStorage.getItem("gk_lang") || "").slice(0,2) === "en" ? "en" : "ar");
+}catch(_){}
 
 let CLUBS = [], LEAGUES = [], PRICES = {};
 let squad = [], captain = null, view = "team", pickFilter = "all", wizStep = 0;
@@ -1706,7 +1713,12 @@ function openRename(){
    is not a leaderboard — and it was the first screen telling the owner the game was over. */
 /* names, not transliterations - the leaderboard is the one screen where a user looks for
    someone they know, and Latin names in an Arabic-first product read as placeholder data */
-const RIVALS = [["يحيى","Yahia"], ["حجازي","Hegazy"], ["عمر","Omar"], ["كريم","Kareem"], ["مصطفى","Mostafa"]];
+/* THESE WERE INVENTED PEOPLE. Five hardcoded names filled the table so the demo had someone
+   to sit against. With the season not started they all score 0, so the screen became a list
+   of five strangers on nothing - a fabricated league presented as standings. A table shows
+   real entrants or admits it is empty; it never invents them. The engine that scores an
+   opponent is kept, because it is correct and is needed the moment real managers exist. */
+const RIVALS = [];
 const rivalName = r => r[LANG === "ar" ? 0 : 1];
 function rivalSquad(name){
  const out = [], byLg = {};
