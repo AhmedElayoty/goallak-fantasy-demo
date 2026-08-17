@@ -190,7 +190,14 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
     --depth is GONE. The old 90%-100% ramp bought a depth cue invisible at 47px and cost 5px
     of width on the back row, where four of the eleven cards live. Depth is carried by the
     raked turf, the row spacing and the plinth blur ramp, all of which are free. */
- --cw:calc((100vw - 56px) / 4);
+ /* CAPPED. Sizing the card from the viewport alone is correct on a phone and catastrophic
+    anywhere else: in a 1256px browser window (100vw - 56)/4 is a 300px card, so eleven cards
+    at 300x396 overflowed the pitch, overlapped each other by whole rows, and — because the
+    nearer row paints over the one behind — physically swallowed the taps meant for the cards
+    underneath. That is the "some teams are not clickable" report, and it is the same class of
+    bug as the 215px cards in landscape. The cap is 84px, which is above the largest phone
+    value (390px viewport gives 83.5) so no phone behaviour changes at all. */
+ --cw:min(calc((100vw - 56px) / 4), 84px);
  --ch:calc(var(--cw) * 1.32);
  --cw-sub:calc(var(--cw) * .76);
  --row-gap:6px;
@@ -214,9 +221,11 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    card, the club row or the share tile, all of which have fixed grounds. So the ground can
    change freely without invalidating a single one of the 126 hand-tuned rim decisions.
    The chrome — nav, cards, budget, points, sheets — never changes for anybody. */
-.st{position:relative;border-radius:0;overflow:hidden;isolation:isolate;
- margin-inline:calc(50% - 50vw);inline-size:100vw;border-inline:none;
- border-block:1px solid var(--fx-line-2);
+/* Full bleed is a PHONE behaviour. `inline-size:100vw` unconditionally made the pitch 1256px
+   wide inside a 560px column on a desktop browser, which is where the card blow-up started.
+   Above the column width it simply fills the column and keeps its rounded frame. */
+.st{position:relative;overflow:hidden;isolation:isolate;
+ inline-size:100%;border-radius:var(--r);border:1px solid var(--fx-line-2);
  --st-stand-1:#141C3E; --st-stand-2:#0C1330;
  --st-lamp-1:#E8F0FF;  --st-lamp-2:#9DB2DA;
  --st-glow:rgba(200,222,255,.55);
@@ -760,6 +769,11 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  animation-delay:calc(240ms + var(--i,0) * 62ms)}
 .ptsbig{animation:stCount 420ms cubic-bezier(.22,1,.36,1) both}
 
+/* the pitch reclaims the page's side padding only when the page IS the phone */
+@media(max-width:560px){
+ .st{margin-inline:calc(50% - 50vw);inline-size:100vw;border-radius:0;
+     border-inline:none;border-block:1px solid var(--fx-line-2)}
+}
 @media(prefers-reduced-motion:reduce){
  *,*::before,*::after{transition-duration:.01ms !important;animation:none !important}
  /* every element that the sequence fades IN must still be visible with animation off */
