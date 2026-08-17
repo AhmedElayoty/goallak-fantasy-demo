@@ -206,6 +206,18 @@ async function navigate(url) {
    pitch has no cards to hit-test. The squad is built with the app's OWN blockReason(), so it
    is a squad the app itself would accept — not a fixture we invented. */
 async function loadApp({ lang, fresh }) {
+  /* TWO THINGS THE SHIPPED BUILD DOES THAT THE DEMO DID NOT, both of which this suite has to
+     recreate for itself rather than rely on:
+       1. The demo wiped localStorage on every open, so every load arrived at first-run state
+          free. The app deliberately does not - a manager's squad must survive closing it - so
+          the suite clears storage itself, or the wizard appears only on the very first load
+          of a run and every later viewport times out waiting for it.
+       2. Fantasy is behind an owner gate until it launches. The suite unlocks it the same way
+          the owner does, with the gk_fx_owner flag; without it the page serves a holding
+          screen and there is no app to test. */
+  await navigate(BASE + "/index.html");
+  await evaluate(`(()=>{try{localStorage.clear();sessionStorage.clear();
+    localStorage.setItem("gk_fx_owner","1");}catch(e){}return 1})()`).catch(() => {});
   await navigate(BASE + "/index.html");
   try {
     await waitFor(`typeof CLUBS !== "undefined" && CLUBS && CLUBS.length > 0`, 15000, "club data");
@@ -224,11 +236,9 @@ async function loadApp({ lang, fresh }) {
       + (errs ? "Console said: " + errs : "The console said nothing."));
   }
   await waitFor(`document.getElementById("bnav").children.length > 0`, 8000, "chrome painted");
-  /* THE DEMO WIPES localStorage ON EVERY OPEN — fx_lang and fx_onboarded included. That is
-     deliberate (it is a review build and the owner opens the link to judge the first run),
-     so state cannot be seeded from outside. Every run therefore starts in Arabic with the
-     wizard up, and the suite gets to its state the way a user does: through the app's own
-     skip and language controls. */
+  /* Storage was cleared above, so every load starts in Arabic with the wizard up and the
+     suite reaches its state the way a user does - through the app's own skip and language
+     controls, never by seeding values from outside. */
   await waitFor(`!document.getElementById("wiz").classList.contains("hide")`, 8000, "onboarding wizard");
   if (!fresh) await evaluate(`closeWizard()`);
   if (await evaluate(`LANG`) !== lang) await evaluate(`toggleLang()`);
