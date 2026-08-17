@@ -69,6 +69,18 @@ try {
   if (noStr) fail.push(noStr + " clubs have no calibrated `str` — run scripts/build-strength.mjs");
 } catch (_) { /* already reported above */ }
 
+/* 7. NEVER AGAIN: a 3D transform on the row stack.
+      translateZ/rotateX inside a perspective context made every card in the affected rows
+      completely untappable — elementFromPoint returned nothing anywhere on them — and it
+      shipped because the checks measured geometry and contrast, neither of which notices
+      that a control has stopped existing. Depth on the pitch is a 2D scale. */
+const css = s.slice(s.indexOf("<style>"), s.indexOf("</style>"));
+const rowRule = (css.match(/\.st__row\{[^}]*\}/) || [""])[0];
+if (/translateZ|rotateX|rotate3d|matrix3d/.test(rowRule))
+  fail.push(".st__row uses a 3D transform — that makes every card in the row untappable");
+if (/\.st__cards\{[^}]*(perspective|preserve-3d)/.test(css))
+  fail.push(".st__cards declares a perspective/preserve-3d context — cards inside stop hit-testing");
+
 if (fail.length) { fail.forEach(f => console.log("  FAIL  " + f)); process.exit(1); }
 console.log("check.mjs: index.html parses, " + called.size + " handlers and "
   + usedKeys.size + " strings resolve, data files intact");

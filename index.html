@@ -319,17 +319,21 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    The cards themselves are never rotated on Y or Z — a tilted card is unreadable, and it
    stops looking like an object you own. Only the depth axis moves. */
 .st__cards{position:relative;z-index:6;display:flex;flex-direction:column;
- gap:var(--row-gap);padding-block:42px 10px;justify-content:flex-start;
- perspective:620px;perspective-origin:50% 130%;transform-style:preserve-3d}
+ gap:var(--row-gap);padding-block:42px 10px;justify-content:flex-start}
+/* DEPTH BY 2D SCALE, NOT BY A 3D TRANSFORM.
+   The previous version put the rows in a perspective context and gave each one
+   translateZ + rotateX. It looked right and it was catastrophic: hit-testing a card inside
+   that subtree returned NOTHING — not a shifted region, no region at all. Scanning a
+   vertical line through a back-row card produced zero hits over its entire height, so nine
+   of the eleven starters were completely dead to touch on every device. That is the
+   "some teams are not clickable" report, and I shipped it while adding the depth.
+   A plain 2D scale gives the identical 13% falloff, hit-tests correctly, and is cheaper. */
 .st__row{display:flex;justify-content:center;gap:12px;
- transform:translateZ(var(--z,0px)) rotateX(var(--lean,0deg));transform-origin:50% 100%}
-/* The first pass was mathematically 3D and perceptually flat: measured, the back row came
-   out 73.5px wide against the front row's 76 — a 3% falloff across the whole pitch. Turned
-   up to give ~12-14%, which is what actually reads as a back four standing further away. */
-.st__row:nth-child(1){--z:-90px;--lean:13deg}
-.st__row:nth-child(2){--z:-60px;--lean:9deg}
-.st__row:nth-child(3){--z:-30px;--lean:5deg}
-.st__row:nth-child(4){--z:0px;  --lean:0deg}
+ transform:scale(var(--s,1));transform-origin:50% 100%}
+.st__row:nth-child(1){--s:.87}
+.st__row:nth-child(2){--s:.91}
+.st__row:nth-child(3){--s:.955}
+.st__row:nth-child(4){--s:1}
 /* the card gets THICKNESS — a lit top edge and a dark under-edge, so it reads as an object
    with a side rather than a decal printed on the grass */
 .cc{box-shadow:0 1px 0 rgba(255,255,255,.16) inset, 0 -2px 0 rgba(4,7,18,.85) inset,
