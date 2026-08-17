@@ -93,11 +93,19 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    as blank paper: at 29px the old 12% collar was 3px and invisible, and the card is 2.6x
    bigger now, so the trim gets real proportions — a collar, a placket down the chest, cuffs,
    and a hem band. Every one of them is a thing a plain kit actually has. */
+/* A PLAIN KIT MUST NOT READ AS A STRIPED ONE. The previous attempt at "more trim" added a
+   placket down the centre and sleeve bars running the FULL height of the card, which on a
+   76px card is three vertical bars of --c2 — so Liverpool (solid red, white trim) rendered
+   as red-and-white stripes and Spurs as white-and-navy stripes. Seen on the owner's screen.
+   The trim now stops where a real one stops: a collar across the top, short sleeve blocks in
+   the shoulder band only, and a hem. Nothing runs the height of the shirt. */
 .fxkit[data-pat="solid"]{background:
- linear-gradient(180deg, var(--c2) 0 9%, transparent 9%),                       /* collar */
- linear-gradient(90deg, transparent 0 46%, var(--c2) 46% 54%, transparent 54%), /* placket */
- linear-gradient(90deg, var(--c2) 0 11%, transparent 11% 89%, var(--c2) 89%),   /* sleeves */
- linear-gradient(0deg, var(--c2) 0 5%, transparent 5%),                         /* hem */
+ linear-gradient(180deg, var(--c2) 0 8%, transparent 8%),                      /* collar */
+ linear-gradient(180deg, transparent 0 8%, var(--c2) 8% 30%, transparent 30%)
+   left top/12% 100% no-repeat,                                               /* left cuff */
+ linear-gradient(180deg, transparent 0 8%, var(--c2) 8% 30%, transparent 30%)
+   right top/12% 100% no-repeat,                                              /* right cuff */
+ linear-gradient(0deg, var(--c2) 0 4%, transparent 4%),                        /* hem */
  var(--c1)}
 /* the placket only reads on a jersey-shaped block, so keep it off the tiny list tiles */
 .k34.fxkit[data-pat="solid"], .k44.fxkit[data-pat="solid"]{background:
@@ -248,7 +256,13 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
  border-bottom:1px solid rgba(255,255,255,.10)}
 /* --- the playing surface --- */
 .st__stage{position:absolute;inset:0;z-index:3;perspective:820px;perspective-origin:50% 118%}
-.st__turf{position:absolute;inset-inline:-3%;top:12%;bottom:0;transform-origin:50% 100%;
+/* top:6%, not 12%. rotateX lifts the far edge, so a turf authored at 12% RENDERS its top
+   edge at 156px — and with the row stack now leaning back in 3D the goalkeeper landed at
+   119px, standing on the stands with 37px of sky under his feet. This is the third time this
+   pitch has put the keeper off the grass and the first time it was caused by the cards
+   moving rather than the turf; measured, moving the turf alone cannot close it (2% still
+   renders at 125), so the card stack also starts lower. */
+.st__turf{position:absolute;inset-inline:-3%;top:6%;bottom:0;transform-origin:50% 100%;
  transform:rotateX(var(--st-rake));
  background:
   radial-gradient(ellipse 26% 9% at 50% 2%, rgba(255,255,255,calc(var(--scuff) * .07)) 0 60%, transparent 72%),
@@ -296,7 +310,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
    The cards themselves are never rotated on Y or Z — a tilted card is unreadable, and it
    stops looking like an object you own. Only the depth axis moves. */
 .st__cards{position:relative;z-index:6;display:flex;flex-direction:column;
- gap:var(--row-gap);padding-block:22px 10px;justify-content:flex-start;
+ gap:var(--row-gap);padding-block:42px 10px;justify-content:flex-start;
  perspective:620px;perspective-origin:50% 130%;transform-style:preserve-3d}
 .st__row{display:flex;justify-content:center;gap:12px;
  transform:translateZ(var(--z,0px)) rotateX(var(--lean,0deg));transform-origin:50% 100%}
