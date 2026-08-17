@@ -415,6 +415,24 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .cc__lg{position:absolute;inset-block-start:0;inset-inline-start:0;z-index:2;
  inline-size:3px;block-size:calc(var(--ch) - 34px);background:var(--lgc,transparent);
  box-shadow:0 0 0 .5px rgba(4,7,18,.55)}
+/* THE CREST SITS ON A NEUTRAL CHIP, NOT ON THE KIT.
+   A crest is drawn to be read against neutral grounds - a shirt, signage, a broadcast bug -
+   never against an arbitrary flat colour. And the flat colour here is the club's OWN, which
+   is usually the crest's own colour too: measured across the 124 crests we ship, 71 have more
+   than 30% of their artwork within 1.5:1 of their kit colour, and four are at 100% - Liverpool,
+   Juventus, Nottingham Forest and Schalke. Liverpool's red liver bird on #C8102E is a blank
+   red rectangle. The chip costs one element and fixes every case.
+   onerror removes the CHIP, not just the image, so a crest that fails to load leaves no empty
+   disc and shifts nothing - and the two clubs ESPN has no logo for are absent from the
+   manifest, so the element is never emitted for them at all. Two independent guarantees. */
+.cc__crest{position:absolute;inset-block-start:8px;inset-inline:0;z-index:2;
+ display:flex;justify-content:center;pointer-events:none}
+.cc__crest::before{content:"";position:absolute;inline-size:52px;block-size:52px;
+ border-radius:50%;background:rgba(255,255,255,.94);
+ box-shadow:0 1px 3px rgba(4,7,18,.45), 0 0 0 1px rgba(4,7,18,.28)}
+.cc__crest img{position:relative;inline-size:44px;block-size:44px;object-fit:contain}
+.subslot .cc__crest::before{inline-size:40px;block-size:40px}
+.subslot .cc__crest img{inline-size:34px;block-size:34px}
 .cc__lgc{position:absolute;inset-block-start:4px;inset-inline-end:4px;z-index:3;
  padding:1px 4px;border-radius:4px;background:var(--lgc,#3D4C82);color:#080C1A;
  font:900 8.5px/1.35 system-ui;letter-spacing:.4px;direction:ltr;
@@ -620,12 +638,20 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .pos{color:var(--fx-pos)}.neg{color:var(--fx-neg)}
 
 /* ---------- leaderboard ---------- */
-.lbrow{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:11px;background:var(--fx-surface-2);
- border:1px solid var(--fx-line);margin-bottom:6px}
-.lbrank{width:26px;font-weight:900;color:var(--fx-ink-mute);font-size:12px}
-.lbrow.me{border-color:var(--fx-gold);background:var(--fx-surface-3)}
-.lbname{flex:1;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lbpts{font-weight:900;color:var(--fx-gold)}
+/* Mirrors the app's own leaderboard (.statcard / .srow) so the two do not look like two
+   different products: one card, hairline-separated rows, rank left, value right in gold. */
+.lbcard{background:var(--fx-surface);border:1px solid var(--fx-line-2);border-radius:14px;
+ overflow:hidden;margin-bottom:12px}
+.lbhead{display:flex;align-items:center;gap:8px;padding:10px 14px;font-weight:900;font-size:14px;
+ border-bottom:1px solid var(--fx-line-2)}
+.lbrow{display:flex;align-items:center;gap:10px;padding:10px 14px;
+ border-bottom:1px solid var(--fx-line-2)}
+.lbrow:last-child{border-bottom:none}
+.lbempty{padding:22px 14px;text-align:center;color:var(--fx-ink-dim);font-size:13px;line-height:1.7}
+.lbrank{width:22px;text-align:center;font-weight:800;color:var(--fx-ink-mute);font-size:13px;flex:0 0 auto}
+.lbrow.me{background:var(--fx-surface-3)}
+.lbname{flex:1;min-width:0;font-size:14.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbpts{font-size:20px;font-weight:900;color:var(--fx-gold);flex:0 0 auto;font-variant-numeric:tabular-nums}
 
 /* ---------- bottom nav ---------- */
 .bnav{position:fixed;inset-inline:0;bottom:0;z-index:60;display:flex;
@@ -909,6 +935,8 @@ const STR = {
           "Only {pct}% of clubs play this round — that is why some have no match"],
  whyZero:["ليه في أندية ماجابتش نقط؟","Why did some clubs score nothing?"],
  preTtl:["الموسم لسه ما بدأش","The season has not started"],
+ boardAlone:["لسه مفيش مدربين تانيين. اللي هيلعبوا معاك هيظهروا هنا.",
+             "No other managers yet. Whoever plays against you will appear here."],
  preBody:["أول جولة بتبدأ {d}. جهّز فريقك دلوقتي، والنقط هتيجي من الماتشات الحقيقية.",
           "Round 1 begins {d}. Build your team now — points will come from the real matches."],
  tooExpensive:["أغلى من اللي فاضل معاك","Over your remaining budget"],
@@ -1069,6 +1097,7 @@ function hash(str){ let h = 2166136261; for(let i = 0; i < str.length; i++){ h ^
 /* THE FROZEN CALENDAR. Each entry is [from, to, days, coverage%] for one of the 36 rounds.
    The fallback is the old flat 10/11 so the game still runs if the file fails to load. */
 let CAL = null;
+let CRESTS = {};
 function gwRound(gw){ return CAL && CAL.gws[gw - 1] ? CAL.gws[gw - 1] : null; }
 function gwCoverage(gw){ const r = gwRound(gw); return r ? r[3] / 100 : 10 / 11; }
 /* "25/09 – 12/10" is a puzzle; "25 سبتمبر – 12 أكتوبر" is a date. Numeric day/month is also
@@ -1297,6 +1326,15 @@ const LG_ABBR = {epl:"ENG", liga:"ESP", seriea:"ITA", bun:"GER", fl1:"FRA", tsl:
 const MINUS = "−";
 function signed(n){ return n > 0 ? "+" + num(n) : n < 0 ? MINUS + num(Math.abs(n)) : num(0); }
 function signOf(n){ return n > 0 ? "pos" : n < 0 ? "neg" : "nil"; }
+/* alt is deliberately empty: the card's aria-label already carries the club name in the
+   active language, so alt text would make every card announce its club twice. */
+function crestHtml(c){
+ const x = CRESTS[String(c.id)];
+ if(!x) return "";
+ return '<span class="cc__crest"><img src="' + esc(x.webp || x.png) + '" alt=""'
+  + ' loading="lazy" decoding="async" width="44" height="44"'
+  + ' onerror="this.parentNode.remove()"></span>';
+}
 function cardHtml(c, withPoints, gw, slotIndex){
  const g = gw == null ? CURRENT_GW : gw;
  const m = simMatch(c.id, g);
@@ -1335,6 +1373,7 @@ function cardHtml(c, withPoints, gw, slotIndex){
      one. One attribute, no new CSS. */
   + ' data-rim="' + esc(c.rim) + '"' + (c.iso ? ' data-iso="1"' : "")
   + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + ';--ink:' + esc(c.ink) + '"></span>'
+  + crestHtml(c)
   + '<span class="cc__lg" style="--lgc:var(--lg-' + esc(c.lg) + ')"></span>'
   + '<span class="cc__lgc" style="--lgc:var(--lg-' + esc(c.lg) + ')" dir="ltr">'
   +   esc(LG_ABBR[c.lg] || String(c.lg).toUpperCase().slice(0, 3)) + "</span>"
@@ -1780,10 +1819,14 @@ function renderBoard(){
     disagree with the band about who was winning. It reads boardRows() now, so the two
     cannot drift again — and it uses the manager's chosen team name rather than "You". */
  const rows = boardRows();
- $("viewBoard").innerHTML = '<div class="card"><h3>' + esc(t("segBoard")) + "</h3>"
-  + rows.map((r, i) => '<div class="lbrow' + (r.me ? " me" : "") + '"><span class="lbrank" dir="ltr">' + num(i + 1) + "</span>"
-   + '<span class="lbname">' + esc(r.name) + '</span><span class="lbpts" dir="ltr">' + num(Math.max(0, r.s)) + "</span></div>").join("")
-  + "</div>" + '<div class="note">' + esc(t("simNote")) + "</div>";
+ const others = rows.filter(r => !r.me).length;
+ $("viewBoard").innerHTML = '<div class="lbcard"><div class="lbhead"><span>🏆</span>'
+  + esc(t("segBoard")) + "</div>"
+  + rows.map((r, i) => '<div class="lbrow' + (r.me ? " me" : "") + '"><span class="lbrank" dir="ltr">'
+   + num(i + 1) + '</span><span class="lbname">' + esc(r.name)
+   + '</span><span class="lbpts" dir="ltr">' + num(Math.max(0, r.s)) + "</span></div>").join("")
+  + (others ? "" : '<div class="lbempty">' + esc(t("boardAlone")) + "</div>")
+  + "</div>";
 }
 
 /* ============================================================================
@@ -2175,16 +2218,23 @@ function toggleLang(){
 /* ---------------- boot ---------------- */
 (async function boot(){
  try{
-  const [cj, pj, kj] = await Promise.all([
+  const [cj, pj, kj, xj] = await Promise.all([
    fetch("clubs.json").then(r => r.json()),
    fetch("prices.json").then(r => r.json()),
    /* calendar.json shipped from the very first build and was read by NOTHING — not
       index.html, not modules.js. The blank badge was inventing its own fixture list. */
-   fetch("calendar.json").then(r => r.json()).catch(() => null)
+   fetch("calendar.json").then(r => r.json()).catch(() => null),
+   /* 124 of 126 clubs. Self-hosted at 128px, NOT hotlinked: ESPN only publishes the 500px
+      original at ~66KB, so a 15-club squad hotlinked is 990KB against 44.7KB served from
+      here - hotlinking is 22x heavier, not lighter. It also sends Cache-Control max-age=55,
+      so a hotlinked crest never really caches, and a referrer policy change would break all
+      126 at once. */
+   fetch("crests.json").then(r => r.json()).catch(() => null)
   ]);
   CLUBS = cj.clubs; LEAGUES = cj.leagues;
   for(const p of pj.clubs) PRICES[p.id] = p;
   if(kj && kj.gws) CAL = kj;
+  if(xj && xj.crests) CRESTS = xj.crests;
  }catch(e){
   document.querySelector(".wrap").innerHTML = '<div class="card">Could not load club data.</div>';
   return;

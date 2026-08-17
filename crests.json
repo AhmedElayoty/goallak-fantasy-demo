@@ -4,14 +4,14 @@
  "note": "Map of ESPN club id -> crest asset. Clubs with no available crest are ABSENT from `crests` (see `missing`) so the app falls back to the existing kit-and-code rendering.",
  "provenance": "All artwork fetched from ESPN's public, keyless site.api endpoint on 2026-08-17. Each URL was confirmed to return HTTP 200 with a valid PNG magic number. Originals are 500x500 (one, id 180 Strasbourg, is 200x200 at source).",
  "formats": {
-  "webp": "primary - WebP q90",
-  "png": "fallback - 128-colour quantised PNG"
+  "webp": "primary - lossless WebP, 64-colour palette",
+  "png": "fallback - 64-colour palette PNG"
  },
  "resolved": 124,
  "total": 126,
  "bytes": {
-  "webp_total": 824018,
-  "png_total": 492478
+  "webp_total": 378500,
+  "png_total": 433472
  },
  "missing": [
   {
