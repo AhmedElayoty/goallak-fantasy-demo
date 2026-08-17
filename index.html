@@ -491,7 +491,9 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 /* the armband as an actual armband, not 8.5px of text. Must NOT mirror: a captain's armband
    is worn on the left arm in every league on earth. */
 .cc__arm{position:absolute;inset-block-start:24%;inset-inline-start:5%;z-index:4;
- inline-size:calc(var(--cw) * .20);block-size:calc(var(--cw) * .13);border-radius:2px;
+ /* was .20 x .13, which renders 13.2 x 8.6px once the row scale is applied — too small to
+    read as an armband at all, on the single most important decision in the game */
+ inline-size:calc(var(--cw) * .27);block-size:calc(var(--cw) * .18);border-radius:2px;
  background:linear-gradient(180deg,#FFE39A,#FFC53D 46%,#C98F14);
  box-shadow:0 1px 0 rgba(255,255,255,.55) inset, 0 1px 3px rgba(0,0,0,.6);font-size:0}
 .cc__arm::before{content:"";position:absolute;inset-inline:14%;top:38%;block-size:22%;
@@ -585,7 +587,12 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .rndb__n{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;line-height:1;
  padding-inline-end:8px;border-inline-end:1px solid var(--fx-line-2)}
 .rndb__n b{font-size:19px;font-weight:900;color:var(--fx-gold);font-variant-numeric:tabular-nums}
-.rndb__n span{font-size:8.5px;font-weight:800;color:var(--fx-ink-mute);letter-spacing:.3px}
+/* A LIVE AA FAILURE, AND I CAUSED IT. Every earlier contrast pass measured against the page
+   ground --fx-bg #070B1A, but I then repainted this band #1E2A56 to lift it off the page —
+   and never re-measured the text sitting on it. --fx-ink-mute on #1E2A56 is 4.07:1 at 8.5px,
+   which fails. --fx-ink-dim on the same ground is 6.95:1. Contrast is a property of the PAIR,
+   so changing a background silently invalidates every ratio ever measured on it. */
+.rndb__n span{font-size:9.5px;font-weight:800;color:var(--fx-ink-dim);letter-spacing:.3px}
 .rndb__w{flex:1;min-inline-size:0}
 .rndb__d{font-size:12px;font-weight:800;color:var(--fx-ink);font-variant-numeric:tabular-nums}
 .rndb__s{font-size:10.5px;font-weight:700;color:var(--fx-ink-dim);margin-block-start:1px}
@@ -1283,7 +1290,13 @@ function cardHtml(c, withPoints, gw, slotIndex){
       + (m.blank ? " · " + t("noMatchFull")
                  : " · " + (m.opp ? clubName(m.opp) : "") + " · " + (m.home ? t("venH") : t("venA")))) + '">'
   + '<span class="cc__kit fxkit" data-pat="' + esc(c.pat) + '"'
-  + (c.iso ? ' data-iso="1"' : "") + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + '"></span>'
+  /* data-rim and --ink are computed at build time for all 126 clubs, are used by the picker,
+     the captain sheet and the share strip — and were never emitted here. That is why a white
+     kit read as a bright hole cut in the pitch instead of a shirt: it had no edge. `contain`
+     gives light kits a dark rim, `rescue` gives the 24 clubs that vanish into navy a bright
+     one. One attribute, no new CSS. */
+  + ' data-rim="' + esc(c.rim) + '"' + (c.iso ? ' data-iso="1"' : "")
+  + ' style="--c1:' + esc(c.c1) + ';--c2:' + esc(c.c2) + ';--ink:' + esc(c.ink) + '"></span>'
   + '<span class="cc__lg" style="--lgc:var(--lg-' + esc(c.lg) + ')"></span>'
   + '<span class="cc__lgc" style="--lgc:var(--lg-' + esc(c.lg) + ')" dir="ltr">'
   +   esc(LG_ABBR[c.lg] || String(c.lg).toUpperCase().slice(0, 3)) + "</span>"
