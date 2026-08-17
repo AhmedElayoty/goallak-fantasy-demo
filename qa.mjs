@@ -812,6 +812,37 @@ async function main() {
 
   /* ---- CONSOLE ---------------------------------------------------------------- */
   setCtx("console");
+  /* THE PICKER FILTER. Choosing a league filtered the list correctly while the strip scrolled
+     back to "All" and the selected chip was 4% lighter than the rest - so the app looked like
+     it had thrown the filter away. Both halves are asserted: the list must actually narrow,
+     the chosen chip must carry .on, it must be VISIBLY different, and it must be in view. */
+  await setViewport(360, 800);
+  await loadApp({ lang: "ar", fresh: false });
+  await evaluate(`openPicker()`);
+  const filt = await evaluate(`(()=>{
+    const target = (LEAGUES[0] && LEAGUES[0].id) || "all";
+    setFilter(target);
+    const strip = document.querySelector("#sheetBox .filters");
+    const on = strip ? strip.querySelector(".fchip.on") : null;
+    if(!strip || !on) return JSON.stringify({fail:"no strip or no selected chip", target:target, chosen:pickFilter});
+    const off = [...strip.querySelectorAll(".fchip")].find(b => b !== on);
+    const r = on.getBoundingClientRect(), sb = strip.getBoundingClientRect();
+    const rows = document.querySelectorAll("#sheetBox .clubrow").length;
+    return JSON.stringify({ target: target, chosen: pickFilter, onLabel: on.textContent.trim(),
+      sameBg: off ? getComputedStyle(on).backgroundColor === getComputedStyle(off).backgroundColor : true,
+      inView: r.left >= sb.left - 1 && r.right <= sb.right + 1,
+      rows: rows, all: CLUBS.length, narrowed: rows > 0 && rows < CLUBS.length });
+  })()`).then(JSON.parse);
+  await evaluate(`closeSheet()`);
+  ok("picker: choosing a league actually narrows the list",
+     filt.narrowed, filt.rows + " of " + filt.all + " clubs shown for " + filt.target);
+  ok("picker: the chosen league is marked selected",
+     filt.chosen === filt.target, "pickFilter is " + filt.chosen + ", chose " + filt.target);
+  ok("picker: the selected chip looks different from the others",
+     !filt.sameBg, "selected chip has the same background as an unselected one");
+  ok("picker: the selected chip is scrolled into view",
+     filt.inView, "the chip for " + filt.onLabel + " is off-screen in the strip");
+
   ok("no console errors anywhere in the run", consoleErrors.length === 0,
     consoleErrors.slice(0, 8).map(e => "[" + e.ctx + "] " + e.text).join("\n"));
 

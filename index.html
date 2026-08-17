@@ -718,7 +718,10 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 .filters::-webkit-scrollbar{display:none}
 .fchip{flex:0 0 auto;padding:7px 12px;border-radius:99px;background:var(--fx-surface-2);border:1px solid var(--fx-line);
  font-size:12px;font-weight:700;color:var(--fx-ink-dim)}
-.fchip.on{background:var(--fx-surface-3);color:var(--fx-ink);border-color:var(--fx-line-3)}
+/* The selected league was surface-2 -> surface-3 with a slightly lighter border: a change of
+   about 4% in luminance, which is not a selected state, it is a rounding error. Picking Ligue 1
+   filtered the list correctly and the strip still looked as though "All" was chosen. */
+.fchip.on{background:var(--fx-acc);color:#0B1020;border-color:var(--fx-acc);font-weight:900}
 
 /* ============================================================================
    THE ENTRY SEQUENCE — the first three seconds.
@@ -767,7 +770,7 @@ button,input,select{font:inherit;color:inherit;background:none;border:none;curso
 
 <header class="hdr">
  <div class="hbrand">
-  <div class="hname">جولك <b>فانتازي</b></div>
+  <div class="hname" id="hname">جولك <b>فانتازي</b></div>
   <div class="hsub" id="hsub"></div>
  </div>
  <button class="hbtn" id="toolsBtn" onclick="openTools()" aria-label="الإعدادات">⚙</button>
@@ -859,6 +862,10 @@ try{ seenCoach = JSON.parse(localStorage.getItem("fx_coach") || "{}"); }catch(_)
 /* ---------------- i18n. Every user-visible string lives here. ---------------- */
 const STR = {
  brandSub:["11 + 4 بدلاء · 120 مليون","11 + 4 subs · 120M"],
+ /* the brand is two words so the second can be gold; it was hardcoded Arabic markup that
+    paintChrome never touched, so the English build read جولك فانتازي in its own header */
+ brandA:["جولك","GOALLAK"], brandB:["فانتازي","FANTASY"],
+ backToApp:["رجوع للتطبيق","Back to the app"],
  demoNote:["دي نسخة تجريبية للعرض بس — من غير حساب ومن غير سيرفر، وكل حاجة متسجلة على تليفونك. النقط اللي هنا مش حقيقية، دي عشان تشوف الشكل.",
            "Demo build for review only — no account, no server. Everything is stored on your device and the points are simulated to show the design."],
  segTeam:["فريقي","My team"], segPts:["النقاط","Points"], segBoard:["الترتيب","Standings"],
@@ -1220,6 +1227,17 @@ function paintChrome(){
  document.documentElement.lang = LANG;
  document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
  $("langBtn").textContent = LANG === "ar" ? "EN" : "ع";
+ $("hname").innerHTML = esc(t("brandA")) + " <b>" + esc(t("brandB")) + "</b>";
+ /* WHEN FANTASY IS INSIDE THE APP THERE MUST BE A WAY OUT. Served from /fantasy/ it is a
+    separate page, not a tab, so the app's bottom nav is not on screen and the only exit was
+    the browser back gesture - which a PWA launched from the home screen does not have. The
+    button shows only when there is an app above us, so the standalone demo has no link to
+    nowhere. */
+ try{
+  var inApp = location.pathname.indexOf("/fantasy/") >= 0;
+  $("backBtn").classList.toggle("hide", !inApp);
+  $("backBtn").setAttribute("aria-label", t("backToApp"));
+ }catch(_){}
  /* the subtitle is the MANAGER now, not a rules recap the wizard already gave once */
  $("hsub").textContent = squad.length ? teamName() : t("brandSub");
  $("bnav").innerHTML =
@@ -1858,8 +1876,19 @@ function paintPicker(){
   + (squad.length === SQUAD_SIZE
      ? '<button type="button" class="btn" onclick="closeSheet();openCaptain()">' + esc(t("confirmSquad")) + "</button>"
      : '<button type="button" class="btn ghost" onclick="autoFill()">' + esc(t("autoPick")) + "</button>");
+ centreFilterChip();
 }
 function setFilter(id){ pickFilter = id; paintPicker(); }
+/* paintPicker rewrites the whole sheet, so the filter strip is a NEW element scrolled back to
+   its start - and the leagues sit off-screen to the right, so choosing one scrolled the strip
+   back to "All". The list underneath was filtered correctly the whole time, which is what made
+   it read as "it reset my filter". The chosen chip is scrolled into view after every repaint. */
+function centreFilterChip(){
+ const strip = document.querySelector("#sheetBox .filters");
+ const on = strip && strip.querySelector(".fchip.on");
+ if(!strip || !on) return;
+ strip.scrollLeft = on.offsetLeft - (strip.clientWidth / 2) + (on.clientWidth / 2);
+}
 function togglePick(id){
  const i = squad.indexOf(id);
  if(i >= 0){ squad.splice(i, 1); if(captain === id) captain = null; }

@@ -1,0 +1,902 @@
+{
+ "generated": "2026-08-17",
+ "size": 128,
+ "note": "Map of ESPN club id -> crest asset. Clubs with no available crest are ABSENT from `crests` (see `missing`) so the app falls back to the existing kit-and-code rendering.",
+ "provenance": "All artwork fetched from ESPN's public, keyless site.api endpoint on 2026-08-17. Each URL was confirmed to return HTTP 200 with a valid PNG magic number. Originals are 500x500 (one, id 180 Strasbourg, is 200x200 at source).",
+ "formats": {
+  "webp": "primary - WebP q90",
+  "png": "fallback - 128-colour quantised PNG"
+ },
+ "resolved": 124,
+ "total": 126,
+ "bytes": {
+  "webp_total": 824018,
+  "png_total": 492478
+ },
+ "missing": [
+  {
+   "id": "132335",
+   "name": "Amed SFK",
+   "lg": "tsl",
+   "slug": "tur.1",
+   "reason": "ESPN has no logo for this team: team endpoint returns the club with an empty logos[] array, and a.espncdn.com/i/teamlogos/soccer/500/132335.png returns HTTP 404. Club id is confirmed correct (present in ESPN's current tur.1 roster)."
+  },
+  {
+   "id": "132334",
+   "name": "Çorum FK",
+   "lg": "tsl",
+   "slug": "tur.1",
+   "reason": "ESPN has no logo for this team: team endpoint returns the club with an empty logos[] array, and a.espncdn.com/i/teamlogos/soccer/500/132334.png returns HTTP 404. Club id is confirmed correct (present in ESPN's current tur.1 roster)."
+  }
+ ],
+ "crests": {
+  "349": {
+   "webp": "crests/349.webp",
+   "png": "crests/349.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/349 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/349.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/349.png",
+   "fetched": "2026-08-17"
+  },
+  "359": {
+   "webp": "crests/359.webp",
+   "png": "crests/359.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/359 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/359.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/359.png",
+   "fetched": "2026-08-17"
+  },
+  "362": {
+   "webp": "crests/362.webp",
+   "png": "crests/362.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/362 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/362.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/362.png",
+   "fetched": "2026-08-17"
+  },
+  "337": {
+   "webp": "crests/337.webp",
+   "png": "crests/337.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/337 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/337.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/337.png",
+   "fetched": "2026-08-17"
+  },
+  "331": {
+   "webp": "crests/331.webp",
+   "png": "crests/331.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/331 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/331.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/331.png",
+   "fetched": "2026-08-17"
+  },
+  "363": {
+   "webp": "crests/363.webp",
+   "png": "crests/363.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/363 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/363.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/363.png",
+   "fetched": "2026-08-17"
+  },
+  "388": {
+   "webp": "crests/388.webp",
+   "png": "crests/388.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/388 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/388.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/388.png",
+   "fetched": "2026-08-17"
+  },
+  "384": {
+   "webp": "crests/384.webp",
+   "png": "crests/384.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/384 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/384.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/384.png",
+   "fetched": "2026-08-17"
+  },
+  "368": {
+   "webp": "crests/368.webp",
+   "png": "crests/368.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/368 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/368.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/368.png",
+   "fetched": "2026-08-17"
+  },
+  "370": {
+   "webp": "crests/370.webp",
+   "png": "crests/370.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/370 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/370.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/370.png",
+   "fetched": "2026-08-17"
+  },
+  "306": {
+   "webp": "crests/306.webp",
+   "png": "crests/306.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/306 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/306.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/306.png",
+   "fetched": "2026-08-17"
+  },
+  "373": {
+   "webp": "crests/373.webp",
+   "png": "crests/373.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/373 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/373.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/373.png",
+   "fetched": "2026-08-17"
+  },
+  "357": {
+   "webp": "crests/357.webp",
+   "png": "crests/357.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/357 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/357.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/357.png",
+   "fetched": "2026-08-17"
+  },
+  "364": {
+   "webp": "crests/364.webp",
+   "png": "crests/364.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/364 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/364.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/364.png",
+   "fetched": "2026-08-17"
+  },
+  "382": {
+   "webp": "crests/382.webp",
+   "png": "crests/382.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/382 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/382.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/382.png",
+   "fetched": "2026-08-17"
+  },
+  "360": {
+   "webp": "crests/360.webp",
+   "png": "crests/360.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/360 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/360.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/360.png",
+   "fetched": "2026-08-17"
+  },
+  "361": {
+   "webp": "crests/361.webp",
+   "png": "crests/361.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/361 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/361.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/361.png",
+   "fetched": "2026-08-17"
+  },
+  "393": {
+   "webp": "crests/393.webp",
+   "png": "crests/393.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/393 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/393.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/393.png",
+   "fetched": "2026-08-17"
+  },
+  "366": {
+   "webp": "crests/366.webp",
+   "png": "crests/366.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/366 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/366.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/366.png",
+   "fetched": "2026-08-17"
+  },
+  "367": {
+   "webp": "crests/367.webp",
+   "png": "crests/367.png",
+   "source": "ESPN site.api /soccer/eng.1/teams/367 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/367.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/367.png",
+   "fetched": "2026-08-17"
+  },
+  "96": {
+   "webp": "crests/96.webp",
+   "png": "crests/96.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/96 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/96.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/96.png",
+   "fetched": "2026-08-17"
+  },
+  "93": {
+   "webp": "crests/93.webp",
+   "png": "crests/93.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/93 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/93.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/93.png",
+   "fetched": "2026-08-17"
+  },
+  "1068": {
+   "webp": "crests/1068.webp",
+   "png": "crests/1068.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/1068 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/1068.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/1068.png",
+   "fetched": "2026-08-17"
+  },
+  "83": {
+   "webp": "crests/83.webp",
+   "png": "crests/83.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/83 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/83.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/83.png",
+   "fetched": "2026-08-17"
+  },
+  "85": {
+   "webp": "crests/85.webp",
+   "png": "crests/85.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/85 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/85.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/85.png",
+   "fetched": "2026-08-17"
+  },
+  "90": {
+   "webp": "crests/90.webp",
+   "png": "crests/90.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/90 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/90.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/90.png",
+   "fetched": "2026-08-17"
+  },
+  "3751": {
+   "webp": "crests/3751.webp",
+   "png": "crests/3751.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/3751 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/3751.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/3751.png",
+   "fetched": "2026-08-17"
+  },
+  "88": {
+   "webp": "crests/88.webp",
+   "png": "crests/88.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/88 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/88.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/88.png",
+   "fetched": "2026-08-17"
+  },
+  "2922": {
+   "webp": "crests/2922.webp",
+   "png": "crests/2922.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/2922 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/2922.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/2922.png",
+   "fetched": "2026-08-17"
+  },
+  "1538": {
+   "webp": "crests/1538.webp",
+   "png": "crests/1538.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/1538 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/1538.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/1538.png",
+   "fetched": "2026-08-17"
+  },
+  "99": {
+   "webp": "crests/99.webp",
+   "png": "crests/99.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/99 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/99.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/99.png",
+   "fetched": "2026-08-17"
+  },
+  "97": {
+   "webp": "crests/97.webp",
+   "png": "crests/97.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/97 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/97.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/97.png",
+   "fetched": "2026-08-17"
+  },
+  "87": {
+   "webp": "crests/87.webp",
+   "png": "crests/87.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/87 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/87.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/87.png",
+   "fetched": "2026-08-17"
+  },
+  "101": {
+   "webp": "crests/101.webp",
+   "png": "crests/101.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/101 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/101.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/101.png",
+   "fetched": "2026-08-17"
+  },
+  "244": {
+   "webp": "crests/244.webp",
+   "png": "crests/244.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/244 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/244.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/244.png",
+   "fetched": "2026-08-17"
+  },
+  "86": {
+   "webp": "crests/86.webp",
+   "png": "crests/86.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/86 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/86.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/86.png",
+   "fetched": "2026-08-17"
+  },
+  "89": {
+   "webp": "crests/89.webp",
+   "png": "crests/89.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/89 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/89.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/89.png",
+   "fetched": "2026-08-17"
+  },
+  "243": {
+   "webp": "crests/243.webp",
+   "png": "crests/243.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/243 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/243.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/243.png",
+   "fetched": "2026-08-17"
+  },
+  "94": {
+   "webp": "crests/94.webp",
+   "png": "crests/94.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/94 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/94.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/94.png",
+   "fetched": "2026-08-17"
+  },
+  "102": {
+   "webp": "crests/102.webp",
+   "png": "crests/102.png",
+   "source": "ESPN site.api /soccer/esp.1/teams/102 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/102.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/102.png",
+   "fetched": "2026-08-17"
+  },
+  "103": {
+   "webp": "crests/103.webp",
+   "png": "crests/103.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/103 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/103.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/103.png",
+   "fetched": "2026-08-17"
+  },
+  "104": {
+   "webp": "crests/104.webp",
+   "png": "crests/104.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/104 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/104.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/104.png",
+   "fetched": "2026-08-17"
+  },
+  "105": {
+   "webp": "crests/105.webp",
+   "png": "crests/105.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/105 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/105.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/105.png",
+   "fetched": "2026-08-17"
+  },
+  "107": {
+   "webp": "crests/107.webp",
+   "png": "crests/107.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/107 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/107.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/107.png",
+   "fetched": "2026-08-17"
+  },
+  "2925": {
+   "webp": "crests/2925.webp",
+   "png": "crests/2925.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/2925 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/2925.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/2925.png",
+   "fetched": "2026-08-17"
+  },
+  "2572": {
+   "webp": "crests/2572.webp",
+   "png": "crests/2572.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/2572 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/2572.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/2572.png",
+   "fetched": "2026-08-17"
+  },
+  "109": {
+   "webp": "crests/109.webp",
+   "png": "crests/109.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/109 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/109.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/109.png",
+   "fetched": "2026-08-17"
+  },
+  "4057": {
+   "webp": "crests/4057.webp",
+   "png": "crests/4057.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/4057 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/4057.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/4057.png",
+   "fetched": "2026-08-17"
+  },
+  "3263": {
+   "webp": "crests/3263.webp",
+   "png": "crests/3263.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/3263 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/3263.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/3263.png",
+   "fetched": "2026-08-17"
+  },
+  "110": {
+   "webp": "crests/110.webp",
+   "png": "crests/110.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/110 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/110.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/110.png",
+   "fetched": "2026-08-17"
+  },
+  "111": {
+   "webp": "crests/111.webp",
+   "png": "crests/111.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/111 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/111.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/111.png",
+   "fetched": "2026-08-17"
+  },
+  "112": {
+   "webp": "crests/112.webp",
+   "png": "crests/112.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/112 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/112.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/112.png",
+   "fetched": "2026-08-17"
+  },
+  "113": {
+   "webp": "crests/113.webp",
+   "png": "crests/113.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/113 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/113.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/113.png",
+   "fetched": "2026-08-17"
+  },
+  "4007": {
+   "webp": "crests/4007.webp",
+   "png": "crests/4007.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/4007 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/4007.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/4007.png",
+   "fetched": "2026-08-17"
+  },
+  "114": {
+   "webp": "crests/114.webp",
+   "png": "crests/114.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/114 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/114.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/114.png",
+   "fetched": "2026-08-17"
+  },
+  "115": {
+   "webp": "crests/115.webp",
+   "png": "crests/115.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/115 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/115.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/115.png",
+   "fetched": "2026-08-17"
+  },
+  "3997": {
+   "webp": "crests/3997.webp",
+   "png": "crests/3997.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/3997 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/3997.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/3997.png",
+   "fetched": "2026-08-17"
+  },
+  "239": {
+   "webp": "crests/239.webp",
+   "png": "crests/239.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/239 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/239.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/239.png",
+   "fetched": "2026-08-17"
+  },
+  "118": {
+   "webp": "crests/118.webp",
+   "png": "crests/118.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/118 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/118.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/118.png",
+   "fetched": "2026-08-17"
+  },
+  "17530": {
+   "webp": "crests/17530.webp",
+   "png": "crests/17530.png",
+   "source": "ESPN site.api /soccer/ita.1/teams/17530 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/17530.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/17530.png",
+   "fetched": "2026-08-17"
+  },
+  "598": {
+   "webp": "crests/598.webp",
+   "png": "crests/598.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/598 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/598.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/598.png",
+   "fetched": "2026-08-17"
+  },
+  "131": {
+   "webp": "crests/131.webp",
+   "png": "crests/131.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/131 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/131.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/131.png",
+   "fetched": "2026-08-17"
+  },
+  "132": {
+   "webp": "crests/132.webp",
+   "png": "crests/132.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/132 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/132.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/132.png",
+   "fetched": "2026-08-17"
+  },
+  "124": {
+   "webp": "crests/124.webp",
+   "png": "crests/124.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/124 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/124.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/124.png",
+   "fetched": "2026-08-17"
+  },
+  "268": {
+   "webp": "crests/268.webp",
+   "png": "crests/268.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/268 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/268.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/268.png",
+   "fetched": "2026-08-17"
+  },
+  "125": {
+   "webp": "crests/125.webp",
+   "png": "crests/125.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/125 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/125.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/125.png",
+   "fetched": "2026-08-17"
+  },
+  "3841": {
+   "webp": "crests/3841.webp",
+   "png": "crests/3841.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/3841 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/3841.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/3841.png",
+   "fetched": "2026-08-17"
+  },
+  "122": {
+   "webp": "crests/122.webp",
+   "png": "crests/122.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/122 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/122.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/122.png",
+   "fetched": "2026-08-17"
+  },
+  "127": {
+   "webp": "crests/127.webp",
+   "png": "crests/127.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/127 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/127.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/127.png",
+   "fetched": "2026-08-17"
+  },
+  "2950": {
+   "webp": "crests/2950.webp",
+   "png": "crests/2950.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/2950 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/2950.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/2950.png",
+   "fetched": "2026-08-17"
+  },
+  "11420": {
+   "webp": "crests/11420.webp",
+   "png": "crests/11420.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/11420 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/11420.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/11420.png",
+   "fetched": "2026-08-17"
+  },
+  "126": {
+   "webp": "crests/126.webp",
+   "png": "crests/126.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/126 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/126.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/126.png",
+   "fetched": "2026-08-17"
+  },
+  "3307": {
+   "webp": "crests/3307.webp",
+   "png": "crests/3307.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/3307 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/3307.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/3307.png",
+   "fetched": "2026-08-17"
+  },
+  "10388": {
+   "webp": "crests/10388.webp",
+   "png": "crests/10388.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/10388 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/10388.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/10388.png",
+   "fetched": "2026-08-17"
+  },
+  "133": {
+   "webp": "crests/133.webp",
+   "png": "crests/133.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/133 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/133.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/133.png",
+   "fetched": "2026-08-17"
+  },
+  "7911": {
+   "webp": "crests/7911.webp",
+   "png": "crests/7911.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/7911 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/7911.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/7911.png",
+   "fetched": "2026-08-17"
+  },
+  "134": {
+   "webp": "crests/134.webp",
+   "png": "crests/134.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/134 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/134.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/134.png",
+   "fetched": "2026-08-17"
+  },
+  "137": {
+   "webp": "crests/137.webp",
+   "png": "crests/137.png",
+   "source": "ESPN site.api /soccer/ger.1/teams/137 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/137.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/137.png",
+   "fetched": "2026-08-17"
+  },
+  "172": {
+   "webp": "crests/172.webp",
+   "png": "crests/172.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/172 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/172.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/172.png",
+   "fetched": "2026-08-17"
+  },
+  "174": {
+   "webp": "crests/174.webp",
+   "png": "crests/174.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/174 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/174.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/174.png",
+   "fetched": "2026-08-17"
+  },
+  "7868": {
+   "webp": "crests/7868.webp",
+   "png": "crests/7868.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/7868 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/7868.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/7868.png",
+   "fetched": "2026-08-17"
+  },
+  "6997": {
+   "webp": "crests/6997.webp",
+   "png": "crests/6997.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/6997 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/6997.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/6997.png",
+   "fetched": "2026-08-17"
+  },
+  "3236": {
+   "webp": "crests/3236.webp",
+   "png": "crests/3236.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/3236 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/3236.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/3236.png",
+   "fetched": "2026-08-17"
+  },
+  "2697": {
+   "webp": "crests/2697.webp",
+   "png": "crests/2697.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/2697 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/2697.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/2697.png",
+   "fetched": "2026-08-17"
+  },
+  "175": {
+   "webp": "crests/175.webp",
+   "png": "crests/175.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/175 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/175.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/175.png",
+   "fetched": "2026-08-17"
+  },
+  "166": {
+   "webp": "crests/166.webp",
+   "png": "crests/166.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/166 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/166.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/166.png",
+   "fetched": "2026-08-17"
+  },
+  "273": {
+   "webp": "crests/273.webp",
+   "png": "crests/273.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/273 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/273.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/273.png",
+   "fetched": "2026-08-17"
+  },
+  "167": {
+   "webp": "crests/167.webp",
+   "png": "crests/167.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/167 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/167.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/167.png",
+   "fetched": "2026-08-17"
+  },
+  "176": {
+   "webp": "crests/176.webp",
+   "png": "crests/176.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/176 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/176.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/176.png",
+   "fetched": "2026-08-17"
+  },
+  "2502": {
+   "webp": "crests/2502.webp",
+   "png": "crests/2502.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/2502 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/2502.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/2502.png",
+   "fetched": "2026-08-17"
+  },
+  "6851": {
+   "webp": "crests/6851.webp",
+   "png": "crests/6851.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/6851 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/6851.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/6851.png",
+   "fetched": "2026-08-17"
+  },
+  "160": {
+   "webp": "crests/160.webp",
+   "png": "crests/160.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/160 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/160.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/160.png",
+   "fetched": "2026-08-17"
+  },
+  "169": {
+   "webp": "crests/169.webp",
+   "png": "crests/169.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/169 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/169.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/169.png",
+   "fetched": "2026-08-17"
+  },
+  "180": {
+   "webp": "crests/180.webp",
+   "png": "crests/180.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/180 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/180.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/180.png",
+   "fetched": "2026-08-17"
+  },
+  "179": {
+   "webp": "crests/179.webp",
+   "png": "crests/179.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/179 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/179.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/179.png",
+   "fetched": "2026-08-17"
+  },
+  "170": {
+   "webp": "crests/170.webp",
+   "png": "crests/170.png",
+   "source": "ESPN site.api /soccer/fra.1/teams/170 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/170.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/170.png",
+   "fetched": "2026-08-17"
+  },
+  "9078": {
+   "webp": "crests/9078.webp",
+   "png": "crests/9078.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/9078 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/9078.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/9078.png",
+   "fetched": "2026-08-17"
+  },
+  "1895": {
+   "webp": "crests/1895.webp",
+   "png": "crests/1895.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/1895 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/1895.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/1895.png",
+   "fetched": "2026-08-17"
+  },
+  "7656": {
+   "webp": "crests/7656.webp",
+   "png": "crests/7656.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/7656 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/7656.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/7656.png",
+   "fetched": "2026-08-17"
+  },
+  "19267": {
+   "webp": "crests/19267.webp",
+   "png": "crests/19267.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/19267 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/19267.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/19267.png",
+   "fetched": "2026-08-17"
+  },
+  "20729": {
+   "webp": "crests/20729.webp",
+   "png": "crests/20729.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/20729 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/20729.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/20729.png",
+   "fetched": "2026-08-17"
+  },
+  "436": {
+   "webp": "crests/436.webp",
+   "png": "crests/436.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/436 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/436.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/436.png",
+   "fetched": "2026-08-17"
+  },
+  "432": {
+   "webp": "crests/432.webp",
+   "png": "crests/432.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/432 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/432.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/432.png",
+   "fetched": "2026-08-17"
+  },
+  "20070": {
+   "webp": "crests/20070.webp",
+   "png": "crests/20070.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/20070 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/20070.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/20070.png",
+   "fetched": "2026-08-17"
+  },
+  "996": {
+   "webp": "crests/996.webp",
+   "png": "crests/996.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/996 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/996.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/996.png",
+   "fetched": "2026-08-17"
+  },
+  "789": {
+   "webp": "crests/789.webp",
+   "png": "crests/789.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/789 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/789.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/789.png",
+   "fetched": "2026-08-17"
+  },
+  "7914": {
+   "webp": "crests/7914.webp",
+   "png": "crests/7914.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/7914 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/7914.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/7914.png",
+   "fetched": "2026-08-17"
+  },
+  "6870": {
+   "webp": "crests/6870.webp",
+   "png": "crests/6870.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/6870 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/6870.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/6870.png",
+   "fetched": "2026-08-17"
+  },
+  "995": {
+   "webp": "crests/995.webp",
+   "png": "crests/995.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/995 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/995.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/995.png",
+   "fetched": "2026-08-17"
+  },
+  "7648": {
+   "webp": "crests/7648.webp",
+   "png": "crests/7648.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/7648 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/7648.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/7648.png",
+   "fetched": "2026-08-17"
+  },
+  "11429": {
+   "webp": "crests/11429.webp",
+   "png": "crests/11429.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/11429 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/11429.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/11429.png",
+   "fetched": "2026-08-17"
+  },
+  "997": {
+   "webp": "crests/997.webp",
+   "png": "crests/997.png",
+   "source": "ESPN site.api /soccer/tur.1/teams/997 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/997.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/997.png",
+   "fetched": "2026-08-17"
+  },
+  "263": {
+   "webp": "crests/263.webp",
+   "png": "crests/263.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/263 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/263.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/263.png",
+   "fetched": "2026-08-17"
+  },
+  "256": {
+   "webp": "crests/256.webp",
+   "png": "crests/256.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/256 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/256.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/256.png",
+   "fetched": "2026-08-17"
+  },
+  "261": {
+   "webp": "crests/261.webp",
+   "png": "crests/261.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/261 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/261.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/261.png",
+   "fetched": "2026-08-17"
+  },
+  "264": {
+   "webp": "crests/264.webp",
+   "png": "crests/264.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/264 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/264.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/264.png",
+   "fetched": "2026-08-17"
+  },
+  "254": {
+   "webp": "crests/254.webp",
+   "png": "crests/254.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/254 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/254.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/254.png",
+   "fetched": "2026-08-17"
+  },
+  "262": {
+   "webp": "crests/262.webp",
+   "png": "crests/262.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/262 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/262.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/262.png",
+   "fetched": "2026-08-17"
+  },
+  "258": {
+   "webp": "crests/258.webp",
+   "png": "crests/258.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/258 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/258.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/258.png",
+   "fetched": "2026-08-17"
+  },
+  "260": {
+   "webp": "crests/260.webp",
+   "png": "crests/260.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/260 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/260.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/260.png",
+   "fetched": "2026-08-17"
+  },
+  "266": {
+   "webp": "crests/266.webp",
+   "png": "crests/266.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/266 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/266.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/266.png",
+   "fetched": "2026-08-17"
+  },
+  "257": {
+   "webp": "crests/257.webp",
+   "png": "crests/257.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/257 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/257.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/257.png",
+   "fetched": "2026-08-17"
+  },
+  "267": {
+   "webp": "crests/267.webp",
+   "png": "crests/267.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/267 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/267.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/267.png",
+   "fetched": "2026-08-17"
+  },
+  "250": {
+   "webp": "crests/250.webp",
+   "png": "crests/250.png",
+   "source": "ESPN site.api /soccer/sco.1/teams/250 -> logos[0].href (https://a.espncdn.com/i/teamlogos/soccer/500/250.png); 500x500 PNG, trimmed to artwork and re-centred on a 128px square",
+   "src_url": "https://a.espncdn.com/i/teamlogos/soccer/500/250.png",
+   "fetched": "2026-08-17"
+  }
+ }
+}
