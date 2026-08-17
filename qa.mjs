@@ -720,9 +720,30 @@ async function main() {
       await suiteScreen("team", "#viewTeam");
 
       await evaluate(`setView("points")`);
-      await waitFor(`document.querySelectorAll("#viewPoints .cc").length > 0`, 6000, "points pitch");
-      await suiteScreen("points", "#viewPoints");
-      await suiteAllRounds();
+      /* BEFORE KICK-OFF THERE IS NO SCOREBOARD. The app deliberately refuses to draw a pitch
+         full of simulated points while the season has not started, so the suite asserts the
+         holding state instead of a pitch. When SEASON_STARTED flips, the pitch assertions
+         come back automatically - nothing here needs editing again. */
+      const started = await evaluate(`SEASON_STARTED === true`);
+      if (started) {
+        await waitFor(`document.querySelectorAll("#viewPoints .cc").length > 0`, 6000, "points pitch");
+        await suiteScreen("points", "#viewPoints");
+        await suiteAllRounds();
+      } else {
+        const pre = await evaluate(`JSON.stringify({
+          cards: document.querySelectorAll("#viewPoints .cc").length,
+          hasNotice: !!document.querySelector("#viewPoints .card h3"),
+          total: seasonTotal(),
+          rivals: RIVALS.map(r => rivalTotal(rivalSeed(r)))
+        })`).then(JSON.parse);
+        ok(`pre-season ${lang} ${vp.w}: no simulated pitch on the points screen`,
+           pre.cards === 0, `${pre.cards} club cards drawn before the season started`);
+        ok(`pre-season ${lang} ${vp.w}: it says why instead of showing nothing`,
+           pre.hasNotice, "no explanation on the points screen");
+        ok(`pre-season ${lang} ${vp.w}: nobody has any points yet`,
+           pre.total === 0 && pre.rivals.every(v => v === 0),
+           `you=${pre.total} rivals=${pre.rivals.join(",")}`);
+      }
 
       await evaluate(`setView("board")`);
       const sb = await evaluate(`JSON.stringify(__QA.scoreboard())`).then(JSON.parse);
@@ -734,13 +755,21 @@ async function main() {
         : "row " + (i + 1) + " shows " + r.pts + ", model says " + (model[i] ? model[i].s : "—")).filter(Boolean);
       ok("board: the table shows the same numbers the model holds", domVsModel.length === 0, domVsModel.join("; "));
 
-      /* the same season total on the standings table and the points screen */
+      /* the same season total on the standings table and the points screen. Before kick-off
+         the points screen prints no total at all - deliberately - so the agreement to check
+         is that everything is zero and nothing anywhere claims otherwise. */
       await evaluate(`setView("points")`);
-      const ptsTotal = await evaluate(`__QA.pointsSeasonTotal()`);
       const meRow = sb.table.find(r => r.me);
-      ok("cross-screen: the season total agrees on the points screen and the standings table",
-        meRow && ptsTotal === meRow.pts && ptsTotal === season,
-        "points screen " + ptsTotal + ", standings " + (meRow ? meRow.pts : "—") + ", model " + season);
+      if (started) {
+        const ptsTotal = await evaluate(`__QA.pointsSeasonTotal()`);
+        ok("cross-screen: the season total agrees on the points screen and the standings table",
+          meRow && ptsTotal === meRow.pts && ptsTotal === season,
+          "points screen " + ptsTotal + ", standings " + (meRow ? meRow.pts : "—") + ", model " + season);
+      } else {
+        ok("cross-screen: before kick-off every screen says zero",
+          meRow && meRow.pts === 0 && season === 0,
+          "standings " + (meRow ? meRow.pts : "—") + ", model " + season);
+      }
 
       if (sb.band) {
         const themRow = sb.table.find(r => r.name === sb.band.them);
@@ -1044,8 +1073,12 @@ async function tutorialSuite() {
       onboarded: (function(){try{return localStorage.getItem("fx_onboarded")}catch(e){return null}})(),
       cards: document.querySelectorAll("#viewTeam .cc").length,
       empty: document.querySelectorAll("#viewTeam .cc--empty").length})`).then(JSON.parse);
-    ok("tutorial: it hands over a complete squad with a captain",
-      after.squad === 15 && after.cap && after.empty === 0,
+    /* THIS ASSERTION IS DELIBERATELY INVERTED. The tutorial used to commit the squad it built
+       during the lesson, so a player finished onboarding owning eleven clubs he had never
+       chosen. It teaches now and picks nothing: the pitch is empty and choosing the team is
+       the first thing the player does himself. */
+    ok("tutorial: it hands over an EMPTY pitch, having chosen nothing for the player",
+      after.squad === 0 && !after.cap && after.empty === 15,   /* 11 on the pitch + 4 on the bench */
       "squad " + after.squad + ", captain " + after.cap + ", " + after.cards + " cards on the pitch, "
       + after.empty + " empty slots");
     ok("tutorial: it is not shown again after it is finished", after.onboarded === "1",

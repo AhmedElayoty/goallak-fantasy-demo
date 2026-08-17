@@ -814,6 +814,12 @@ const VERSION = "demo-1.0";
    eleven starters is still a real constraint, and MAX_PER_LEAGUE does the rest of the work.
    The floor is 4.5M, NOT 4.0M: at 4.0 the fifth superclub comes within reach (123.0M) and the
    ceiling disappears altogether. */
+/* THE SEASON HAS NOT KICKED OFF. Until it does there are no results, so there are no points -
+   not yours, not a rival's. Everything the engine can compute is a simulation, and showing a
+   simulated total as though it were a score is the one thing this screen must never do.
+   Flip this to true when real fixtures feed the scoring. */
+const SEASON_STARTED = false;
+const SEASON_OPENS = "2026-08-21";
 const START_SIZE = 11, BENCH_SIZE = 4;
 const SQUAD_SIZE = START_SIZE + BENCH_SIZE;          /* 15 clubs owned, 11 of them on the pitch */
 const BUDGET = 120.0, MAX_PER_LEAGUE = 3, MIN_CLUB_PRICE = 4.5;
@@ -895,6 +901,9 @@ const STR = {
  covNote:["الجولة دي فيها {pct}% بس من الأندية بتلعب — عشان كده في أندية مالهاش ماتش",
           "Only {pct}% of clubs play this round — that is why some have no match"],
  whyZero:["ليه في أندية ماجابتش نقط؟","Why did some clubs score nothing?"],
+ preTtl:["الموسم لسه ما بدأش","The season has not started"],
+ preBody:["أول جولة بتبدأ {d}. جهّز فريقك دلوقتي، والنقط هتيجي من الماتشات الحقيقية.",
+          "Round 1 begins {d}. Build your team now — points will come from the real matches."],
  tooExpensive:["أغلى من اللي فاضل معاك","Over your remaining budget"],
  leagueFull:["خلاص عندك 3 أندية من الدوري ده","3 clubs from this league already"],
  squadFull:["فريقك كمل — شيل نادي الأول","Your squad is full"],
@@ -1055,9 +1064,16 @@ function hash(str){ let h = 2166136261; for(let i = 0; i < str.length; i++){ h ^
 let CAL = null;
 function gwRound(gw){ return CAL && CAL.gws[gw - 1] ? CAL.gws[gw - 1] : null; }
 function gwCoverage(gw){ const r = gwRound(gw); return r ? r[3] / 100 : 10 / 11; }
+/* "25/09 – 12/10" is a puzzle; "25 سبتمبر – 12 أكتوبر" is a date. Numeric day/month is also
+   ambiguous to anyone who reads month-first, and this app has both audiences. */
+const MONTHS = {
+ ar:["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"],
+ en:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+};
 function gwDates(gw){
  const r = gwRound(gw); if(!r) return "";
- const d = s => { const p = s.split("-"); return p[2] + "/" + p[1]; };
+ const d = str => { const p = str.split("-");
+   return num(String(+p[2])) + " " + MONTHS[LANG === "ar" ? "ar" : "en"][+p[1] - 1]; };
  return d(r[0]) + " – " + d(r[1]);
 }
 function simMatch(clubId, gw){
@@ -1178,7 +1194,7 @@ function scoreGw(gw){
  res.bench = squad.slice(START_SIZE).map(cid => ({id: cid, m: simMatch(cid, gw)}));
  return applyChip(id, res) || res;
 }
-function gwTotal(gw){ return scoreGw(gw).total; }
+function gwTotal(gw){ return SEASON_STARTED ? scoreGw(gw).total : 0; }
 /* DEMO ONLY: a scrubber so the season can be walked in ten seconds instead of nine months.
    The real product reads the gameweek from the fixture calendar. */
 let CURRENT_GW = 6;
@@ -1194,7 +1210,10 @@ function setGw(g){
  if(_gwRaf) return;
  _gwRaf = requestAnimationFrame(() => { _gwRaf = 0; render(); });
 }
-function seasonTotal(){ let s = 0; for(let g = 1; g <= CURRENT_GW; g++) s += gwTotal(g); return s; }
+function seasonTotal(){
+ if(!SEASON_STARTED) return 0;
+ let s = 0; for(let g = 1; g <= CURRENT_GW; g++) s += gwTotal(g); return s;
+}
 
 /* ---------------- rendering ---------------- */
 function paintChrome(){
@@ -1204,13 +1223,14 @@ function paintChrome(){
  /* the subtitle is the MANAGER now, not a rules recap the wizard already gave once */
  $("hsub").textContent = squad.length ? teamName() : t("brandSub");
  $("bnav").innerHTML =
-  [["team","👕","navTeam"],["pick","➕","navPick"],["points","📊","navPts"],["board","🏆","navBoard"],["help","❓","navHelp"]]
+  [["team","👕","navTeam"],["pick","➕","navPick"],["chips","🃏","chipsLab"],["points","📊","navPts"],["board","🏆","navBoard"]]
   .map(n => '<button type="button" class="' + (view === n[0] ? "on" : "") + '" onclick="navTo(\'' + n[0] + '\')">'
    + '<span class="ic">' + n[1] + '</span><span>' + esc(t(n[2])) + "</span></button>").join("");
 }
 function setView(v){ swapFrom = null; view = v; paintChrome(); render(); }
 function navTo(v){
  if(v === "pick") return openPicker();
+ if(v === "chips") return openChips();
  if(v === "help") return openHelp();
  setView(v);
 }
@@ -1488,7 +1508,13 @@ function renderTeam(){
   + roundBarHtml()
   + pitchHtml(false)
   + '<button type="button" class="btn" onclick="openPicker()">'
-  + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>";
+  + esc(squad.length ? t("changeTeam") : t("startWiz")) + "</button>"
+  /* The eight chips were reachable only from the settings sheet, so the owner asked where the
+     wildcards were - a fair question about a feature with no door on the screen that uses it. */
+  + (squad.length === SQUAD_SIZE
+     ? '<button type="button" class="btn ghost" onclick="openChips()">🃏 ' + esc(t("chipsLab")) + "</button>"
+       + '<button type="button" class="btn ghost" onclick="openCaptain()">' + esc(t("capTitle")) + "</button>"
+     : "");
  /* the budget coach mark pointed at #budBox, which now lives in the settings sheet */
 }
 
@@ -1497,6 +1523,13 @@ function renderPoints(){
  const gw = CURRENT_GW;
  /* The round scrubber lives HERE now, on the screen whose whole subject is the round. On the
     team screen it was 96px of chrome above a pitch nobody could see. */
+ if(!SEASON_STARTED){
+  $("viewPoints").innerHTML = gwBarHtml()
+   + '<div class="card" style="text-align:center"><div style="font-size:34px">⏳</div>'
+   + '<h3 style="margin:8px 0 4px">' + esc(t("preTtl")) + "</h3>"
+   + '<div class="muted">' + esc(t("preBody", {d: gwDates(1)})) + "</div></div>";
+  centreGwChip(); return;
+ }
  $("viewPoints").innerHTML = gwBarHtml()
   + '<div class="card"><div class="muted" style="text-align:center">' + esc(t("gwTitle")) + " " + num(gw)
   + (gwDates(gw) ? ' <span dir="ltr">· ' + esc(gwDates(gw)) + "</span>" : "") + "</div>"
@@ -1590,6 +1623,7 @@ function openTools(){
   + (full ? '<button type="button" class="btn ghost" onclick="closeSheet();openCaptain()">' + esc(t("capTitle")) + "</button>" : "")
   + (full ? '<button type="button" class="btn ghost" onclick="closeSheet();openChips()">' + esc(t("chipsLab")) + "</button>" : "")
   + (full ? '<button type="button" class="btn ghost" onclick="closeSheet();openShare()">' + esc(t("shareTitle")) + "</button>" : "")
+  + '<button type="button" class="btn ghost" onclick="closeSheet();openHelp()">' + esc(t("rulesTitle")) + "</button>"
   + '<button type="button" class="btn ghost" onclick="closeSheet();openRename()">' + esc(t("renameTeam")) + "</button>"
   + '<button type="button" class="btn ghost" onclick="resetDemo()">' + esc(t("resetDemo")) + "</button>"
   + '<div class="muted" style="margin-top:14px;text-align:center">DEMO · ' + esc(t("demoNote")) + "</div>");
@@ -1644,6 +1678,7 @@ function rivalTotal(name){
  const sq = rivalSquad(name);
  /* the captain must be a STARTER, exactly as the player's must be */
  const cap = sq[hash(name + "c") % Math.max(1, Math.min(START_SIZE, sq.length))];
+ if(!SEASON_STARTED) return 0;          /* a rival cannot have scored either */
  let total = 0;
  /* Same engine as the player: eleven starters, auto-subs for blanks, armband on one club.
     Summing all 15 here is what made the board unwinnable. */
@@ -2037,7 +2072,11 @@ $("wizBox").addEventListener("click", function(e){
  if(!el || !TS) return;
  TS = tutReduce(TS, {type: el.dataset.tutAct, arg: el.dataset.tutArg});
  if(TS.done){
-  squad = TS.squad.slice(); captain = TS.captain; save();
+  /* THE TUTORIAL TEACHES, IT DOES NOT PICK. It used to commit the squad it had built during
+     the lesson, so a player finished onboarding owning eleven clubs he had never chosen -
+     and the same was true of Skip. The pitch is empty when the lesson ends; choosing the
+     team is the first thing the player actually does. */
+  squad = []; captain = null; save();
   /* paintChrome, not just render: the header subtitle becomes the TEAM NAME once a squad
      exists, and the tutorial is the moment a squad first exists. Without this the header
      kept showing the rules recap for the whole session. */
